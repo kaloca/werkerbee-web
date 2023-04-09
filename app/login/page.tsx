@@ -1,27 +1,22 @@
 'use client'
 
-import { useCallback, useState } from 'react'
-import axios from 'axios'
-import { useRouter } from 'next/navigation'
+import { useState } from 'react'
+import { signIn } from 'next-auth/react'
 
 export default function LoginPage() {
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
 	const [showError, setShowError] = useState(false)
 
-	const router = useRouter()
-
 	const handleLogin = async () => {
 		try {
-			const res = await axios.post('http://localhost:3000/login', {
+			const result = await signIn('credentials', {
 				email,
 				password,
+				redirect: true,
+				callbackUrl: '/',
 			})
-
-			const { type, token, id } = res.data
-
-			router.push(`/company/${id}`)
-			console.log(type, token)
+			console.log(result)
 		} catch (e: any) {
 			setShowError(true)
 			console.log(e.response.data)
@@ -31,12 +26,13 @@ export default function LoginPage() {
 	const onSubmit = (e: any) => {
 		e.preventDefault()
 		console.log('refresh prevented')
+		handleLogin()
 	}
 
 	//const handleLogin = useCallback(() => {}, [])
 
 	return (
-		<div className='bg-yellow-400 h-screen overflow-hidden flex items-center justify-center'>
+		<div className='bg-slate-400 h-screen overflow-hidden flex items-center justify-center'>
 			<div className='bg-white lg:w-5/12 md:6/12 w-10/12 shadow-3xl'>
 				<div className='bg-gray-800 absolute left-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-full p-4 md:p-8'>
 					<svg width='32' height='32' viewBox='0 0 24 24' fill='#FFF'>
@@ -82,12 +78,12 @@ export default function LoginPage() {
 						Login
 					</div>
 					<div className='flex flex-row justify-between my-7'>
-						<button className='bg-gradient-to-b from-gray-700 to-gray-900 font-medium p-2 md:p-4 text-white uppercase w-5/12'>
+						<div className='bg-gradient-to-b from-gray-700 to-gray-900 font-medium p-2 md:p-4 text-white uppercase w-5/12 text-center hover:cursor-pointer'>
 							Register Company
-						</button>
-						<button className='bg-gradient-to-b from-gray-700 to-gray-900 font-medium p-2 md:p-4 text-white uppercase w-5/12'>
+						</div>
+						<div className='bg-gradient-to-b from-gray-700 to-gray-900 font-medium p-2 md:p-4 text-white uppercase w-5/12 text-center hover:cursor-pointer'>
 							Register Worker
-						</button>
+						</div>
 					</div>
 				</form>
 			</div>

@@ -1,3 +1,4 @@
+import Provider from './provider'
 import { MenuBar } from './components/menuBar/menuBar'
 import './globals.css'
 
@@ -12,9 +13,13 @@ export default function RootLayout({
 	children: React.ReactNode
 }) {
 	return (
-		<html lang='en' className='h-full w-full'>
-			<MenuBar />
-			<body className='h-full w-full'>{children}</body>
+		<html lang='en'>
+			<body>
+				<Provider>
+					<MenuBar />
+					<div className='h-screen w-screen'>{children}</div>
+				</Provider>
+			</body>
 		</html>
 	)
 }
