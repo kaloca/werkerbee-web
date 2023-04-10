@@ -10,6 +10,14 @@ function validatePhoneNumber(phoneNumber: string): boolean {
 	return pattern.test(phoneNumber)
 }
 
+function validateUsername(username: string): boolean {
+	if (username.length > 20 || username.length < 5) {
+		return false
+	}
+	const regex = /^[a-z0-9_.]+$/
+	return regex.test(username)
+}
+
 function autoFormatPhoneNumber(input: string): string {
 	let phoneNumber = input.replace(/\D/g, '') // Remove non-digits
 	const maxLength = 10
@@ -55,6 +63,7 @@ const helpers = {
 	validatePhoneNumber,
 	autoFormatPhoneNumber,
 	formatArrayToString,
+	validateUsername,
 }
 
 export default helpers

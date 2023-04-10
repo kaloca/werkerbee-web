@@ -13,6 +13,8 @@ interface AddressAutocompleteProps {
 	) => void
 	value: string
 	onChangeValue: (value: string) => void
+	showError: Record<string, any>
+	error: string
 	// onSelect: (address: string, coordinates: { lat: number; lng: number }) => void
 }
 
@@ -20,6 +22,8 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
 	onSelect,
 	value: savedValue,
 	onChangeValue,
+	showError,
+	error,
 }) => {
 	const {
 		ready,
@@ -68,9 +72,15 @@ const AddressAutocomplete: React.FC<AddressAutocompleteProps> = ({
 					value={savedValue}
 					onChange={handleInput}
 					disabled={!ready}
+					placeholder='Search Address'
 					className='w-full p-3 mt-3 bg-gray-100 border rounded border-gray-200 focus:outline-none focus:border-gray-600 text-sm font-medium leading-none text-gray-800'
 				/>
 				{status === 'OK' && <ul>{renderSuggestions()}</ul>}
+			</div>
+			<div className='h-8 mt-2'>
+				{showError['address'] && (
+					<p className='text-red-600 text-xs'>{error}</p>
+				)}
 			</div>
 		</div>
 	)

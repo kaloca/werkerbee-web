@@ -48,36 +48,43 @@ export default function RegisterCompanyPage({ params }: any) {
 			value: '',
 			required: true,
 			step: 1,
+			hasChanged: false,
 		},
 		username: {
 			value: '',
 			required: true,
 			step: 1,
+			hasChanged: false,
 		},
 		email: {
 			value: '',
 			required: true,
 			step: 1,
+			hasChanged: false,
 		},
 		phoneNumber: {
 			value: '',
 			required: false,
 			step: 1,
+			hasChanged: false,
 		},
 		location: {
 			value: '',
 			required: true,
 			step: 2,
+			hasChanged: false,
 		},
 		type: {
 			value: '',
 			required: true,
 			step: 2,
+			hasChanged: false,
 		},
 		jobTypes: {
 			value: [''],
 			required: true,
 			step: 2,
+			hasChanged: false,
 		},
 		address: {
 			value: {
@@ -89,8 +96,9 @@ export default function RegisterCompanyPage({ params }: any) {
 			},
 			required: true,
 			step: 2,
+			hasChanged: false,
 		},
-		password: { value: '', required: true, step: 1 },
+		password: { value: '', required: true, step: 1, hasChanged: false },
 	})
 
 	const handleAddressSelect = (
@@ -122,11 +130,13 @@ export default function RegisterCompanyPage({ params }: any) {
 				value: { street, city, state, country, zip },
 				required: true,
 				step: 2,
+				hasChanged: true,
 			},
 			location: {
 				value: `${coordinates.lat}, ${coordinates.lng}`,
 				required: true,
 				step: 2,
+				hasChanged: true,
 			},
 		})
 	}
@@ -137,8 +147,9 @@ export default function RegisterCompanyPage({ params }: any) {
 
 	useEffect(() => {
 		if (
-			formData.email.value != '' &&
-			!helpers.validateEmail(formData.email.value)
+			formData.email.hasChanged &&
+			(formData.email.value == '' ||
+				!helpers.validateEmail(formData.email.value))
 		) {
 			setShowError('email', true)
 		} else {
@@ -148,8 +159,29 @@ export default function RegisterCompanyPage({ params }: any) {
 
 	useEffect(() => {
 		if (
-			formData.phoneNumber.value != '' &&
-			!helpers.validatePhoneNumber(formData.phoneNumber.value)
+			formData.username.hasChanged &&
+			(formData.username.value == '' ||
+				!helpers.validateUsername(formData.username.value))
+		) {
+			setShowError('username', true)
+		} else {
+			setShowError('username', false)
+		}
+	}, [formData.username])
+
+	useEffect(() => {
+		if (formData.address.hasChanged && address == '') {
+			setShowError('address', true)
+		} else {
+			setShowError('address', false)
+		}
+	}, [address, formData.address.hasChanged])
+
+	useEffect(() => {
+		if (
+			formData.phoneNumber.hasChanged &&
+			(formData.phoneNumber.value == '' ||
+				!helpers.validatePhoneNumber(formData.phoneNumber.value))
 		) {
 			setShowError('phoneNumber', true)
 		} else {
@@ -158,16 +190,41 @@ export default function RegisterCompanyPage({ params }: any) {
 	}, [formData.phoneNumber])
 
 	useEffect(() => {
-		if (reenterPassword != '' && reenterPassword != formData.password.value) {
+		if (formData.name.hasChanged && formData.name.value == '') {
+			setShowError('name', true)
+		} else {
+			setShowError('name', false)
+		}
+	}, [formData.name])
+
+	useEffect(() => {
+		if (
+			formData.password.hasChanged &&
+			(reenterPassword == '' || reenterPassword != formData.password.value)
+		) {
 			setShowError('reenterPassword', true)
 		} else {
 			setShowError('reenterPassword', false)
 		}
 	}, [reenterPassword, formData.password])
 
+	useEffect(() => {
+		if (
+			formData.password.hasChanged &&
+			(formData.password.value == '' || formData.password.value.length < 8)
+		) {
+			setShowError('password', true)
+		} else {
+			setShowError('password', false)
+		}
+	}, [formData.password])
+
 	const handleChange = (e: any) => {
-		const { name, value } = e.target
-		setFormData({ ...formData, [name]: { value: value } })
+		const { name: fieldName, value } = e.target
+		setFormData({
+			...formData,
+			[fieldName]: { value: value, hasChanged: true },
+		})
 	}
 
 	const handlePhoneNumberChange = (e: any) => {
@@ -178,12 +235,13 @@ export default function RegisterCompanyPage({ params }: any) {
 				value: helpers.autoFormatPhoneNumber(value),
 				required: false,
 				step: 1,
+				hasChanged: true,
 			},
 		})
 	}
 
-	const handleSubmit = async (e: any) => {
-		e.preventDefault()
+	const handleSubmit = async () => {
+		// e.preventDefault()
 
 		const outputJobTypes = formData.jobTypes.value.map((item: string) => {
 			if (item != '') return { type: item }
@@ -219,16 +277,47 @@ export default function RegisterCompanyPage({ params }: any) {
 		}
 	}
 
-	const handleNextStep = () => {
+	const handleCheckUsernameEmail = async () => {
+		const response = await fetch(`${BASE_URL}/check-email-username`, {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify({
+				email: formData.email.value,
+				username: formData.username.value,
+			}),
+		})
+		if (response.ok) {
+			const { emailExists, usernameExists } = await response.json()
+			console.log(emailExists, usernameExists)
+			if (emailExists != null) {
+				setShowError('email', true)
+			}
+			if (usernameExists != null) {
+				setShowError('username', true)
+			}
+
+			if (!emailExists && !usernameExists) {
+				return true
+			}
+		}
+	}
+
+	const handleNextStep = async () => {
 		let newError: any = { ...error } // Create a copy of the error object to update
 		let shouldReturn = false
 
 		Object.entries(formData).forEach(([key, field]) => {
 			if (
-				field.required === true &&
-				field.value === '' &&
-				field.step == currentStep
+				(field.required === true &&
+					field.value === '' &&
+					field.step == currentStep) ||
+				(key == 'address' &&
+					currentStep == 2 &&
+					Object.values(formData.address.value).some((param) => param === ''))
 			) {
+				console.log('hello papa')
 				newError[key] = true
 				shouldReturn = true
 			} else {
@@ -246,15 +335,16 @@ export default function RegisterCompanyPage({ params }: any) {
 					value === true && (formData as any)[key].step === currentStep
 			)
 		) {
-		} else setCurrentStep(currentStep + 1)
+		} else if (currentStep == 1) {
+			if (await handleCheckUsernameEmail()) setCurrentStep(currentStep + 1)
+			else return
+		} else handleSubmit()
 	}
-
-	console.log(formData)
 
 	return (
 		<>
 			<div className='flex items-center justify-center'>
-				<div className='xl:w-10/12 w-full px-16 pt-7'>
+				<div className='xl:w-8/12 w-full px-16 pt-7'>
 					<div className='flex flex-row w-full justify-between items-center h-20'>
 						{currentStep > 1 ? (
 							<button
@@ -264,7 +354,7 @@ export default function RegisterCompanyPage({ params }: any) {
 								className='flex items-center justify-center py-2 px-7 focus:outline-none bg-white border rounded border-gray-400 hover:bg-gray-100  focus:ring-2 focus:ring-offset-2 focus:ring-gray-700'
 							>
 								<svg
-									className='mt-1 mr-3'
+									className='mr-3'
 									width={24}
 									height={24}
 									viewBox='0 0 24 24'
@@ -284,31 +374,11 @@ export default function RegisterCompanyPage({ params }: any) {
 						) : (
 							<div className=' w-28'></div>
 						)}
-						<RegisterTabs currentStep={currentStep} />
-						<button
-							role='button'
-							onClick={handleNextStep}
-							aria-label='Next step'
-							className='flex items-center justify-center py-2 px-7 focus:outline-none bg-white border rounded border-gray-400 hover:bg-gray-100  focus:ring-2 focus:ring-offset-2 focus:ring-gray-700'
-						>
-							<span className='text-sm font-medium text-center text-gray-800 capitalize'>
-								Next Step
-							</span>
-							<svg
-								className='mt-1 ml-3'
-								width={12}
-								height={8}
-								viewBox='0 0 12 8'
-								fill='none'
-								xmlns='http://www.w3.org/2000/svg'
-							>
-								<path d='M8.01 3H0V5H8.01V8L12 4L8.01 0V3Z' fill='#242731' />
-							</svg>
-						</button>
-						{currentStep == 2 && (
+						{/* <RegisterTabs currentStep={currentStep} /> */}
+						{currentStep < 2 && (
 							<button
 								role='button'
-								onClick={handleSubmit}
+								onClick={handleNextStep}
 								aria-label='Next step'
 								className='flex items-center justify-center py-2 px-7 focus:outline-none bg-white border rounded border-gray-400 hover:bg-gray-100  focus:ring-2 focus:ring-offset-2 focus:ring-gray-700'
 							>
@@ -316,7 +386,7 @@ export default function RegisterCompanyPage({ params }: any) {
 									Next Step
 								</span>
 								<svg
-									className='mt-1 ml-3'
+									className='ml-3'
 									width={12}
 									height={8}
 									viewBox='0 0 12 8'
@@ -327,6 +397,18 @@ export default function RegisterCompanyPage({ params }: any) {
 								</svg>
 							</button>
 						)}
+						{currentStep == 2 && (
+							<button
+								role='button'
+								onClick={handleNextStep}
+								aria-label='Next step'
+								className='flex items-center justify-center py-2 px-7 focus:outline-none bg-blue-600 border rounded border-gray-400 hover:bg-gray-100  focus:ring-2 focus:ring-offset-2 focus:ring-gray-700'
+							>
+								<span className='text-sm font-medium text-center text-white capitalize'>
+									Submit
+								</span>
+							</button>
+						)}
 					</div>
 					<form onSubmit={handleSubmit}>
 						{currentStep == 1 ? (
@@ -335,12 +417,12 @@ export default function RegisterCompanyPage({ params }: any) {
 									<div className='w-80'>
 										<div className='flex items-center'>
 											<h1 className='text-xl font-medium pr-2 leading-5 text-gray-800'>
-												Personal Information
+												Login Information
 											</h1>
 										</div>
 										<p className='mt-4 text-sm leading-5 text-gray-600'>
-											Information about the section could go here and a brief
-											description of how this might be used.
+											If registering a franchised brand, make sure to include
+											the branch name. (ex: Wendy&apos;s Redwood City)
 										</p>
 									</div>
 									<div>
@@ -367,7 +449,7 @@ export default function RegisterCompanyPage({ params }: any) {
 													error={
 														formData.username.value == ''
 															? 'Username is required'
-															: 'Username already exists'
+															: 'Username not valid'
 													}
 													inputName='username'
 													value={formData.username.value}
@@ -410,8 +492,9 @@ export default function RegisterCompanyPage({ params }: any) {
 											</h1>
 										</div>
 										<p className='mt-4 text-sm leading-5 text-gray-600'>
-											Information about the section could go here and a brief
-											description of how this might be used.
+											Your password needs to be at least 8 digits long. Make
+											sure to write it down somewhere so you don&apos;t forget
+											it!
 										</p>
 									</div>
 									<div className='flex flex-col  p-1'>
@@ -424,7 +507,11 @@ export default function RegisterCompanyPage({ params }: any) {
 														onChange={handleChange}
 														placeholder='Enter your password'
 														showError={error}
-														error='Password is required'
+														error={
+															formData.password.value.length == 0
+																? 'Password is required'
+																: 'Invalid Password'
+														}
 														inputName='password'
 														value={formData.password.value}
 													/>
@@ -487,12 +574,13 @@ export default function RegisterCompanyPage({ params }: any) {
 									<div className='w-80'>
 										<div className='flex items-center'>
 											<h1 className='text-xl font-medium pr-2 leading-5 text-gray-800'>
-												Personal Information
+												Address
 											</h1>
 										</div>
 										<p className='mt-4 text-sm leading-5 text-gray-600'>
-											Information about the section could go here and a brief
-											description of how this might be used.
+											Choose the address where the workers will go to. Feel free
+											to type the name of your business directly in the seach
+											bar.
 										</p>
 									</div>
 									<div>
@@ -507,7 +595,18 @@ export default function RegisterCompanyPage({ params }: any) {
 													<AddressAutocomplete
 														onSelect={handleAddressSelect}
 														value={address}
-														onChangeValue={(value) => setAddress(value)}
+														onChangeValue={(value) => {
+															setFormData({
+																...formData,
+																address: {
+																	...formData.address,
+																	hasChanged: true,
+																},
+															})
+															setAddress(value)
+														}}
+														showError={error}
+														error='Please add valid address'
 													/>
 												</LoadScript>
 											</div>
@@ -552,6 +651,7 @@ export default function RegisterCompanyPage({ params }: any) {
 																value: currentTypes,
 																required: true,
 																step: 2,
+																hasChanged: true,
 															},
 														})
 													}}
@@ -569,13 +669,10 @@ export default function RegisterCompanyPage({ params }: any) {
 									<div className='w-80'>
 										<div className='flex items-center'>
 											<h1 className='text-xl font-medium pr-2 leading-5 text-gray-800'>
-												Security
+												Upload Photo
 											</h1>
 										</div>
-										<p className='mt-4 text-sm leading-5 text-gray-600'>
-											Information about the section could go here and a brief
-											description of how this might be used.
-										</p>
+										<p className='mt-4 text-sm leading-5 text-gray-600'>Soon</p>
 									</div>
 								</div>
 							</div>

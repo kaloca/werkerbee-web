@@ -19,7 +19,7 @@ const registerTabs: React.FC<RegisterTabProps> = ({ currentStep }) => {
 					<p className='text-base font-medium leading-none '>01</p>
 				</div>
 				<p className='text-base ml-3 font-medium leading-4 text-gray-800'>
-					Sign Up
+					Basic Info
 				</p>
 			</div>
 			<div className='flex items-center md:mt-0 mt-4 md:ml-12'>
@@ -31,7 +31,7 @@ const registerTabs: React.FC<RegisterTabProps> = ({ currentStep }) => {
 					<p className='text-base font-medium leading-none '>02</p>
 				</div>
 				<p className='text-base ml-3 font-medium leading-4 text-gray-800'>
-					Security Check
+					About
 				</p>
 			</div>
 			<div className='flex items-center md:mt-0 mt-4 md:ml-12'>
@@ -43,7 +43,7 @@ const registerTabs: React.FC<RegisterTabProps> = ({ currentStep }) => {
 					<p className='text-base font-medium leading-none '>03</p>
 				</div>
 				<p className='text-base ml-3 font-medium leading-4 text-gray-800'>
-					Confirm Info
+					Confirm Details
 				</p>
 			</div>
 			<div className='flex items-center md:mt-0 mt-4 md:ml-12'>
