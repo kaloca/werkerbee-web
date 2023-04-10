@@ -1,6 +1,7 @@
 import Provider from './provider'
 import { MenuBar } from './components/menuBar/menuBar'
 import './globals.css'
+import NavBar from './components/NavBar'
 
 export const metadata = {
 	title: 'Create Next App',
@@ -16,7 +17,8 @@ export default function RootLayout({
 		<html lang='en'>
 			<body>
 				<Provider>
-					<MenuBar />
+					{/* <MenuBar /> */}
+					<NavBar />
 					<div className='h-screen w-screen'>{children}</div>
 				</Provider>
 			</body>

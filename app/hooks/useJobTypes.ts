@@ -4,11 +4,10 @@ import fetcher from '../utils/fetcher'
 
 import { BASE_URL } from '@/app/utils/constants'
 
-const useCompany = (companyId: string) => {
-	const { data, error, isLoading, mutate } = useSWR(
-		`${BASE_URL}/company/${companyId}`,
-		fetcher
-	)
+const useJobTypes = () => {
+	const { data, error, mutate } = useSWR(`${BASE_URL}/job-types`, fetcher)
+
+	const isLoading = !error && !data
 
 	return {
 		data,
@@ -18,4 +17,4 @@ const useCompany = (companyId: string) => {
 	}
 }
 
-export default useCompany
+export default useJobTypes

@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { signIn } from 'next-auth/react'
+import Link from 'next/link'
 
 export default function LoginPage() {
 	const [email, setEmail] = useState('')
@@ -78,12 +79,18 @@ export default function LoginPage() {
 						Login
 					</div>
 					<div className='flex flex-row justify-between my-7'>
-						<div className='bg-gradient-to-b from-gray-700 to-gray-900 font-medium p-2 md:p-4 text-white uppercase w-5/12 text-center hover:cursor-pointer'>
+						<Link
+							href='/register/company'
+							className='bg-gradient-to-b from-gray-700 to-gray-900 font-medium p-2 md:p-4 text-white uppercase w-5/12 text-center hover:cursor-pointer'
+						>
 							Register Company
-						</div>
-						<div className='bg-gradient-to-b from-gray-700 to-gray-900 font-medium p-2 md:p-4 text-white uppercase w-5/12 text-center hover:cursor-pointer'>
+						</Link>
+						<Link
+							href='/register/worker'
+							className='bg-gradient-to-b from-gray-700 to-gray-900 font-medium p-2 md:p-4 text-white uppercase w-5/12 text-center hover:cursor-pointer'
+						>
 							Register Worker
-						</div>
+						</Link>
 					</div>
 				</form>
 			</div>

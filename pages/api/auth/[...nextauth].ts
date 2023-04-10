@@ -63,6 +63,6 @@ export default NextAuth({
 	},
 	pages: {
 		signIn: '/login',
-		signOut: '/',
+		signOut: '/jobs',
 	},
 })

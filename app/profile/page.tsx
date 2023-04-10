@@ -6,22 +6,24 @@ import { useSession } from 'next-auth/react'
 
 import { BASE_URL } from '@/app/utils/constants'
 
-import WorkerProfile from './components/workerProfile'
-import CompanyProfile from './components/companyProfile'
+import WorkerProfile from './workerProfile'
+import CompanyProfile from './companyProfile'
 
 export default function ProfilePage({ params }: any) {
 	const { data: session, status } = useSession()
 	console.log(session)
 	const router = useRouter()
-
-	if (!session) {
-		// Redirect to another page, e.g., the login page
-		router.push('/login')
-	}
+	useEffect(() => {
+		if (status == 'authenticated' && !session) {
+			// Redirect to another page, e.g., the login page
+			router.push('/login')
+		}
+	}, [session, status, router])
 
 	return (
 		<>
-			{session?.user.type === 'worker' ? <WorkerProfile /> : <CompanyProfile />}
+			{session?.user.type === 'worker' ? <WorkerProfile /> : null}
+			{session?.user.type === 'company' ? <CompanyProfile /> : null}
 		</>
 	)
 }

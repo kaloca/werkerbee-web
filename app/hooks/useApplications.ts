@@ -2,17 +2,16 @@ import useSWR from 'swr'
 import { useSession } from 'next-auth/react'
 
 import fetcher from '../utils/fetcher'
-
 import { BASE_URL } from '@/app/utils/constants'
 
-const useUser = () => {
+const useApplications = () => {
 	const { data: session } = useSession()
 
-	const profileUrl = `${BASE_URL}/${session?.user.type}/settings/profile`
+	const applicationsUrl = `${BASE_URL}/worker/${session?.user.username}/applications`
 
 	const { data, error, isLoading, mutate } = useSWR(
-		profileUrl,
-		session ? () => fetcher(profileUrl, session.user.token) : null
+		applicationsUrl,
+		session ? () => fetcher(applicationsUrl, session.user.token) : null
 	)
 
 	return {
@@ -23,4 +22,4 @@ const useUser = () => {
 	}
 }
 
-export default useUser
+export default useApplications

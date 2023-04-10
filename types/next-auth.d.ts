@@ -9,6 +9,7 @@ declare module 'next-auth' {
 			/** The user's name. */
 			type: string
 			token: string
+			username: string
 		}
 	}
 }
