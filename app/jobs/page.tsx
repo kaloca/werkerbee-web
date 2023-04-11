@@ -1,12 +1,17 @@
 'use client'
 
 import React, { useState } from 'react'
+import { useRouter } from 'next/navigation'
+
 import useJobPostings, { JobPosting } from '../hooks/useJobPostings'
+
 import JobPostingCard from './components/jobPostingCard'
 
 const JobPostingsList = () => {
 	const [currentPage, setCurrentPage] = useState(1)
 	const { data, error, isLoading } = useJobPostings(currentPage, 10)
+
+	const router = useRouter()
 
 	const handlePrevPage = () => {
 		if (currentPage > 1) {
@@ -28,11 +33,19 @@ const JobPostingsList = () => {
 		return <div>Error: {error.message}</div>
 	}
 
+	const handleApply = (id: string) => {
+		router.push(`job-posting/${id}`)
+	}
+
 	return (
 		<div className='flex flex-col w-full h-full bg-slate-300 items-center justify-between pt-20'>
 			<ul className=''>
 				{data.jobPostings.map((job: JobPosting) => (
-					<JobPostingCard key={job._id} jobPosting={job} />
+					<JobPostingCard
+						key={job._id}
+						jobPosting={job}
+						handleApply={handleApply}
+					/>
 				))}
 			</ul>
 			<div className='flex flex-row mb-5 w-1/4 justify-evenly'>
