@@ -5,6 +5,7 @@ import { signOut } from 'next-auth/react'
 
 import useUser from '@/app/hooks/useUser'
 import Applications from './components/applications'
+import ProfileCard from './components/workerProfileCard'
 
 const WorkerProfile = () => {
 	const { data, error, isLoading } = useUser()
@@ -17,16 +18,14 @@ const WorkerProfile = () => {
 	}
 	return (
 		<div className='h-screen w-full flex flex-col pt-20 items-center bg-slate-300'>
-			<p>{data.worker.name}</p>
-			<p>{data.worker.bio}</p>
-			<div className='flex flex-row'>
-				{data.worker.jobTypes.map((type: string) => (
-					<p className='mx-2' key={type}>
-						{type}
-					</p>
-				))}
-			</div>
-			<div>
+			<ProfileCard
+				name={data.worker.name}
+				bio={data.worker.bio}
+				rating={data.worker.rating}
+				address={data.worker.address}
+				jobTypes={data.worker.jobTypes}
+			/>
+			<div className=' mt-52'>
 				<Suspense fallback={<div>Loading Applications</div>}>
 					<Applications />
 				</Suspense>
