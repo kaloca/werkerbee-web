@@ -127,7 +127,13 @@ export default function RegisterCompanyPage({ params }: any) {
 		setFormData({
 			...formData,
 			address: {
-				value: { street, city, state, country, zip },
+				value: {
+					street: street as string,
+					city: city as string,
+					state: state as string,
+					country: country as string,
+					zip: zip as string,
+				},
 				required: true,
 				step: 2,
 				hasChanged: true,
@@ -343,7 +349,7 @@ export default function RegisterCompanyPage({ params }: any) {
 
 	return (
 		<>
-			<div className='flex items-center justify-center'>
+			<div className='flex items-start justify-center h-full'>
 				<div className='xl:w-8/12 w-full px-16 pt-7'>
 					<div className='flex flex-row w-full justify-between items-center h-20'>
 						{currentStep > 1 ? (
@@ -622,6 +628,7 @@ export default function RegisterCompanyPage({ params }: any) {
 																value,
 																required: true,
 																step: 2,
+																hasChanged: true,
 															},
 														})
 													}

@@ -134,7 +134,13 @@ export default function RegisterWorkerPage({ params }: any) {
 		setFormData({
 			...formData,
 			address: {
-				value: { street, city, state, country, zip },
+				value: {
+					street: street as string,
+					city: city as string,
+					state: state as string,
+					country: country as string,
+					zip: zip as string,
+				},
 				required: true,
 				step: 2,
 				hasChanged: true,
