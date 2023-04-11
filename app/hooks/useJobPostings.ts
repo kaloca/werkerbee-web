@@ -8,7 +8,7 @@ export interface JobPosting {
 	_id: string
 	name: string
 	description: string
-	companyId: string
+	companyId: any
 	location: string
 	dressCode: string
 	requiredSkills: string
