@@ -25,7 +25,7 @@ const WorkerProfile = () => {
 				address={data.worker.address}
 				jobTypes={data.worker.jobTypes}
 			/>
-			<div className=' mt-52'>
+			<div className='flex'>
 				<Suspense fallback={<div>Loading Applications</div>}>
 					<Applications />
 				</Suspense>

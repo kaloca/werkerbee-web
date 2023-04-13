@@ -65,7 +65,7 @@ const JobPostingDetailsPage = ({
 
 	return (
 		<div className='h-full flex flex-col justify-center items-center'>
-			<div className='mb-10 border p-10'>
+			<div className='mb-10 border p-10 max-w-lg'>
 				<p>{name}</p>
 				<p className='first-letter:capitalize'>{type}</p>
 				<p className='first-letter:capitalize'>{description}</p>

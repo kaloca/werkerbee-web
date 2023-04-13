@@ -21,11 +21,11 @@ const Applications = () => {
 	console.log(data)
 
 	return (
-		<div>
+		<div className='flex flex-row justify-between'>
 			{data.applications.map((application: any) => (
 				<div
 					key={application._id}
-					className='w-full max-w-md  mx-auto bg-white rounded-3xl shadow-xl overflow-hidden'
+					className='w-full max-w-md  mx-5 bg-white rounded-3xl shadow-xl overflow-hidden'
 				>
 					<div className='max-w-md mx-auto'>
 						<div className='p-4 sm:p-6'>
