@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useSession } from 'next-auth/react'
 
 import useJobPostings, { JobPosting } from '../hooks/useJobPostings'
 
@@ -9,6 +10,8 @@ import JobPostingCard from './components/jobPostingCard'
 
 const JobPostingsList = () => {
 	const [currentPage, setCurrentPage] = useState(1)
+
+	const { data: session } = useSession()
 	const { data, error, isLoading } = useJobPostings(currentPage, 10)
 
 	const router = useRouter()
@@ -45,6 +48,7 @@ const JobPostingsList = () => {
 						key={job._id}
 						jobPosting={job}
 						handleApply={handleApply}
+						showApply={session?.user.type == 'worker'}
 					/>
 				))}
 			</ul>

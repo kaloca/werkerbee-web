@@ -26,9 +26,9 @@ export default function NavBar() {
 			url: '/jobs',
 		},
 		{
-			name: 'Other Stuff',
+			name: 'Post Job',
 			isSelected: false,
-			url: '/jobs',
+			url: '/create-job-posting',
 		},
 		{
 			name: 'Home	',

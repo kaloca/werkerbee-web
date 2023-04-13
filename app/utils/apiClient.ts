@@ -18,7 +18,7 @@ const apiClient = async ({ url, method, token, data }: apiClientProps) => {
 			headers: { Authorization: 'Bearer ' + token },
 		})
 
-		return response.data
+		return response
 	} catch (error) {
 		// Handle the error as needed
 		//console.error(error)

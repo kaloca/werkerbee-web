@@ -4,11 +4,15 @@ import Rating from '@/app/components/rating'
 interface JobPostingCardProps {
 	jobPosting: JobPosting
 	handleApply: (id: string) => void
+	showApply: boolean
+	showEdit?: boolean
 }
 
 const JobPostingCard: React.FC<JobPostingCardProps> = ({
 	jobPosting,
 	handleApply,
+	showApply,
+	showEdit = false,
 }) => {
 	return (
 		<div className='flex flex-col bg-white border border-white shadow-lg  rounded-3xl p-4 m-4 w-full'>
@@ -19,19 +23,21 @@ const JobPostingCard: React.FC<JobPostingCardProps> = ({
 						alt='aji'
 						className=' w-32 h-32 object-cover rounded-2xl'
 					/>
-					<a
-						href='#'
-						className='absolute -right-2 bottom-2   -ml-3  text-white p-1 text-xs bg-green-400 hover:bg-green-500 font-medium tracking-wider rounded-full transition ease-in duration-300'
-					>
-						<svg
-							xmlns='http://www.w3.org/2000/svg'
-							viewBox='0 0 20 20'
-							fill='currentColor'
-							className='h-4 w-4'
+					{showEdit && (
+						<a
+							href='#'
+							className='absolute -right-2 bottom-2 -ml-3 text-white p-1 text-xs bg-green-400 hover:bg-green-500 font-medium tracking-wider rounded-full transition ease-in duration-300'
 						>
-							<path d='M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z'></path>
-						</svg>
-					</a>
+							<svg
+								xmlns='http://www.w3.org/2000/svg'
+								viewBox='0 0 20 20'
+								fill='currentColor'
+								className='h-4 w-4'
+							>
+								<path d='M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z'></path>
+							</svg>
+						</a>
+					)}
 				</div>
 				<div className='flex-auto sm:ml-5 justify-evenly'>
 					<div className='flex items-center justify-between sm:mt-2'>
@@ -52,16 +58,25 @@ const JobPostingCard: React.FC<JobPostingCardProps> = ({
 					</div>
 					<Rating rating={3.4} />
 					<div className='flex pt-2  text-sm text-gray-500'>
-						<div className='flex-1 inline-flex items-center'>
+						<div className='flex-1 inline-flex items-center flex-row'>
 							<svg
 								xmlns='http://www.w3.org/2000/svg'
-								className='h-5 w-5 mr-2'
-								viewBox='0 0 20 20'
-								fill='currentColor'
+								className='icon icon-tabler icon-tabler-currency-dollar h-5'
+								width={24}
+								height={24}
+								viewBox='0 0 24 24'
+								strokeWidth={2}
+								stroke='currentColor'
+								fill='none'
+								strokeLinecap='round'
+								strokeLinejoin='round'
 							>
-								<path d='M8 9a3 3 0 100-6 3 3 0 000 6zM8 11a6 6 0 016 6H2a6 6 0 016-6zM16 7a1 1 0 10-2 0v1h-1a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V7z'></path>
+								<path stroke='none' d='M0 0h24v24H0z' fill='none' />
+								<path d='M16.7 8a3 3 0 0 0 -2.7 -2h-4a3 3 0 0 0 0 6h4a3 3 0 0 1 0 6h-4a3 3 0 0 1 -2.7 -2' />
+								<path d='M12 3v3m0 12v3' />
 							</svg>
-							<p className=''>1.2k Followers</p>
+
+							<p className=''>{jobPosting.payment}</p>
 						</div>
 						<div className='flex-1 inline-flex items-center'>
 							<svg
@@ -76,14 +91,16 @@ const JobPostingCard: React.FC<JobPostingCardProps> = ({
 									clipRule='evenodd'
 								/>
 							</svg>
-							<p className=''>14 Components</p>
+							<p className=''>{jobPosting.time}</p>
 						</div>
-						<button
-							onClick={() => handleApply(jobPosting._id)}
-							className='flex-no-shrink bg-green-400 hover:bg-green-500 px-5 ml-4 py-2 text-xs shadow-sm hover:shadow-lg font-medium tracking-wider border-2 border-green-300 hover:border-green-500 text-white rounded-full transition ease-in duration-300'
-						>
-							Apply
-						</button>
+						{showApply && (
+							<button
+								onClick={() => handleApply(jobPosting._id)}
+								className='flex-no-shrink bg-green-400 hover:bg-green-500 px-5 ml-4 py-2 text-xs shadow-sm hover:shadow-lg font-medium tracking-wider border-2 border-green-300 hover:border-green-500 text-white rounded-full transition ease-in duration-300'
+							>
+								Apply
+							</button>
+						)}
 					</div>
 				</div>
 			</div>
