@@ -6,10 +6,10 @@ WorkerBee is an on-demand job marketplace that connects businesses with temporar
 
 WorkerBee aims to empower workers and businesses in the hospitality industry by providing a comprehensive platform for them to find temporary work and skilled labor. The company operates on a commission-based business model, taking a percentage of the worker's wages as a fee for using the platform.
 
-## Tech Stack
+## Tech Stack (Typescript)
 
 - Front-end: React, Next.js, and Tailwind CSS
-- Main API: Node.js Express + Mongoose (Typescript)
+- Main API: Node.js Express + Mongoose ([API Repository](https://github.com/kaloca/werkerbee-api))
 - Database: MongoDB
 
 ## Functionalities
