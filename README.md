@@ -1,38 +1,24 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# WorkerBee - On-Demand Job Marketplace
 
-## Getting Started
+WorkerBee is an on-demand job marketplace that connects businesses with temporary workers in the hospitality industry. Our platform makes it easy for businesses to post job listings and find skilled workers quickly, while workers can discover and apply for jobs tailored to their skillsets and preferences. The marketplace streamlines the entire process from job application to completion, and even includes a rating system for both parties to ensure a positive experience.
 
-First, run the development server:
+## Company and Business Model
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+WorkerBee aims to empower workers and businesses in the hospitality industry by providing a comprehensive platform for them to find temporary work and skilled labor. The company operates on a commission-based business model, taking a percentage of the worker's wages as a fee for using the platform.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Tech Stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- Front-end: React, Next.js, and Tailwind CSS
+- Main API: Node.js Express + Mongoose (Typescript)
+- Database: MongoDB
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+## Functionalities
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- Comprehensive profiles for workers and businesses
+- Job posting and application system
+- Job acceptance and confirmation process
+- Clocking in/out system with SMS notifications
+- Rating system for workers and businesses
+- Payment processing with optional same-day pay
+- Job history tracking and logging
+- Marketplace filtering by wage, job type, skillsets, and date
