@@ -41,7 +41,7 @@ const JobPostingsList = () => {
 	}
 
 	return (
-		<div className='flex flex-col w-full h-full bg-slate-300 items-center justify-between pt-20'>
+		<div className='flex flex-col w-full h-full bg-slate-300 items-center justify-between pt-20 overflow-scroll'>
 			<ul className=''>
 				{data.jobPostings.map((job: JobPosting) => (
 					<JobPostingCard

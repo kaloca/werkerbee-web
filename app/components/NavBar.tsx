@@ -15,8 +15,6 @@ export default function NavBar() {
 	const showNavBar = pathname?.includes('register') ? false : true
 
 	const [show, setShow] = useState(false)
-	const [product, setProduct] = useState(false)
-	const [deliverables, setDeliverables] = useState(false)
 	const [profile, setProfile] = useState(false)
 
 	const [navBarItems, setNavBarItems] = useState([
@@ -24,16 +22,19 @@ export default function NavBar() {
 			name: 'Jobs',
 			isSelected: false,
 			url: '/jobs',
+			type: 'all',
 		},
 		{
 			name: 'Post Job',
 			isSelected: false,
 			url: '/create-job-posting',
+			type: 'company',
 		},
 		{
 			name: 'Home	',
 			isSelected: false,
 			url: '/jobs',
+			type: 'all',
 		},
 	])
 
@@ -505,20 +506,23 @@ export default function NavBar() {
 									</h3>
 								</div>
 								<ul className='pr-12 flex flex-row justify-center h-full'>
-									{navBarItems.map((item) => (
-										<div
-											key={item.name}
-											onClick={() => selectItem(item.name, item.url)}
-										>
-											<li
-												className={`cursor-pointer h-full flex items-center text-sm mx-5 ${
-													item.isSelected ? selected : normal
-												}`}
-											>
-												{item.name}
-											</li>
-										</div>
-									))}
+									{navBarItems.map((item) => {
+										if (item.type == 'all' || item.type == session?.user.type)
+											return (
+												<div
+													key={item.name}
+													onClick={() => selectItem(item.name, item.url)}
+												>
+													<li
+														className={`cursor-pointer h-full flex items-center text-sm mx-5 ${
+															item.isSelected ? selected : normal
+														}`}
+													>
+														{item.name}
+													</li>
+												</div>
+											)
+									})}
 								</ul>
 							</div>
 							<div className='h-full xl:flex items-center justify-end hidden'>

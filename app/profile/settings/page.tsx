@@ -5,11 +5,11 @@ const Index = () => {
 	let form = useRef(null)
 	const handleSubmit = (event: any) => {
 		event.preventDefault()
-		const form_data = new FormData(form.current)
-		let payload = {}
-		form_data.forEach(function (value, key) {
-			payload[key] = value
-		})
+		// const form_data = new FormData(form.current)
+		// let payload = {}
+		// form_data.forEach(function (value, key) {
+		// 	payload[key] = value
+		// })
 		// console.log("payload", payload);
 		// Place your API call here to submit your payload.
 	}
@@ -174,7 +174,7 @@ const Index = () => {
 									name='firstName'
 									required
 									className='border border-gray-300 dark:border-gray-700 pl-3 py-3 shadow-sm bg-transparent rounded text-sm focus:outline-none focus:border-indigo-700 placeholder-gray-500 text-gray-500 dark:text-gray-400'
-									placeholder
+									placeholder='Test'
 								/>
 							</div>
 							<div className='xl:w-1/4 lg:w-1/2 md:w-1/2 flex flex-col mb-6'>
@@ -190,7 +190,7 @@ const Index = () => {
 									name='lastName'
 									required
 									className='border border-gray-300 dark:border-gray-700 pl-3 py-3 shadow-sm bg-transparent rounded text-sm focus:outline-none focus:border-indigo-700 placeholder-gray-500 text-gray-500 dark:text-gray-400'
-									placeholder
+									placeholder='Test'
 								/>
 							</div>
 							<div className='xl:w-1/4 lg:w-1/2 md:w-1/2 flex flex-col mb-6'>
@@ -262,7 +262,7 @@ const Index = () => {
 									name='streetAddress'
 									required
 									className='border border-gray-300 dark:border-gray-700 pl-3 py-3 shadow-sm rounded bg-transparent text-sm focus:outline-none focus:border-indigo-700 placeholder-gray-500 text-gray-500 dark:text-gray-400'
-									placeholder
+									placeholder='Test'
 								/>
 							</div>
 							<div className='xl:w-1/4 lg:w-1/2 md:w-1/2 flex flex-col mb-6'>
@@ -376,7 +376,7 @@ const Index = () => {
 									required
 									id='ZIP'
 									className='bg-transparent border border-red-400 pl-3 py-3 shadow-sm rounded text-sm focus:outline-none focus:border-indigo-700 placeholder-gray-500 text-gray-500 dark:text-gray-400'
-									placeholder={86745}
+									placeholder={'86745'}
 								/>
 								<div className='flex justify-between items-center pt-1 text-red-400'>
 									<p className='text-xs'>Incorrect Zip Code</p>

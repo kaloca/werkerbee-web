@@ -21,6 +21,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
 	address,
 	jobTypes,
 }) => {
+	console.log(jobTypes)
 	return (
 		<div className='flex flex-col bg-white border border-white shadow-lg  rounded-3xl p-4 m-4 w-1/3'>
 			<div className='flex-none sm:flex'>

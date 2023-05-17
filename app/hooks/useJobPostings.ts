@@ -8,7 +8,7 @@ export interface JobPosting {
 	_id: string
 	name: string
 	description: string
-	companyId: any
+	company: any
 	location: string
 	dressCode: string
 	requiredSkills: string
@@ -16,7 +16,7 @@ export interface JobPosting {
 	time: string
 	type: string
 	payment: string
-	applicants: string[]
+	applications: string[]
 	createdAt: Date
 	updatedAt: Date
 }

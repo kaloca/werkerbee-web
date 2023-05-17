@@ -60,7 +60,7 @@ const JobPostingDetailsPage = ({
 		location,
 		dressCode,
 		payment,
-		companyId,
+		company,
 	}: JobPosting = data.jobPosting
 
 	return (
@@ -71,8 +71,8 @@ const JobPostingDetailsPage = ({
 				<p className='first-letter:capitalize'>{description}</p>
 				<p>{dressCode}</p>
 				<p>
-					{companyId.address.street}, {companyId.address.city},{' '}
-					{companyId.address.state}, {companyId.address.zip}
+					{company.address.street}, {company.address.city},{' '}
+					{company.address.state}, {company.address.zip}
 				</p>
 				<p>{payment}</p>
 			</div>

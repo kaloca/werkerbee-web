@@ -11,7 +11,7 @@ const getCompanyData = async (companyId: string) => {
 }
 
 export default function CompanyProfilePage({ params }: any) {
-	const { data, isLoading } = useCompany(params.companyId)
+	const { data, isLoading } = useCompany(params.companyUsername)
 
 	return (
 		<div className='w-full h-full'>

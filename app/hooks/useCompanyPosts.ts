@@ -4,9 +4,9 @@ import fetcher from '../utils/fetcher'
 
 import { BASE_URL } from '@/app/utils/constants'
 
-const useCompany = (companyUsername: string) => {
+const useCompanyPosts = (companyUsername: string) => {
 	const { data, error, isLoading, mutate } = useSWR(
-		`${BASE_URL}/company/${companyUsername}`,
+		`${BASE_URL}/company/${companyUsername}/posts`,
 		fetcher
 	)
 
@@ -18,4 +18,4 @@ const useCompany = (companyUsername: string) => {
 	}
 }
 
-export default useCompany
+export default useCompanyPosts

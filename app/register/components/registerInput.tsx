@@ -44,6 +44,7 @@ const RegisterInput: React.FC<registerInputProps> = ({
 					className='w-full p-3 mt-3 bg-gray-100 border rounded border-gray-200 focus:outline-none focus:border-gray-600 text-sm font-medium leading-none text-gray-800'
 					placeholder={placeholder}
 					name={inputName}
+					value={value}
 				/>
 			)}
 			<div className='h-8'>

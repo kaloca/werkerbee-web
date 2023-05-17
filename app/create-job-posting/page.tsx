@@ -1,6 +1,7 @@
 'use client'
 import React, { useEffect, useRef, useState } from 'react'
 import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 
 import apiClient from '../utils/apiClient'
 import useJobTypes from '../hooks/useJobTypes'
@@ -14,7 +15,10 @@ const CreateJobPostingPage: React.FC = () => {
 		isLoading: loadingJobTypes,
 		error: jobTypesError,
 	} = useJobTypes()
+
 	const { data: session } = useSession()
+	const router = useRouter()
+
 	const { showError } = useErrorBar()
 
 	const dropdownRef = useRef<HTMLDivElement>(null)
@@ -116,6 +120,7 @@ const CreateJobPostingPage: React.FC = () => {
 				})
 				if (response?.status === 201) {
 					console.log('Job application submitted successfully')
+					router.push('/jobs')
 				} else {
 					console.error(
 						`Error submitting job application: ${
