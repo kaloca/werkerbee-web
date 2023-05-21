@@ -4,7 +4,7 @@ import React, { Suspense } from 'react'
 import { signOut } from 'next-auth/react'
 
 import useUser from '@/app/hooks/useUser'
-import Applications from './components/applications'
+// import Applications from './components/applications'
 import ProfileCard from './components/workerProfileCard'
 
 const WorkerProfile = () => {
@@ -25,11 +25,11 @@ const WorkerProfile = () => {
 				address={data.worker.address}
 				jobTypes={data.worker.jobTypes}
 			/>
-			<div className='flex'>
+			{/* <div className='flex'>
 				<Suspense fallback={<div>Loading Applications</div>}>
 					<Applications />
 				</Suspense>
-			</div>
+			</div> */}
 		</div>
 	)
 }
