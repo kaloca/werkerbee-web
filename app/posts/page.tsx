@@ -13,14 +13,6 @@ export default function CompanyPostsPage({ params }: any) {
 	const { data: session, status } = useSession()
 	const router = useRouter()
 
-	const {
-		data: posts,
-		isLoading,
-		error,
-	} = useCompanyPosts(params.companyUsername)
-
-	console.log(posts)
-
 	useEffect(() => {
 		if (status == 'unauthenticated' && !session) {
 			// Redirect to another page, e.g., the login page
@@ -28,15 +20,21 @@ export default function CompanyPostsPage({ params }: any) {
 		}
 	}, [session, status, router])
 
+	const {
+		data: posts,
+		isLoading,
+		error,
+	} = useCompanyPosts(session?.user.username || '')
+
 	const handleClickJobPost = (jobPostingId: string) => {
-		router.push(`/company/${params.companyUsername}/jobs/${jobPostingId}`)
+		router.push(`/posts/${jobPostingId}`)
 	}
 
 	return (
 		<>
 			{!isLoading && (
 				<>
-					{session?.user.username === params.companyUsername ? (
+					{session?.user.type === 'company' ? (
 						<div className='h-full w-full flex flex-col justify-center items-center bg-blue-50'>
 							{posts.map((post: JobPosting) => (
 								<JobPostCard

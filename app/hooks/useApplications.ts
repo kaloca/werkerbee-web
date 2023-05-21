@@ -4,6 +4,16 @@ import { useSession } from 'next-auth/react'
 import fetcher from '../utils/fetcher'
 import { BASE_URL } from '@/app/utils/constants'
 
+import { JobPosting } from './useJobPostings'
+import { ICompany } from './useCompany'
+
+export interface IJobApplication {
+	_id: string
+	company: ICompany
+	jobPosting: JobPosting
+	status: 'PENDING' | 'ACCEPTED' | 'REJECTED' | 'CANCELED' | 'SCHEDULED'
+}
+
 const useApplications = () => {
 	const { data: session } = useSession()
 
@@ -15,7 +25,7 @@ const useApplications = () => {
 	)
 
 	return {
-		data,
+		data: data as IJobApplication[],
 		error,
 		isLoading,
 		mutate,

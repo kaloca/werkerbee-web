@@ -1,6 +1,7 @@
 'use client'
 import React from 'react'
 import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
 
 import useJobPosting from '@/app/hooks/useJobPosting'
 import { JobPosting } from '@/app/hooks/useJobPostings'
@@ -20,6 +21,8 @@ const JobPostingDetailsPage = ({
 	const { data, isLoading, error } = useJobPosting(params.id)
 	const { data: session } = useSession()
 	const { showError } = useErrorBar()
+
+	const router = useRouter()
 
 	const handleApply = async () => {
 		if (session)
@@ -44,6 +47,9 @@ const JobPostingDetailsPage = ({
 				)
 				showError(error.response.data.message)
 			}
+		else {
+			router.push('/login')
+		}
 	}
 	if (isLoading) {
 		return <div>Loading Job Posting</div>

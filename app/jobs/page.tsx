@@ -48,7 +48,7 @@ const JobPostingsList = () => {
 						key={job._id}
 						jobPosting={job}
 						handleApply={handleApply}
-						showApply={session?.user.type == 'worker'}
+						showApply={session?.user.type != 'company'}
 					/>
 				))}
 			</ul>

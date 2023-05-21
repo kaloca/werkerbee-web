@@ -24,10 +24,10 @@ export default function CompanyProfilePage({ params }: any) {
 							<div className='flex flex-wrap justify-center'>
 								<div className='w-full flex justify-center'>
 									<div className='relative'>
-										<img
+										{/* <img
 											src='https://github.com/creativetimofficial/soft-ui-dashboard-tailwind/blob/main/build/assets/img/team-2.jpg?raw=true'
 											className='shadow-xl rounded-full align-middle border-none absolute -m-16 -ml-20 lg:-ml-16 max-w-[150px]'
-										/>
+										/> */}
 									</div>
 								</div>
 								<div className='w-full text-center mt-20'>

@@ -36,6 +36,24 @@ export default function NavBar() {
 			url: '/jobs',
 			type: 'all',
 		},
+		{
+			name: 'Manage Posts',
+			isSelected: false,
+			url: '/posts',
+			type: 'company',
+		},
+		{
+			name: 'Applications',
+			isSelected: false,
+			url: '/applications',
+			type: 'worker',
+		},
+		{
+			name: 'My Jobs',
+			isSelected: false,
+			url: '/myjobs',
+			type: 'worker',
+		},
 	])
 
 	const selectItem = (name: string, url: string) => {
