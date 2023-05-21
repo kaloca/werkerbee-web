@@ -136,12 +136,12 @@ export default function LoginPage() {
 						)}
 						<div>
 							<label className='text-sm font-medium leading-none text-gray-800'>
-								Email
+								Email or username
 							</label>
 							<input
 								aria-label='enter email adress'
 								role='input'
-								type='email'
+								type='text'
 								value={email}
 								onChange={(e) => setEmail(e.target.value)}
 								className='bg-gray-200 border rounded focus:outline-none text-xs font-medium leading-none text-gray-800 py-3 w-full pl-3 mt-2'
