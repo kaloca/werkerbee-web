@@ -69,7 +69,10 @@ export default function RegisterCompanyPage({ params }: any) {
 			hasChanged: false,
 		},
 		location: {
-			value: '',
+			value: {
+				type: 'Point',
+				coordinates: [0, 0],
+			},
 			required: true,
 			step: 2,
 			hasChanged: false,
@@ -139,7 +142,10 @@ export default function RegisterCompanyPage({ params }: any) {
 				hasChanged: true,
 			},
 			location: {
-				value: `${coordinates.lat}, ${coordinates.lng}`,
+				value: {
+					type: 'Point',
+					coordinates: [coordinates.lng, coordinates.lat],
+				},
 				required: true,
 				step: 2,
 				hasChanged: true,

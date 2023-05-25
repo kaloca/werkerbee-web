@@ -51,7 +51,7 @@ const JobPostingCard: React.FC<JobPostingCardProps> = ({
 										{jobPosting.type}
 									</span>
 									<span className='mr-3 border-r border-gray-200  max-h-0' />
-									<span>{jobPosting.location}</span>
+									<span>{JSON.stringify(jobPosting.location)}</span>
 								</div>
 							</div>
 						</div>
@@ -91,7 +91,7 @@ const JobPostingCard: React.FC<JobPostingCardProps> = ({
 									clipRule='evenodd'
 								/>
 							</svg>
-							<p className=''>{jobPosting.time}</p>
+							<p className=''>{jobPosting.start}</p>
 						</div>
 						{showApply && (
 							<button
