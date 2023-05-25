@@ -1,30 +1,31 @@
 import useSWR from 'swr'
-import { useEffect, useState } from 'react'
-
+import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 
 import fetcher from '../utils/fetcher'
+
 import { BASE_URL } from '@/src/utils/constants'
 
-import { JobPosting } from './useJobPostings'
-import { ICompany } from './useCompany'
-import { Worker } from './useUser'
-
-export interface JobApplication {
+export interface Job {
 	_id: string
-	company: ICompany
-	worker: Worker
-	jobPosting: JobPosting
-	status: 'PENDING' | 'ACCEPTED' | 'REJECTED' | 'CANCELED' | 'SCHEDULED'
+	name: string
+	rating?: number
+	worker: string
+	company: string
+	jobPosting: string
+	status: 'PENDING' | 'COMPLETE' | 'CANCELED'
+	time: {}
+	createdAt: Date
+	updatedAt: Date
 }
 
-const useApplications = () => {
+const useJobs = (username: string) => {
 	const [isLoading, setIsLoading] = useState(true)
-	const [data, setData] = useState<JobApplication[] | null>(null)
+	const [data, setData] = useState<Job[] | null>(null)
 	const [error, setError] = useState<Error | null>(null)
 
 	const { data: session } = useSession()
-	const applicationsUrl = `${BASE_URL}/worker/${session?.user.username}/applications`
+	const applicationsUrl = `${BASE_URL}/worker/${session?.user.username}/jobs`
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -47,7 +48,7 @@ const useApplications = () => {
 		fetchData()
 	}, [session, applicationsUrl])
 
-	return { data: data as JobApplication[], error: error as Error, isLoading }
+	return { data, error, isLoading }
 }
 
-export default useApplications
+export default useJobs
