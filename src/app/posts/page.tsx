@@ -36,7 +36,7 @@ export default function CompanyPostsPage({ params }: any) {
 			{!isLoading && (
 				<>
 					{session?.user.type === 'company' ? (
-						<div className='h-full w-full flex flex-col justify-center items-center bg-blue-50'>
+						<div className='h-full w-full flex flex-col items-center bg-blue-50 pt-32'>
 							{posts.map((post: JobPosting) => (
 								<JobPostCard
 									onClick={handleClickJobPost}

@@ -1,15 +1,17 @@
 'use client'
 
-import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { useErrorBar } from '@/src/app/context/errorContext'
 
-import { BASE_URL } from '@/src/utils/constants'
-import { JobPosting } from '@/src/hooks/useJobPostings'
 import useJobPostingApplications from '@/src/hooks/useJobPostingApplications'
-import fetcher from '@/src/utils/fetcher'
 import apiClient from '@/src/utils/apiClient'
+
+import TopBar from './components/TopBar'
+import List from './components/List'
+import { BASE_URL } from '@/src/utils/constants'
+import fetcher from '@/src/utils/fetcher'
+import useSWR from 'swr'
 
 export default function CompanyPostsPage({ params }: any) {
 	const { data: session, status } = useSession()
@@ -17,34 +19,44 @@ export default function CompanyPostsPage({ params }: any) {
 	const { showError } = useErrorBar()
 	const {
 		data: applications,
+		jobName,
 		isLoading,
 		error,
 		mutate,
 	} = useJobPostingApplications(params.jobPostingId)
 
-	const onAccept = async (applicationId: string) => {
+	// console.log(applications)
+	const onApplicationUpdate = async (
+		decision: 'ACCEPTED' | 'REJECTED',
+		applicationId: string
+	) => {
 		if (session) {
 			try {
 				const response = await apiClient({
-					method: 'post',
-					url: `/job-application/${applicationId}/accept`,
+					method: decision == 'ACCEPTED' ? 'post' : 'put',
+					url: `/job-application/${applicationId}/${
+						decision == 'ACCEPTED' ? 'accept' : 'status'
+					}`,
 					token: session.user.token,
+					data: {
+						status: decision,
+					},
 				})
 
 				if (response?.status === 200) {
-					console.log('Job application accepted successfully')
+					console.log('Job application status updated successfully')
 					// Copy the current applications
 					let updatedApplications = [...applications]
 
 					// Find the clicked application in the applications array and update its status
 					for (let application of updatedApplications) {
 						if (application._id === applicationId) {
-							application.status = 'ACCEPTED' // or whatever status is appropriate here
+							application.status = decision // or whatever status is appropriate here
 						}
 					}
 
 					// Update the state with the updated applications
-					mutate(updatedApplications, false)
+					mutate()
 					router.replace(window.location.pathname)
 				} else {
 					console.error(
@@ -62,30 +74,36 @@ export default function CompanyPostsPage({ params }: any) {
 	}
 
 	return (
-		<>
-			{!isLoading && (
-				<>
-					<div className='flex flex-col items-center justify-center bg-blue-300 h-full'>
-						{applications != undefined &&
-							applications.map((application: any) => (
-								<div key={application._id} className='flex flex-col'>
-									<div className='flex flex-row items-center'>
-										<span>{application.worker.name}</span>
-										<div
-											className='p-2 bg-green-300 ml-5 hover:cursor-pointer'
-											onClick={() => onAccept(application._id)}
-										>
-											<span>Accept</span>
-										</div>
-									</div>
-									<span className='first-letter:uppercase lowercase'>
-										{application.status}
-									</span>
-								</div>
-							))}
-					</div>
-				</>
+		<div className='py-20 w-screen bg-slate-100 md:px-14 lg:px-20 xl:px-64 h-full'>
+			<TopBar
+				jobName={jobName || 'Loading'}
+				numberOfPages={1}
+				numberPerPage={applications ? applications.length : 0}
+				totalApplications={20}
+			/>
+			{applications && applications.length > 0 && (
+				<List
+					applications={applications}
+					onApplicationUpdate={onApplicationUpdate}
+				/>
 			)}
-		</>
+			{applications && applications.length == 0 && (
+				<div>
+					<span>This job has no current applications</span>
+				</div>
+			)}
+			{isLoading && (
+				<div>
+					<span>Loading applications</span>
+				</div>
+			)}
+			{error && (
+				<div>
+					<span>
+						There was an error loading the applications. Please reload the page
+					</span>
+				</div>
+			)}
+		</div>
 	)
 }
