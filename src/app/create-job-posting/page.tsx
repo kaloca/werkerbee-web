@@ -3,9 +3,9 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 
-import apiClient from '../../utils/apiClient'
+import apiClient from '@/src/utils/apiClient'
 import useJobTypes from '@/src/hooks/useJobTypes'
-import { useErrorBar } from '../context/errorContext'
+import { useErrorBar } from '@/src/app/context/errorContext'
 
 import DropdownInput from './components/jobTypeInput'
 
@@ -56,7 +56,19 @@ const CreateJobPostingPage: React.FC = () => {
 			step: 1,
 			hasChanged: false,
 		},
-		time: {
+		date: {
+			value: '',
+			required: true,
+			step: 1,
+			hasChanged: false,
+		},
+		startTime: {
+			value: '',
+			required: true,
+			step: 1,
+			hasChanged: false,
+		},
+		endTime: {
 			value: '',
 			required: true,
 			step: 1,
@@ -99,9 +111,21 @@ const CreateJobPostingPage: React.FC = () => {
 	}
 
 	const handleSubmit = async () => {
-		if (Object.values(formData).some((item) => item.value === '')) return
+		if (Object.values(formData).some((item) => item.value === '')) {
+			console.log(formData)
+			showError('Please fill all job posting fields')
+			return
+		}
 
 		if (session) {
+			// Create start time Date object
+			const startDateTimeString = `${formData.date.value}T${formData.startTime.value}`
+			const endDateTimeString = `${formData.date.value}T${formData.endTime.value}`
+
+			// Parse these full date strings into Date objects
+			const startDate = new Date(startDateTimeString)
+			const endDate = new Date(endDateTimeString)
+
 			try {
 				const response = await apiClient({
 					method: 'post',
@@ -113,7 +137,8 @@ const CreateJobPostingPage: React.FC = () => {
 						dressCode: formData.dressCode.value,
 						requiredSkills: formData.requiredSkills.value,
 						requiredCertifications: formData.requiredCertifications.value,
-						time: formData.time.value,
+						start: startDate,
+						end: endDate,
 						type: formData.type.value,
 						payment: formData.payment.value,
 					},
@@ -146,11 +171,7 @@ const CreateJobPostingPage: React.FC = () => {
 			<div className='mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8'>
 				<div className='grid grid-cols-1 gap-x-16 gap-y-8 lg:grid-cols-5'>
 					<div className='lg:col-span-2 lg:py-12'>
-						<p className='max-w-xl text-lg'>
-							At the same time, the fact that we are wholly owned and totally
-							independent from manufacturer and other group control gives you
-							confidence that we will only recommend what is right for you.
-						</p>
+						<p className='max-w-xl text-lg'>Tutorial text space</p>
 						{/* <div className='mt-8'>
 							<a href='' className='text-2xl font-bold text-pink-600'>
 								0151 475 4450
@@ -175,21 +196,43 @@ const CreateJobPostingPage: React.FC = () => {
 									onChange={handleOnChange}
 								/>
 							</div>
-							<div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
+							<div className='grid grid-cols-1 gap-4 sm:grid-cols-2 '>
 								<div>
-									<label className='sr-only' htmlFor='email'>
-										Time
+									<div className='flex flex-row items-center justify-between mb-2'>
+										<span className='mr-2 text-gray-600'>Shift Start</span>
+										<input
+											className='w-1/2 rounded-lg border border-gray-300 p-3 text-sm'
+											placeholder='Shift Start'
+											type='time'
+											id='startTime'
+											value={formData.startTime.value}
+											onChange={handleOnChange}
+										/>
+									</div>
+									<div className='flex flex-row items-center justify-between'>
+										<span className='text-gray-600'>Shift End</span>
+										<input
+											className='w-1/2 rounded-lg border border-gray-300 p-3 text-sm'
+											placeholder='Shift End'
+											type='time'
+											id='endTime'
+											value={formData.endTime.value}
+											onChange={handleOnChange}
+										/>
+									</div>
+								</div>
+								<div className=''>
+									<label className='sr-only' htmlFor='phone'>
+										Payment
 									</label>
 									<input
-										className='w-full rounded-lg border border-gray-300 p-3 text-sm'
-										placeholder='Time (TO BE REPLACED)'
-										type='text'
-										id='time'
-										value={formData.time.value}
+										className='w-full rounded-lg border border-gray-300 p-3 text-sm mb-2'
+										placeholder='Date'
+										type='date'
+										id='date'
+										value={formData.date.value}
 										onChange={handleOnChange}
 									/>
-								</div>
-								<div>
 									<label className='sr-only' htmlFor='phone'>
 										Payment
 									</label>
