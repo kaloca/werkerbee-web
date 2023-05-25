@@ -80,7 +80,7 @@ const CreateJobPostingPage: React.FC = () => {
 			step: 1,
 			hasChanged: false,
 		},
-		payment: { value: '', required: true, step: 1, hasChanged: false },
+		payment: { value: 0, required: true, step: 1, hasChanged: false },
 	})
 
 	const handleMouseDown = (e: MouseEvent) => {
@@ -239,7 +239,7 @@ const CreateJobPostingPage: React.FC = () => {
 									<input
 										className='w-full rounded-lg border border-gray-300 p-3 text-sm'
 										placeholder='Payment'
-										type='text'
+										type='number'
 										id='payment'
 										value={formData.payment.value}
 										onChange={handleOnChange}
