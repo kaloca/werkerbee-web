@@ -13,12 +13,19 @@ export interface JobPosting {
 	dressCode: string
 	requiredSkills: string
 	requiredCertifications: string
-	time: string
+	start: string
+	end: string
 	type: string
 	payment: string
 	applications: string[]
 	createdAt: Date
 	updatedAt: Date
+}
+
+interface getJobsResponse {
+	totalPages: number
+	currentPage: number
+	jobPostings: JobPosting[]
 }
 
 const useJobPostings = (page: number, limit: number) => {
@@ -30,7 +37,7 @@ const useJobPostings = (page: number, limit: number) => {
 	const isLoading = !error && !data
 
 	return {
-		data,
+		data: data as getJobsResponse,
 		error,
 		isLoading,
 		mutate,
