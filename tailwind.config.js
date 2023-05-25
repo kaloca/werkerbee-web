@@ -10,6 +10,7 @@ module.exports = {
 	theme: {
 		extend: {},
 	},
+	darkMode: 'class',
 	plugins: [
 		plugin(function ({ addUtilities }) {
 			addUtilities({
@@ -24,5 +25,6 @@ module.exports = {
 				},
 			})
 		}),
+		require('@tailwindcss/forms'),
 	],
 }
