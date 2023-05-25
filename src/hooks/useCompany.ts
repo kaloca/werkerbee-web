@@ -22,7 +22,9 @@ export interface ICompany {
 	username: string
 	description: string
 	email: string
-	location: string
+	location: {
+		coordinates: [number, number]
+	}
 	type: string
 	overallRating: number
 	jobTypes: string[]
