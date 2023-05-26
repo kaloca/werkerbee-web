@@ -14,34 +14,42 @@ import {
 } from '@heroicons/react/20/solid'
 
 import helpers from '@/src/utils/helpers'
-import useJobPostings from '@/src/hooks/useJobPostings'
+import useJobPostings, { JobPostingsOptions } from '@/src/hooks/useJobPostings'
 
-import { sortOptions, subCategories, filters } from './options'
+import {
+	sortOptions,
+	subCategories,
+	filters,
+} from './components/SearchOptions/options'
 
-import MobileFilter from './components/MobileFilters'
+import MobileFilter from './components/SearchOptions/MobileFilters'
 import JobCard from './components/JobCard'
+import FilterTextInput from './components/SearchOptions/FilterTextInput'
+import SearchButton from './components/SearchOptions/SearchButton'
 
 const classNames = helpers.classNames
 
 export default function Jobs() {
 	const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
-
-	const [currentPage, setCurrentPage] = useState(1)
+	const [searchOptions, setSearchOptions] = useState<JobPostingsOptions>({
+		page: 1,
+		limit: 10,
+	})
 
 	const { data: session } = useSession()
-	const { data, error, isLoading } = useJobPostings(currentPage, 10)
+	const { data, error, isLoading } = useJobPostings(searchOptions)
 
 	const router = useRouter()
 
 	const handlePrevPage = () => {
-		if (currentPage > 1) {
-			setCurrentPage(currentPage - 1)
+		if (searchOptions.page > 1) {
+			setSearchOptions({ ...searchOptions, page: searchOptions.page - 1 })
 		}
 	}
 
 	const handleNextPage = () => {
-		if (currentPage < data.totalPages) {
-			setCurrentPage(currentPage + 1)
+		if (searchOptions.page < data.totalPages) {
+			setSearchOptions({ ...searchOptions, page: searchOptions.page + 1 })
 		}
 	}
 
@@ -149,7 +157,7 @@ export default function Jobs() {
 								<h3 className='sr-only'>Categories</h3>
 								<ul
 									role='list'
-									className='space-y-4 border-b border-gray-200 pb-6 text-sm font-medium text-gray-900'
+									className='space-y-4 border-b border-gray-200 pb-6 text-sm font-medium text-gray-900 mb-3'
 								>
 									{subCategories.map((category) => (
 										<li key={category.name}>
@@ -157,7 +165,11 @@ export default function Jobs() {
 										</li>
 									))}
 								</ul>
-
+								<FilterTextInput
+									label={'Max Distance From You (miles)'}
+									type='number'
+									id='max-distance'
+								/>
 								{filters.map((section) => (
 									<Disclosure
 										as='div'
@@ -215,6 +227,7 @@ export default function Jobs() {
 										)}
 									</Disclosure>
 								))}
+								<SearchButton />
 							</form>
 
 							{/* Product grid */}

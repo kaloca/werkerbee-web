@@ -2,13 +2,7 @@ export const sortOptions = [
 	{ name: 'Most Popular', href: '#', current: true },
 	{ name: 'Best Rating', href: '#', current: false },
 ]
-export const subCategories = [
-	{ name: 'Closest to you', href: '#' },
-	{ name: 'Backpacks', href: '#' },
-	{ name: 'Travel Bags', href: '#' },
-	{ name: 'Hip Bags', href: '#' },
-	{ name: 'Laptop Sleeves', href: '#' },
-]
+export const subCategories = [{ name: 'Closest to you', href: '#' }]
 export const filters = [
 	{
 		id: 'days',

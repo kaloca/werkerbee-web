@@ -9,6 +9,8 @@ export interface JobPosting {
 	name: string
 	description: string
 	company: any
+	companyName: string
+	dayOfWeek: string
 	location: string
 	dressCode: string
 	requiredSkills: string
@@ -28,9 +30,33 @@ interface getJobsResponse {
 	jobPostings: JobPosting[]
 }
 
-const useJobPostings = (page: number, limit: number) => {
+const buildParams = (params: Record<string, any>) => {
+	return Object.entries(params)
+		.filter(([_, v]) => v != null) // filter out undefined values
+		.flatMap(([k, v]) =>
+			Array.isArray(v)
+				? v.map(
+						(item) => `${encodeURIComponent(k)}=${encodeURIComponent(item)}`
+				  )
+				: `${encodeURIComponent(k)}=${encodeURIComponent(v)}`
+		)
+		.join('&')
+}
+export interface JobPostingsOptions {
+	page: number
+	limit: number
+	dayOfWeek?: string[]
+	minPay?: number
+	jobType?: string
+	requesterLocation?: string
+	requesterDistance?: number
+	sortBy?: string // "bestRating", "mostPopular", "newest"
+}
+
+const useJobPostings = (options: JobPostingsOptions) => {
+	const params = buildParams(options)
 	const { data, error, mutate } = useSWR(
-		`${BASE_URL}/job-postings?page=${page}&limit=${limit}`,
+		`${BASE_URL}/job-postings?${params}`,
 		fetcher
 	)
 

@@ -33,7 +33,7 @@ const JobCard: React.FC<JobCardProps> = ({
 }) => {
 	const startDate = new Date(jobPosting.start)
 	const endDate = new Date(jobPosting.start)
-
+	console.log(jobPosting)
 	return (
 		<li className='bg-white shadow overflow-hidden px-4 py-4 sm:px-6 sm:rounded-md'>
 			<div className='flex-none sm:flex'>
@@ -68,14 +68,14 @@ const JobCard: React.FC<JobCardProps> = ({
 								</div>
 								<div className='flex-auto text-gray-500 my-1'>
 									<span className='mr-3 first-letter:capitalize'>
-										{jobPosting.company.name}
+										{jobPosting.companyName}
 									</span>
 									<span className='mr-3 border-r border-gray-200  max-h-0' />
 									<span className='mr-3 first-letter:capitalize'>
 										{jobPosting.type}
 									</span>
 									<span className='mr-3 border-r border-gray-200  max-h-0' />
-									<span>{jobPosting.location}</span>
+									<span>{JSON.stringify(jobPosting.location)}</span>
 								</div>
 							</div>
 						</div>
