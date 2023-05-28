@@ -73,6 +73,30 @@ const classNames = (...classes: any) => {
 	return classes.filter(Boolean).join(' ')
 }
 
+const formatTime = (dateTimeString: string) => {
+	const date = new Date(dateTimeString)
+	let hours = date.getUTCHours()
+	let minutes = date.getUTCMinutes()
+
+	let hoursString = hours < 10 ? '0' + hours : '' + hours
+	let minutesString = minutes < 10 ? '0' + minutes : '' + minutes
+
+	return `${hoursString}:${minutesString}`
+}
+
+const formatDate = (dateTimeString: string) => {
+	const date = new Date(dateTimeString)
+	let year = date.getUTCFullYear()
+	let month = date.getUTCMonth() + 1 // JavaScript months are 0-11
+	let day = date.getUTCDate()
+
+	let yearString = '' + year
+	let monthString = month < 10 ? '0' + month : '' + month
+	let dayString = day < 10 ? '0' + day : '' + day
+
+	return `${yearString}-${monthString}-${dayString}`
+}
+
 const helpers = {
 	validateEmail,
 	validatePhoneNumber,
@@ -81,6 +105,8 @@ const helpers = {
 	validateUsername,
 	formatAMPM,
 	classNames,
+	formatTime,
+	formatDate,
 }
 
 export default helpers

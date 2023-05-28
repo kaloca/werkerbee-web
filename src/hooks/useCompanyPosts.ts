@@ -4,6 +4,8 @@ import fetcher from '../utils/fetcher'
 
 import { BASE_URL } from '@/src/utils/constants'
 
+import { JobPosting } from './useJobPostings'
+
 const useCompanyPosts = (companyUsername: string) => {
 	const { data, error, isLoading, mutate } = useSWR(
 		`${BASE_URL}/company/${companyUsername}/posts`,
@@ -11,7 +13,7 @@ const useCompanyPosts = (companyUsername: string) => {
 	)
 
 	return {
-		data,
+		data: data as JobPosting[],
 		error,
 		isLoading,
 		mutate,

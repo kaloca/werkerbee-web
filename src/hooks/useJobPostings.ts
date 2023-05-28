@@ -47,7 +47,7 @@ export interface JobPostingsOptions {
 	limit: number
 	dayOfWeek?: string[]
 	minPay?: number
-	jobType?: string
+	jobType?: string[]
 	requesterLocation?: string
 	requesterDistance?: number
 	sortBy?: string // "bestRating", "mostPopular", "newest"
