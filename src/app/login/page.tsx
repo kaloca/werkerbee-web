@@ -99,7 +99,7 @@ export default function LoginPage() {
 							Login to your account
 						</p>
 						<div className='text-sm mt-4 font-medium leading-none text-gray-500'>
-							Don&apos;t have account?{' '}
+							Don&apos;t have an account?{' '}
 							<div className='mt-2'>
 								<Link href='/register/worker'>
 									<span
