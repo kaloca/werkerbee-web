@@ -1,8 +1,12 @@
+import { ArrowLeftIcon } from '@heroicons/react/20/solid'
+import { useRouter } from 'next/navigation'
+
 interface TopBarProps {
 	jobName: string
 	numberOfPages: number
 	numberPerPage: number
 	totalApplications: number
+	handleEdit: () => void
 }
 
 const TopBar: React.FC<TopBarProps> = ({
@@ -10,15 +14,21 @@ const TopBar: React.FC<TopBarProps> = ({
 	numberOfPages,
 	numberPerPage,
 	totalApplications,
+	handleEdit,
 }) => {
+	const router = useRouter()
 	return (
 		<div className='flex flex-col lg:flex-row p-4 lg:p-8 justify-between items-start lg:items-stretch w-full'>
 			<div className='w-full flex flex-col lg:flex-row items-start lg:items-center '>
+				<ArrowLeftIcon
+					className='w-10 mr-3 hover:bg-slate-200 rounded p-2 hover:cursor-pointer'
+					onClick={() => router.push('/posts')}
+				/>
 				<span className=' font-bold text-lg'>Applications for {jobName}</span>
 				<div className='flex items-center'>
 					<a
 						className='text-gray-600 dark:text-gray-400 p-2 border-transparent border bg-gray-100 dark:bg-gray-700 dark:hover:bg-gray-600 hover:bg-gray-200 cursor-pointer rounded focus:outline-none focus:border-gray-800 focus:shadow-outline-gray ml-10 w-max flex flex-row items-center border-slate-300'
-						//href='javascript: void(0)'
+						onClick={handleEdit}
 					>
 						<span>Edit Job Post</span>
 						<svg
