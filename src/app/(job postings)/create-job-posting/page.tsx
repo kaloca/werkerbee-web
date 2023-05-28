@@ -184,12 +184,15 @@ const CreateJobPostingPage: React.FC = () => {
 					<div className='rounded-lg bg-white p-8 shadow-lg lg:col-span-3 lg:p-12'>
 						<form action='' className='space-y-4'>
 							<div>
-								<label className='sr-only' htmlFor='name'>
+								<label
+									htmlFor='jobTitle'
+									className='block text-sm font-medium leading-6 text-gray-900 mb-1 ml-1'
+								>
 									Job Title
 								</label>
 								<input
 									className='w-full rounded-lg border border-gray-300 p-3 text-sm'
-									placeholder='Job Title'
+									placeholder='Cashier at Chipotle Stanford Mall'
 									type='text'
 									id='jobTitle'
 									value={formData.jobTitle.value}
@@ -198,32 +201,41 @@ const CreateJobPostingPage: React.FC = () => {
 							</div>
 							<div className='grid grid-cols-1 gap-4 sm:grid-cols-2 '>
 								<div>
-									<div className='flex flex-row items-center justify-between mb-2'>
-										<span className='mr-2 text-gray-600'>Shift Start</span>
-										<input
-											className='w-1/2 rounded-lg border border-gray-300 p-3 text-sm'
-											placeholder='Shift Start'
-											type='time'
-											id='startTime'
-											value={formData.startTime.value}
-											onChange={handleOnChange}
-										/>
-									</div>
-									<div className='flex flex-row items-center justify-between'>
-										<span className='text-gray-600'>Shift End</span>
-										<input
-											className='w-1/2 rounded-lg border border-gray-300 p-3 text-sm'
-											placeholder='Shift End'
-											type='time'
-											id='endTime'
-											value={formData.endTime.value}
-											onChange={handleOnChange}
-										/>
-									</div>
+									<label
+										htmlFor='startTime'
+										className='block text-sm font-medium leading-6 text-gray-900 mb-1 ml-1'
+									>
+										Shift Start
+									</label>
+									<input
+										className='w-1/2 rounded-lg border border-gray-300 p-3 text-sm mb-2'
+										placeholder='Shift Start'
+										type='time'
+										id='startTime'
+										value={formData.startTime.value}
+										onChange={handleOnChange}
+									/>
+									<label
+										htmlFor='endTime'
+										className='block text-sm font-medium leading-6 text-gray-900 mb-1 ml-1'
+									>
+										Shift End
+									</label>
+									<input
+										className='w-1/2 rounded-lg border border-gray-300 p-3 text-sm'
+										placeholder='Shift End'
+										type='time'
+										id='endTime'
+										value={formData.endTime.value}
+										onChange={handleOnChange}
+									/>
 								</div>
 								<div className=''>
-									<label className='sr-only' htmlFor='phone'>
-										Payment
+									<label
+										htmlFor='date'
+										className='block text-sm font-medium leading-6 text-gray-900 mb-1 ml-1'
+									>
+										Date
 									</label>
 									<input
 										className='w-full rounded-lg border border-gray-300 p-3 text-sm mb-2'
@@ -233,12 +245,15 @@ const CreateJobPostingPage: React.FC = () => {
 										value={formData.date.value}
 										onChange={handleOnChange}
 									/>
-									<label className='sr-only' htmlFor='phone'>
-										Payment
+									<label
+										htmlFor='payment'
+										className='block text-sm font-medium leading-6 text-gray-900 mb-1 ml-1'
+									>
+										Payment ($ per hour)
 									</label>
 									<input
 										className='w-full rounded-lg border border-gray-300 p-3 text-sm'
-										placeholder='Payment'
+										placeholder='20'
 										type='number'
 										id='payment'
 										value={formData.payment.value}
@@ -248,12 +263,15 @@ const CreateJobPostingPage: React.FC = () => {
 							</div>
 							<div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
 								<div>
-									<label className='sr-only' htmlFor='phone'>
-										Payment
+									<label
+										htmlFor='requiredSkills'
+										className='block text-sm font-medium leading-6 text-gray-900 mb-1 ml-1'
+									>
+										Required Skills
 									</label>
 									<input
 										className='w-full rounded-lg border border-gray-300 p-3 text-sm'
-										placeholder='Skills Needed'
+										placeholder='Calculating change, POS system'
 										type='text'
 										id='requiredSkills'
 										value={formData.requiredSkills.value}
@@ -261,12 +279,15 @@ const CreateJobPostingPage: React.FC = () => {
 									/>
 								</div>
 								<div>
-									<label className='sr-only' htmlFor='phone'>
-										Payment
+									<label
+										htmlFor='requiredCertifications'
+										className='block text-sm font-medium leading-6 text-gray-900 mb-1 ml-1'
+									>
+										Required Certifications
 									</label>
 									<input
 										className='w-full rounded-lg border border-gray-300 p-3 text-sm'
-										placeholder='Required Certifications'
+										placeholder='Chipotle Cashier Training'
 										type='text'
 										id='requiredCertifications'
 										value={formData.requiredCertifications.value}
@@ -276,7 +297,10 @@ const CreateJobPostingPage: React.FC = () => {
 							</div>
 							<div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
 								<div>
-									<label className='sr-only' htmlFor='phone'>
+									<label
+										htmlFor='jobType'
+										className='block text-sm font-medium leading-6 text-gray-900 mb-1 ml-1'
+									>
 										Job Type
 									</label>
 									{loadingJobTypes ? (
@@ -310,12 +334,15 @@ const CreateJobPostingPage: React.FC = () => {
 									)}
 								</div>
 								<div>
-									<label className='sr-only' htmlFor='phone'>
+									<label
+										htmlFor='dressCode'
+										className='block text-sm font-medium leading-6 text-gray-900 mb-1 ml-1'
+									>
 										Dress Code
 									</label>
 									<input
 										className='w-full rounded-lg border border-gray-300 p-3 text-sm'
-										placeholder='Dress Code'
+										placeholder='Provided at location, suit, etc	'
 										type='text'
 										id='dressCode'
 										value={formData.dressCode.value}
