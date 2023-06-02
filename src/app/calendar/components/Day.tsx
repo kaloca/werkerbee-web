@@ -1,3 +1,5 @@
+import { useRouter } from 'next/navigation'
+
 import helpers from '@/src/utils/helpers'
 
 import { Day } from '@/src/hooks/useWorkerCalendar'
@@ -9,6 +11,8 @@ interface DayProps {
 const classNames = helpers.classNames
 
 const MonthDay: React.FC<DayProps> = ({ days }) => {
+	const router = useRouter()
+
 	return (
 		<>
 			<div className='hidden w-full lg:grid lg:grid-cols-7 lg:grid-rows-4 lg:gap-px'>
@@ -37,7 +41,10 @@ const MonthDay: React.FC<DayProps> = ({ days }) => {
 									let endDate = new Date(event.end)
 									return (
 										<li key={event.id} onClick={() => console.log(event.id)}>
-											<a href={event.href} className='group flex flex-col'>
+											<a
+												onClick={() => router.push(`/job/${event.id}`)}
+												className='group flex flex-col'
+											>
 												<p className='flex-auto truncate font-medium text-gray-900 hover:text-indigo-600 hover:cursor-pointer'>
 													{event.name}
 												</p>
