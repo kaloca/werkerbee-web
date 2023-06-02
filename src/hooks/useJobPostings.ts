@@ -19,6 +19,7 @@ export interface JobPosting {
 	end: string
 	type: string
 	payment: string
+	distance: number
 	applications: string[]
 	createdAt: Date
 	updatedAt: Date

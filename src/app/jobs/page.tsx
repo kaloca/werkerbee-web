@@ -82,10 +82,10 @@ export default function Jobs() {
 							<SearchOptions
 								options={searchOptions}
 								handleToggleOption={(filter, option) =>
-									setSearchOptions((options) => ({
+									setSearchOptions((options: any) => ({
 										...options,
 										[filter]: options[filter].includes(option)
-											? options[filter].filter((o) => o !== option)
+											? options[filter].filter((o: any) => o !== option)
 											: [...options[filter], option],
 									}))
 								}

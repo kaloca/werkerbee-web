@@ -66,13 +66,15 @@ const SearchOptions: React.FC<SearchOptionsProps> = ({
 										<div key={option.value} className='flex items-center'>
 											<input
 												onChange={() =>
-													handleToggleOption(filter.id, option.value)
+													handleToggleOption(filter.id as any, option.value)
 												}
 												id={`filter-${filter.id}-${optionIdx}`}
 												name={`${filter.id}[]`}
 												defaultValue={option.value}
 												type='checkbox'
-												checked={options[filter.id]?.includes(option.value)}
+												checked={(options[filter.id] as any)?.includes(
+													option.value
+												)}
 												className='h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500'
 											/>
 											<label
