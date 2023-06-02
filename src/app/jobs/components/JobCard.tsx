@@ -1,9 +1,12 @@
+import Image from 'next/image'
 import moment from 'moment'
 
 import Rating from '@/src/components/rating'
 import helpers from '@/src/utils/helpers'
 import { CurrencyDollarIcon } from '@heroicons/react/24/outline'
 import { JobPosting } from '@/src/hooks/useJobPostings'
+
+import Placeholder from '@/src/assets/placeholder.jpg'
 
 const jobPosting = {
 	name: 'Cashier at Shake Shack',
@@ -37,8 +40,8 @@ const JobCard: React.FC<JobCardProps> = ({
 		<li className='bg-white shadow overflow-hidden px-4 py-4 sm:px-6 sm:rounded-md'>
 			<div className='flex-none sm:flex'>
 				<div className=' relative h-32 w-32   sm:mb-0 mb-3'>
-					<img
-						src='https://tailwindcomponents.com/storage/avatars/njkIbPhyZCftc4g9XbMWwVsa7aGVPajYLRXhEeoo.jpg'
+					<Image
+						src={Placeholder}
 						alt='aji'
 						className=' w-32 h-32 object-cover rounded-2xl'
 					/>

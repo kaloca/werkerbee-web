@@ -48,7 +48,7 @@ export default function NavBar() {
 		{
 			name: 'My Jobs',
 			isSelected: false,
-			url: '/myjobs',
+			url: '/calendar',
 			type: 'worker',
 		},
 	])

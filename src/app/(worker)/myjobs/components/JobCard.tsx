@@ -1,6 +1,7 @@
 import { JobPosting } from '@/src/hooks/useJobPostings'
 import Rating from '@/src/components/rating'
 import { Job } from '@/src/hooks/useJobs'
+import helpers from '@/src/utils/helpers'
 
 interface JobCardProps {
 	job: Job
@@ -12,7 +13,9 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
 			<div className='flex flex-col'>
 				<span>{job.name}</span>
 				<span className='first-letter:capitalize lowercase text-gray-700'>
-					{job.status}
+					{helpers.formatAMPM(new Date(job.shiftStart))}
+					{'-'}
+					{helpers.formatAMPM(new Date(job.shiftEnd))}
 				</span>
 			</div>
 		</div>

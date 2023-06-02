@@ -13,7 +13,7 @@ const JobApplicationCard: React.FC<JobApplicationCardProps> = ({
 						{application.jobPosting.name}
 					</p>
 					<div className='flex flex-row'>
-						<p className='text-[#3C3C4399] text-[17px] mr-2 '>
+						<p className='text-[#3C3C4399] text-[17px] mr-2 lowercase first-letter:capitalize'>
 							{application.status}
 						</p>
 					</div>
