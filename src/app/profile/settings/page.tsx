@@ -43,7 +43,7 @@ const Index = () => {
 							<div className='rounded relative mt-8 h-48'>
 								<img
 									src='https://cdn.tuk.dev/assets/webapp/forms/form_layouts/form1.jpg'
-									alt
+									alt='alt'
 									className='w-full h-full object-cover rounded absolute shadow'
 								/>
 								<div className='absolute bg-black opacity-50 top-0 right-0 bottom-0 left-0 rounded' />
@@ -72,7 +72,7 @@ const Index = () => {
 								<div className='w-20 h-20 rounded-full bg-cover bg-center bg-no-repeat absolute bottom-0 -mb-10 ml-12 shadow flex items-center justify-center'>
 									<img
 										src='https://cdn.tuk.dev/assets/webapp/forms/form_layouts/form2.jpg'
-										alt
+										alt='alt'
 										className='absolute z-0 h-full w-full object-cover rounded-full shadow top-0 left-0 bottom-0 right-0'
 									/>
 									<div className='absolute bg-black opacity-50 top-0 right-0 bottom-0 left-0 rounded-full z-0' />
