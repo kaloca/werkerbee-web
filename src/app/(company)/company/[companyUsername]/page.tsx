@@ -60,7 +60,7 @@ export default function CompanyProfilePage({ params }: any) {
 								</h3>
 								<div className='text-xs mt-0 mb-2 text-slate-400 font-bold uppercase'>
 									<i className='fas fa-map-marker-alt mr-2 text-slate-400 opacity-75'></i>
-									{data.location}
+									{JSON.stringify(data.location)}
 								</div>
 							</div>
 							<div className='mt-6 py-6 border-t border-slate-200 text-center'>

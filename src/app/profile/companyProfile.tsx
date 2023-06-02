@@ -26,12 +26,12 @@ const CompanyProfile = () => {
 				address={data.company.address}
 				jobTypes={data.company.jobTypes}
 			/>
-			<div
-				className='hover:cursor-pointer bg-slate-400 p-4'
+			{/* <div
+				className='hover:cursor-pointer bg-slate-400 p-4 rounded-lg text-white mt-6'
 				onClick={() => signOut()}
 			>
 				Sign Out
-			</div>
+			</div> */}
 		</div>
 	)
 }
