@@ -2,14 +2,35 @@
 import { Fragment, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { CheckIcon } from '@heroicons/react/20/solid'
+import { BeatLoader, SyncLoader } from 'react-spinners'
 
-export default function Example() {
-	const [open, setOpen] = useState(true)
+interface AcceptDeclineModalProps {
+	isOpen: boolean
+	setOpen: (value: boolean) => void
+	title: string
+	subtitle: string
+	option1Title: string
+	option2Title: string
+	option1Action?: () => void
+	option2Action: () => void
+	loading?: boolean
+}
 
+const AcceptDeclineModal: React.FC<AcceptDeclineModalProps> = ({
+	isOpen,
+	setOpen,
+	title,
+	subtitle,
+	option1Title,
+	option1Action,
+	option2Title,
+	option2Action,
+	loading,
+}) => {
 	const cancelButtonRef = useRef(null)
 
 	return (
-		<Transition.Root show={open} as={Fragment}>
+		<Transition.Root show={isOpen} as={Fragment}>
 			<Dialog
 				as='div'
 				className='fixed z-10 inset-0 overflow-y-auto'
@@ -58,33 +79,38 @@ export default function Example() {
 										as='h3'
 										className='text-lg leading-6 font-medium text-gray-900'
 									>
-										Do you want to receive Job notifications through SMS?
+										{title}
 									</Dialog.Title>
 									<div className='mt-2'>
-										<p className='text-sm text-gray-500'>
-											We will use the phone number you provided in the
-											registration to send you updates on your job applications,
-											current jobs, and new job opportunities. You can always
-											choose to opt-out later.
-										</p>
+										<p className='text-sm text-gray-500'>{subtitle}</p>
 									</div>
 								</div>
 							</div>
 							<div className='mt-5 sm:mt-6 sm:grid sm:grid-cols-2 sm:gap-3 sm:grid-flow-row-dense'>
 								<button
 									type='button'
-									className='w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:col-start-2 sm:text-sm'
-									onClick={() => setOpen(false)}
+									className='w-full inline-flex justify-center items-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:col-start-2 sm:text-sm'
+									onClick={async () => {
+										await option2Action()
+										setOpen(false)
+									}}
 								>
-									Yes
+									{!loading ? (
+										<span>{option2Title}</span>
+									) : (
+										<BeatLoader color='white' size={5} />
+									)}
 								</button>
 								<button
 									type='button'
 									className='mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:col-start-1 sm:text-sm'
-									onClick={() => setOpen(false)}
+									onClick={async () => {
+										if (option1Action) await option1Action()
+										setOpen(false)
+									}}
 									ref={cancelButtonRef}
 								>
-									Cancel
+									{option1Title}
 								</button>
 							</div>
 						</div>
@@ -94,3 +120,5 @@ export default function Example() {
 		</Transition.Root>
 	)
 }
+
+export default AcceptDeclineModal
