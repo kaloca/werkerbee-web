@@ -1,10 +1,10 @@
 import Image from 'next/image'
 import moment from 'moment'
+import { CurrencyDollarIcon } from '@heroicons/react/24/outline'
 
 import Rating from '@/src/components/rating'
 import helpers from '@/src/utils/helpers'
-import { CurrencyDollarIcon } from '@heroicons/react/24/outline'
-import { JobPosting } from '@/src/hooks/useJobPostings'
+import { JobPosting } from '@/src/interfaces/models/JobPosting'
 
 import Placeholder from '@/src/assets/placeholder.jpg'
 
