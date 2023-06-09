@@ -576,7 +576,10 @@ export default function NavBar() {
 										</div>
 									</div>
 									<div className='w-full h-full flex'>
-										<div className='w-32 h-full flex items-center justify-center border-r cursor-pointer text-gray-600'>
+										<div
+											className='w-32 h-full flex items-center justify-center border-r cursor-pointer text-gray-600'
+											onClick={() => router.push('notifications')}
+										>
 											<svg
 												xmlns='http://www.w3.org/2000/svg'
 												className='icon icon-tabler icon-tabler-bell'
