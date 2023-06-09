@@ -35,7 +35,7 @@ const JobCard: React.FC<JobCardProps> = ({
 	showApply,
 }) => {
 	const startDate = new Date(jobPosting.start)
-	const endDate = new Date(jobPosting.start)
+	const endDate = new Date(jobPosting.end)
 	return (
 		<li className='bg-white shadow overflow-hidden px-4 py-4 sm:px-6 sm:rounded-md'>
 			<div className='flex-none sm:flex'>

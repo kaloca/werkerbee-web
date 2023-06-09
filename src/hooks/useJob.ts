@@ -1,5 +1,5 @@
 import useSWR from 'swr'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useSession } from 'next-auth/react'
 
 import fetcher from '../utils/fetcher'
@@ -15,28 +15,27 @@ const useJob = (jobId: string) => {
 	const { data: session } = useSession()
 	const jobUrl = `${BASE_URL}/job/${jobId}`
 
-	useEffect(() => {
-		const fetchData = async () => {
-			if (session) {
-				try {
-					const result = await fetcher(jobUrl, session.user.token)
-					setData(result)
-					setError(null)
-				} catch (e: any) {
-					setError(e)
-					setData(null)
-				} finally {
-					setIsLoading(false)
-				}
-			} else {
-				setIsLoading(true)
+	const fetchData = useCallback(async () => {
+		if (session) {
+			setIsLoading(true)
+			try {
+				const result = await fetcher(jobUrl, session.user.token)
+				setData(result)
+				setError(null)
+			} catch (e: any) {
+				setError(e)
+				setData(null)
+			} finally {
+				setIsLoading(false)
 			}
 		}
-
-		fetchData()
 	}, [session, jobUrl])
 
-	return { data, error, isLoading }
+	useEffect(() => {
+		fetchData()
+	}, [fetchData])
+
+	return { data, error, isLoading, refetch: fetchData }
 }
 
 export default useJob

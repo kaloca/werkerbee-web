@@ -4,7 +4,7 @@ import { Day } from '@/src/hooks/useWorkerCalendar'
 import MonthDay from './Day'
 
 interface MonthViewProps {
-	days: Day[]
+	days: Day[] | undefined | null
 }
 
 const classNames = helpers.classNames
