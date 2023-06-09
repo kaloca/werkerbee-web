@@ -55,10 +55,6 @@ export default function Jobs() {
 
 	const handleLocationSelect = () => {}
 
-	if (error) {
-		return <div>Error: {error.message}</div>
-	}
-
 	const handleApply = (id: string) => {
 		router.push(`job-posting/${id}`)
 	}
@@ -125,6 +121,7 @@ export default function Jobs() {
 											)}
 										</ul>
 									)}
+									{error && <div>Error: {error.message}</div>}
 								</div>
 							</div>
 						</div>
