@@ -1,7 +1,7 @@
 import { useRouter } from 'next/navigation'
-
-import { Notification } from '@/src/hooks/useNotification'
 import { CheckCircleIcon } from '@heroicons/react/20/solid'
+
+import { Notification } from '@/src/interfaces/models/Notification'
 
 interface NotificationCardProps {
 	notification: Notification
