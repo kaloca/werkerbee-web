@@ -114,7 +114,7 @@ export default function JobPostsPage() {
 								</tr>
 							))
 						) : (
-							<div>You have not created any job posts yet.</div>
+							<div className='p-5'>You have not created any job posts yet.</div>
 						)}
 					</tbody>
 				</table>
