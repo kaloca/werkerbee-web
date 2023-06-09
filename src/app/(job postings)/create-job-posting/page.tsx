@@ -199,7 +199,7 @@ const CreateJobPostingPage: React.FC = () => {
 									onChange={handleOnChange}
 								/>
 							</div>
-							<div className='grid grid-cols-1 gap-4 sm:grid-cols-2 '>
+							<div className='grid grid-cols-1 gap-4 sm:grid-cols-2 w-max'>
 								<div>
 									<label
 										htmlFor='startTime'
@@ -208,7 +208,7 @@ const CreateJobPostingPage: React.FC = () => {
 										Shift Start
 									</label>
 									<input
-										className='w-1/2 rounded-lg border border-gray-300 p-3 text-sm mb-2'
+										className='w-min rounded-lg border border-gray-300 p-3 text-sm mb-2'
 										placeholder='Shift Start'
 										type='time'
 										id='startTime'
@@ -222,7 +222,7 @@ const CreateJobPostingPage: React.FC = () => {
 										Shift End
 									</label>
 									<input
-										className='w-1/2 rounded-lg border border-gray-300 p-3 text-sm'
+										className='w-min rounded-lg border border-gray-300 p-3 text-sm'
 										placeholder='Shift End'
 										type='time'
 										id='endTime'
