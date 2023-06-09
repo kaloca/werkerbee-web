@@ -3,16 +3,15 @@ import { useCallback, useEffect, useState } from 'react'
 
 import { useSession } from 'next-auth/react'
 
-import fetcher from '../utils/fetcher'
+import { Company } from '@/src/interfaces/models/Company'
+import { JobPosting } from '@/src/interfaces/models/JobPosting'
+import { Worker } from '@/src/interfaces/models/Worker'
+
+import fetcher from '@/src/utils/fetcher'
 import { BASE_URL } from '@/src/utils/constants'
-
-import { JobPosting } from './useJobPostings'
-import { ICompany } from './useCompany'
-import { Worker } from './useUser'
-
 export interface JobApplication {
 	_id: string
-	company: ICompany
+	company: Company
 	worker: Worker
 	jobPosting: JobPosting
 	status: 'PENDING' | 'ACCEPTED' | 'REJECTED' | 'CANCELED' | 'SCHEDULED'

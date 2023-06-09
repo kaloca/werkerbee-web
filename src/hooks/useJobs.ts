@@ -2,43 +2,10 @@ import useSWR from 'swr'
 import { useState, useEffect } from 'react'
 import { useSession } from 'next-auth/react'
 
-import fetcher from '../utils/fetcher'
-
 import { BASE_URL } from '@/src/utils/constants'
+import fetcher from '@/src/utils/fetcher'
 
-export type TimelineEventType =
-	| 'CLOCK_IN'
-	| 'CLOCK_OUT'
-	| 'BREAK_START'
-	| 'BREAK_END'
-
-export interface ITimelineEvent {
-	status: TimelineEventType
-	time: Date
-}
-export interface Job {
-	_id: string
-	name: string
-	rating?: number
-	worker: string
-	company: string
-	jobPosting: string
-	status: 'PENDING' | 'COMPLETE' | 'CANCELED'
-	shiftStart: Date
-	shiftEnd: Date
-	clockStart?: Date
-	clockEnd?: Date
-	breaks?: [
-		{
-			start: Date
-			end?: Date
-			_id: string
-		}
-	]
-	timeline: ITimelineEvent[]
-	createdAt: Date
-	updatedAt: Date
-}
+import { Job } from '@/src/interfaces/models/Job'
 
 const useJobs = (username: string) => {
 	const [isLoading, setIsLoading] = useState(true)

@@ -1,24 +1,10 @@
 import { useState, useEffect, useCallback } from 'react'
 import { useSession } from 'next-auth/react'
 
-import { BASE_URL } from '../utils/constants'
-import fetcher from '../utils/fetcher'
-export interface Notification {
-	_id: string
-	recipient: {
-		id: string
-		type: 'Worker' | 'Company'
-	}
-	type: 'SYSTEM' | 'USER' | 'TRANSACTION' | 'OTHER'
-	message: string
-	readStatus: boolean
-	action?: string
-	actionData?: any
-	dateRead?: Date
-	createdAt: Date
-	updatedAt: Date
-}
+import { Notification } from '@/src/interfaces/models/Notification'
 
+import { BASE_URL } from '@/src/utils/constants'
+import fetcher from '@/src/utils/fetcher'
 interface NotificationsResponse {
 	notifications: Notification[]
 	total: number

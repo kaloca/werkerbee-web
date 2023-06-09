@@ -3,8 +3,14 @@ import useSWR from 'swr'
 import fetcher from '../utils/fetcher'
 
 import { BASE_URL } from '@/src/utils/constants'
+import { JobPosting } from '@/src/interfaces/models/JobPosting'
 
-import { JobPosting } from './useJobPostings'
+interface CompanyPostsReponse extends JobPosting {
+	job: {
+		_id: string
+		status: string
+	}
+}
 
 const useCompanyPosts = (companyUsername: string) => {
 	const { data, error, isLoading, mutate } = useSWR(
@@ -13,7 +19,7 @@ const useCompanyPosts = (companyUsername: string) => {
 	)
 
 	return {
-		data: data as JobPosting[],
+		data: data as CompanyPostsReponse[],
 		error,
 		isLoading,
 		mutate,

@@ -6,7 +6,7 @@ import { useSession } from 'next-auth/react'
 
 import { BASE_URL } from '@/src/utils/constants'
 import useCompanyPosts from '@/src/hooks/useCompanyPosts'
-import { JobPosting } from '@/src/hooks/useJobPostings'
+import { JobPosting } from '@/src/interfaces/models/JobPosting'
 
 export default function JobPostsPage() {
 	const { data: session, status } = useSession()
@@ -104,12 +104,14 @@ export default function JobPostsPage() {
 										{post.applications.length}
 									</td>
 									<td className='whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6'>
-										<a
-											onClick={() => router.push(`posts/${post._id}/edit`)}
-											className='text-indigo-600 hover:text-indigo-900'
-										>
-											Edit<span className='sr-only'>, {post.name}</span>
-										</a>
+										{
+											<a
+												onClick={() => router.push(`posts/${post._id}/edit`)}
+												className='text-indigo-600 hover:text-indigo-900'
+											>
+												Edit<span className='sr-only'>, {post.name}</span>
+											</a>
+										}
 									</td>
 								</tr>
 							))

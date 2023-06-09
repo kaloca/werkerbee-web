@@ -3,28 +3,7 @@ import useSWR from 'swr'
 import fetcher from '../utils/fetcher'
 
 import { BASE_URL } from '@/src/utils/constants'
-
-export interface JobPosting {
-	_id: string
-	name: string
-	description: string
-	company: any
-	companyName: string
-	dayOfWeek: string
-	location: string
-	dressCode: string
-	requiredSkills: string
-	requiredCertifications: string
-	start: string
-	end: string
-	type: string
-	payment: string
-	distance: number
-	applications: string[]
-	createdAt: Date
-	updatedAt: Date
-}
-
+import { JobPosting } from '@/src/interfaces/models/JobPosting'
 interface getJobsResponse {
 	totalPages: number
 	currentPage: number
