@@ -9,7 +9,7 @@ import { useErrorBar } from '@/src/app/context/errorContext'
 
 import { BASE_URL } from '@/src/utils/constants'
 
-import { JobPosting } from '@/src/hooks/useJobPostings'
+import { JobPosting } from '@/src/interfaces/models/JobPosting'
 import helpers from '@/src/utils/helpers'
 import useJobPosting from '@/src/hooks/useJobPosting'
 

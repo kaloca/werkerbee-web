@@ -6,7 +6,7 @@ import { SyncLoader } from 'react-spinners'
 
 import apiClient from '@/src/utils/apiClient'
 
-import { JobPosting } from '@/src/hooks/useJobPostings'
+import { JobPosting } from '@/src/interfaces/models/JobPosting'
 import useApplications, { JobApplication } from '@/src/hooks/useApplications'
 
 import { useErrorBar } from '@/src/app/context/errorContext'

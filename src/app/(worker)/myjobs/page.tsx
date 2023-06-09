@@ -5,7 +5,8 @@ import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 
 import { BASE_URL } from '@/src/utils/constants'
-import useJobs, { Job } from '@/src/hooks/useJobs'
+import useJobs from '@/src/hooks/useJobs'
+import { Job } from '@/src/interfaces/models/Job'
 
 import JobCard from './components/JobCard'
 

@@ -1,4 +1,4 @@
-import { JobPosting } from '@/src/hooks/useJobPostings'
+import { JobPosting } from '@/src/interfaces/models/JobPosting'
 
 interface JobPostCardProps {
 	post: JobPosting

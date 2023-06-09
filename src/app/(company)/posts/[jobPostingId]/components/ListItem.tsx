@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from 'react'
 
 import { useRouter } from 'next/navigation'
 
-import { Worker } from '@/src/hooks/useUser'
+import { Worker } from '@/src/interfaces/models/Worker'
 import { JobApplication } from '@/src/hooks/useApplications'
 
 const tdStyle =

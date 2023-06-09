@@ -4,7 +4,7 @@ import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 
 import useJobPostingWorker from '@/src/hooks/useJobPostingWorker'
-import { JobPosting } from '@/src/hooks/useJobPostings'
+import { JobPosting } from '@/src/interfaces/models/JobPosting'
 import { useErrorBar } from '@/src/app/context/errorContext'
 
 import apiClient from '@/src/utils/apiClient'

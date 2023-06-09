@@ -1,6 +1,8 @@
-import { JobPosting } from '@/src/hooks/useJobPostings'
 import Rating from '@/src/components/rating'
-import { Job } from '@/src/hooks/useJobs'
+
+import { JobPosting } from '@/src/interfaces/models/JobPosting'
+import { Job } from '@/src/interfaces/models/Job'
+
 import helpers from '@/src/utils/helpers'
 
 interface JobCardProps {
