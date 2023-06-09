@@ -1,14 +1,14 @@
 'use client'
 import { useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+
 import {
 	CheckIcon,
-	HandThumbUpIcon,
-	UserIcon,
-	ArrowDownIcon,
 	ClockIcon,
 	ArrowLeftOnRectangleIcon,
 	HandRaisedIcon,
 	ArrowDownOnSquareIcon,
+	ArrowLeftIcon,
 } from '@heroicons/react/20/solid'
 
 import useJob from '@/src/hooks/useJob'
@@ -40,6 +40,7 @@ const eventFormatting = {
 const classNames = helpers.classNames
 
 export default function JobTimelinePage({ params }: any) {
+	const router = useRouter()
 	const { data: job, isLoading, refetch } = useJob(params.jobId)
 
 	useEffect(() => {
@@ -53,6 +54,10 @@ export default function JobTimelinePage({ params }: any) {
 	return (
 		<div className='flex flex-col justify-start items-center pt-28'>
 			<div className='flow-root'>
+				<ArrowLeftIcon
+					className='w-10 mr-3 hover:bg-slate-200 rounded p-2 hover:cursor-pointer'
+					onClick={() => router.push('/posts')}
+				/>
 				<ul role='list' className='-mb-8'>
 					{job && (
 						<div className='mb-8 flex flex-col'>
