@@ -25,7 +25,7 @@ export default function NavBar() {
 			name: 'Jobs',
 			isSelected: false,
 			url: '/jobs',
-			type: 'all',
+			type: 'worker',
 		},
 		{
 			name: 'Post Job',
