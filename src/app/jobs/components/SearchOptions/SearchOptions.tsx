@@ -14,15 +14,16 @@ interface SearchOptionsProps {
 		filter: 'keyof JobPostingsOptions',
 		option: string
 	) => void
+	handleOpenLocationModal: () => void
 }
 
 const SearchOptions: React.FC<SearchOptionsProps> = ({
 	options,
 	handleToggleOption,
+	handleOpenLocationModal,
 }) => {
 	return (
 		<form className='hidden lg:block'>
-			<h3 className='sr-only'>Categories</h3>
 			{/* <ul
 				role='list'
 				className='space-y-4 border-b border-gray-200 pb-6 text-sm font-medium text-gray-900 mb-3'
@@ -33,6 +34,12 @@ const SearchOptions: React.FC<SearchOptionsProps> = ({
 					</li>
 				))}
 			</ul> */}
+			<h2
+				className='mb-6 text-blue-600 fotn-bold hover:underline hover:cursor-pointer underline-offset-2'
+				onClick={handleOpenLocationModal}
+			>
+				Choose your location
+			</h2>
 			<FilterTextInput
 				label={'Max Distance From You (miles)'}
 				type='number'
