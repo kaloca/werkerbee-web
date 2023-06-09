@@ -37,13 +37,14 @@ const useApplications = () => {
 	const applicationsUrl = `${BASE_URL}/worker/${session?.user.username}/applications`
 
 	const refetch = useCallback(
-		async (status?: string) => {
+		async (status?: string, past?: boolean) => {
 			if (session) {
 				setIsLoading(true)
 				const url = new URL(applicationsUrl)
 				url.searchParams.append('page', String(page))
 				url.searchParams.append('limit', '10')
 				if (status) url.searchParams.append('status', status)
+				if (past != null) url.searchParams.append('past', String(past))
 
 				try {
 					const result = await fetcher(url.toString(), session.user.token)

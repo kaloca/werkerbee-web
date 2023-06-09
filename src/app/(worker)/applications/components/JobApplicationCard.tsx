@@ -16,6 +16,11 @@ const JobApplicationCard: React.FC<JobApplicationCardProps> = ({
 }) => {
 	const { jobPosting, status, _id } = application
 
+	const now = new Date()
+	const jobStart = new Date(jobPosting.start)
+
+	const expired = now.getTime() > jobStart.getTime()
+
 	let statusColor
 	switch (status) {
 		case 'ACCEPTED':
@@ -61,7 +66,7 @@ const JobApplicationCard: React.FC<JobApplicationCardProps> = ({
 								{status}
 							</p>
 						</div>
-						{status == 'ACCEPTED' && (
+						{status == 'ACCEPTED' && !expired && (
 							<button
 								onClick={() => onConfirmJobButton(jobPosting, _id)}
 								className=' bg-blue-500 hover:bg-blue-400 transition-colors duration-100 text-white rounded px-3 py-2'
@@ -69,6 +74,7 @@ const JobApplicationCard: React.FC<JobApplicationCardProps> = ({
 								Confirm Job
 							</button>
 						)}
+						{expired && <span className='text-red-500 mr-4'>Expired</span>}
 					</div>
 				</div>
 			</div>

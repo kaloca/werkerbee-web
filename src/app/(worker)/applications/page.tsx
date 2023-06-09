@@ -1,5 +1,6 @@
 'use client'
 import React, { useState } from 'react'
+import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { SyncLoader } from 'react-spinners'
 
@@ -8,16 +9,16 @@ import apiClient from '@/src/utils/apiClient'
 import { JobPosting } from '@/src/hooks/useJobPostings'
 import useApplications, { JobApplication } from '@/src/hooks/useApplications'
 
+import { useErrorBar } from '@/src/app/context/errorContext'
 import AcceptDeclineModal from '@/src/components/AcceptDeclineModal'
 
 import JobApplicationCard from './components/JobApplicationCard'
 import ApplicationStatusSelector from './components/ApplicationStatusSelector'
-import ApplicationsHeading from './components/ApplicationsHeading'
-import { useRouter } from 'next/navigation'
 
 const Applications = () => {
 	const { data: session } = useSession()
 	const router = useRouter()
+	const { showError } = useErrorBar()
 
 	const [acceptJobModalOpen, setAcceptJobModalOpen] = useState(false)
 	const [confirmJobLoading, setConfirmJobLoading] = useState(false)
@@ -30,19 +31,13 @@ const Applications = () => {
 	const { data, pagination, error, isLoading, setPage, refetch } =
 		useApplications()
 
-	if (error) {
-		return <div>Error: {error.message}</div>
-	}
-
-	console.log(data)
-
 	const handleChangeView = (option: string) => {
 		setCurrentView(option)
 
 		const status =
 			option == 'All' || option == 'View' ? undefined : option.toUpperCase()
 
-		refetch(status)
+		refetch(status, false)
 	}
 
 	const handleConfirmJobButton = (
@@ -89,7 +84,7 @@ const Applications = () => {
 				}
 			} catch (error: any) {
 				console.error('Error confirming job:', error.response.data.message)
-				//showError(error.response.data.message)
+				showError(`Error confirming job: ${error.response.data.message}`)
 			}
 			setConfirmJobLoading(false)
 		}
@@ -119,6 +114,7 @@ const Applications = () => {
 			<div className='bg-blue-300'></div>
 			<div className='overflow-scroll no-scrollbar'>
 				{!isLoading &&
+					!error &&
 					(data && data.length > 0 ? (
 						data.map((application) => (
 							<JobApplicationCard
@@ -140,6 +136,17 @@ const Applications = () => {
 					<div className='flex justify-center items-start'>
 						<h3>Loading applications</h3>
 						<SyncLoader size={8} className='m-4' />
+					</div>
+				)}
+				{error && (
+					<div>
+						<span className='mr-4'>{error.message}</span>
+						<span
+							onClick={() => router.replace('/applications')}
+							className='text-blue-600 hover:underline hover:cursor-pointer'
+						>
+							Try again
+						</span>
 					</div>
 				)}
 			</div>
