@@ -167,12 +167,10 @@ const CreateJobPostingPage: React.FC = () => {
 	// }, [jobTypes, formData.type])
 
 	return (
-		<section className='bg-gray-100 flex h-full flex-col justify-center items-center'>
-			<div className='mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8'>
-				<div className='grid grid-cols-1 gap-x-16 gap-y-8 lg:grid-cols-5'>
-					<div className='lg:col-span-2 lg:py-12'>
-						<p className='max-w-xl text-lg'>Tutorial text space</p>
-						{/* <div className='mt-8'>
+		<section className='flex flex-row bg-gray-100 h-full justify-center items-start pt-28 pb-10 overflow-scroll '>
+			<div className='px-4 py-16 sm:px-6 lg:px-8 mx-10'>
+				<p className='max-w-xl text-lg'>Tutorial text space</p>
+				{/* <div className='mt-8'>
 							<a href='' className='text-2xl font-bold text-pink-600'>
 								0151 475 4450
 							</a>
@@ -180,176 +178,176 @@ const CreateJobPostingPage: React.FC = () => {
 								282 Kevin Brook, Imogeneborough, CA 58517
 							</address>
 						</div> */}
+			</div>
+			<div className='rounded-lg bg-white p-8 shadow-lg lg:p-12 h-min'>
+				<form action='' className='space-y-4'>
+					<div>
+						<label
+							htmlFor='jobTitle'
+							className='block text-sm font-medium leading-6 text-gray-900 mb-1 ml-1'
+						>
+							Job Title
+						</label>
+						<input
+							className='w-full rounded-lg border border-gray-300 p-3 text-sm'
+							placeholder='Cashier at Chipotle Stanford Mall'
+							type='text'
+							id='jobTitle'
+							value={formData.jobTitle.value}
+							onChange={handleOnChange}
+						/>
 					</div>
-					<div className='rounded-lg bg-white p-8 shadow-lg lg:col-span-3 lg:p-12'>
-						<form action='' className='space-y-4'>
-							<div>
-								<label
-									htmlFor='jobTitle'
-									className='block text-sm font-medium leading-6 text-gray-900 mb-1 ml-1'
-								>
-									Job Title
-								</label>
-								<input
-									className='w-full rounded-lg border border-gray-300 p-3 text-sm'
-									placeholder='Cashier at Chipotle Stanford Mall'
-									type='text'
-									id='jobTitle'
-									value={formData.jobTitle.value}
-									onChange={handleOnChange}
-								/>
-							</div>
-							<div className='grid grid-cols-1 gap-4 sm:grid-cols-2 w-max'>
-								<div>
-									<label
-										htmlFor='startTime'
-										className='block text-sm font-medium leading-6 text-gray-900 mb-1 ml-1'
-									>
-										Shift Start
-									</label>
-									<input
-										className='w-min rounded-lg border border-gray-300 p-3 text-sm mb-2'
-										placeholder='Shift Start'
-										type='time'
-										id='startTime'
-										value={formData.startTime.value}
-										onChange={handleOnChange}
-									/>
-									<label
-										htmlFor='endTime'
-										className='block text-sm font-medium leading-6 text-gray-900 mb-1 ml-1'
-									>
-										Shift End
-									</label>
-									<input
-										className='w-min rounded-lg border border-gray-300 p-3 text-sm'
-										placeholder='Shift End'
-										type='time'
-										id='endTime'
-										value={formData.endTime.value}
-										onChange={handleOnChange}
-									/>
-								</div>
-								<div className=''>
-									<label
-										htmlFor='date'
-										className='block text-sm font-medium leading-6 text-gray-900 mb-1 ml-1'
-									>
-										Date
-									</label>
-									<input
-										className='w-full rounded-lg border border-gray-300 p-3 text-sm mb-2'
-										placeholder='Date'
-										type='date'
-										id='date'
-										value={formData.date.value}
-										onChange={handleOnChange}
-									/>
-									<label
-										htmlFor='payment'
-										className='block text-sm font-medium leading-6 text-gray-900 mb-1 ml-1'
-									>
-										Payment ($ per hour)
-									</label>
-									<input
-										className='w-full rounded-lg border border-gray-300 p-3 text-sm'
-										placeholder='20'
-										type='number'
-										id='payment'
-										value={formData.payment.value}
-										onChange={handleOnChange}
-									/>
-								</div>
-							</div>
-							<div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
-								<div>
-									<label
-										htmlFor='requiredSkills'
-										className='block text-sm font-medium leading-6 text-gray-900 mb-1 ml-1'
-									>
-										Required Skills
-									</label>
-									<input
-										className='w-full rounded-lg border border-gray-300 p-3 text-sm'
-										placeholder='Calculating change, POS system'
-										type='text'
-										id='requiredSkills'
-										value={formData.requiredSkills.value}
-										onChange={handleOnChange}
-									/>
-								</div>
-								<div>
-									<label
-										htmlFor='requiredCertifications'
-										className='block text-sm font-medium leading-6 text-gray-900 mb-1 ml-1'
-									>
-										Required Certifications
-									</label>
-									<input
-										className='w-full rounded-lg border border-gray-300 p-3 text-sm'
-										placeholder='Chipotle Cashier Training'
-										type='text'
-										id='requiredCertifications'
-										value={formData.requiredCertifications.value}
-										onChange={handleOnChange}
-									/>
-								</div>
-							</div>
-							<div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
-								<div>
-									<label
-										htmlFor='jobType'
-										className='block text-sm font-medium leading-6 text-gray-900 mb-1 ml-1'
-									>
-										Job Type
-									</label>
-									{loadingJobTypes ? (
-										<div>Loading Job Types</div>
-									) : (
-										<DropdownInput
-											ref={dropdownRef}
-											label='Job Type'
-											onChange={(value, hide) => {
-												setShowDropDown(!hide)
+					<div className='grid grid-cols-1 gap-4 sm:grid-cols-2 w-max'>
+						<div>
+							<label
+								htmlFor='startTime'
+								className='block text-sm font-medium leading-6 text-gray-900 mb-1 ml-1'
+							>
+								Shift Start
+							</label>
+							<input
+								className='w-min rounded-lg border border-gray-300 p-3 text-sm mb-2'
+								placeholder='Shift Start'
+								type='time'
+								id='startTime'
+								value={formData.startTime.value}
+								onChange={handleOnChange}
+							/>
+							<label
+								htmlFor='endTime'
+								className='block text-sm font-medium leading-6 text-gray-900 mb-1 ml-1'
+							>
+								Shift End
+							</label>
+							<input
+								className='w-min rounded-lg border border-gray-300 p-3 text-sm'
+								placeholder='Shift End'
+								type='time'
+								id='endTime'
+								value={formData.endTime.value}
+								onChange={handleOnChange}
+							/>
+						</div>
+						<div className=''>
+							<label
+								htmlFor='date'
+								className='block text-sm font-medium leading-6 text-gray-900 mb-1 ml-1'
+							>
+								Date
+							</label>
+							<input
+								className='w-full rounded-lg border border-gray-300 p-3 text-sm mb-2'
+								placeholder='Date'
+								type='date'
+								id='date'
+								value={formData.date.value}
+								onChange={handleOnChange}
+							/>
+							<label
+								htmlFor='payment'
+								className='block text-sm font-medium leading-6 text-gray-900 mb-1 ml-1'
+							>
+								Payment ($ per hour)
+							</label>
+							<input
+								className='w-full rounded-lg border border-gray-300 p-3 text-sm'
+								placeholder='20'
+								type='number'
+								id='payment'
+								value={formData.payment.value}
+								onChange={handleOnChange}
+							/>
+						</div>
+					</div>
+					<div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
+						<div>
+							<label
+								htmlFor='requiredSkills'
+								className='block text-sm font-medium leading-6 text-gray-900 mb-1 ml-1'
+							>
+								Required Skills
+							</label>
+							<input
+								className='w-full rounded-lg border border-gray-300 p-3 text-sm'
+								placeholder='Calculating change, POS system'
+								type='text'
+								id='requiredSkills'
+								value={formData.requiredSkills.value}
+								onChange={handleOnChange}
+							/>
+						</div>
+						<div>
+							<label
+								htmlFor='requiredCertifications'
+								className='block text-sm font-medium leading-6 text-gray-900 mb-1 ml-1'
+							>
+								Required Certifications
+							</label>
+							<input
+								className='w-full rounded-lg border border-gray-300 p-3 text-sm'
+								placeholder='Chipotle Cashier Training'
+								type='text'
+								id='requiredCertifications'
+								value={formData.requiredCertifications.value}
+								onChange={handleOnChange}
+							/>
+						</div>
+					</div>
+					<div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
+						<div>
+							<label
+								htmlFor='jobType'
+								className='block text-sm font-medium leading-6 text-gray-900 mb-1 ml-1'
+							>
+								Job Type
+							</label>
+							{loadingJobTypes ? (
+								<div>Loading Job Types</div>
+							) : (
+								<DropdownInput
+									ref={dropdownRef}
+									label='Job Type'
+									onChange={(value, hide) => {
+										setShowDropDown(!hide)
 
-												setFormData({
-													...formData,
-													type: {
-														value,
-														required: true,
-														step: 1,
-														hasChanged: true,
-													},
-												})
-											}}
-											onFocus={() => setShowDropDown(true)}
-											showError={showDropDownError}
-											placeholder='Job Type'
-											inputName='type'
-											value={formData.type.value}
-											showDropdown={showDropDown}
-											// ref={dropdownRef}
-											dropdownItems={jobTypes.types}
-										/>
-									)}
-								</div>
-								<div>
-									<label
-										htmlFor='dressCode'
-										className='block text-sm font-medium leading-6 text-gray-900 mb-1 ml-1'
-									>
-										Dress Code
-									</label>
-									<input
-										className='w-full rounded-lg border border-gray-300 p-3 text-sm'
-										placeholder='Provided at location, suit, etc	'
-										type='text'
-										id='dressCode'
-										value={formData.dressCode.value}
-										onChange={handleOnChange}
-									/>
-								</div>
-								{/* <div>
+										setFormData({
+											...formData,
+											type: {
+												value,
+												required: true,
+												step: 1,
+												hasChanged: true,
+											},
+										})
+									}}
+									onFocus={() => setShowDropDown(true)}
+									showError={showDropDownError}
+									placeholder='Job Type'
+									inputName='type'
+									value={formData.type.value}
+									showDropdown={showDropDown}
+									// ref={dropdownRef}
+									dropdownItems={jobTypes.types}
+								/>
+							)}
+						</div>
+						<div>
+							<label
+								htmlFor='dressCode'
+								className='block text-sm font-medium leading-6 text-gray-900 mb-1 ml-1'
+							>
+								Dress Code
+							</label>
+							<input
+								className='w-full rounded-lg border border-gray-300 p-3 text-sm'
+								placeholder='Provided at location, suit, etc	'
+								type='text'
+								id='dressCode'
+								value={formData.dressCode.value}
+								onChange={handleOnChange}
+							/>
+						</div>
+						{/* <div>
 									<input
 										className='peer sr-only'
 										id='option1'
@@ -397,32 +395,30 @@ const CreateJobPostingPage: React.FC = () => {
 										<span className='text-sm font-medium'> Option 3 </span>
 									</label>
 								</div> */}
-							</div>
-							<div>
-								<label className='sr-only' htmlFor='message'>
-									Job Description
-								</label>
-								<textarea
-									className='w-full rounded-lg border border-gray-300 p-3 text-sm'
-									placeholder='Job Description'
-									rows={8}
-									id='jobDescription'
-									value={formData.jobDescription.value}
-									onChange={handleOnChange}
-								/>
-							</div>
-							<div className='mt-4'>
-								<button
-									type='button'
-									onClick={handleSubmit}
-									className='inline-block w-full rounded-lg bg-blue-800 px-5 py-3 font-medium text-white sm:w-auto'
-								>
-									Create Job Posting
-								</button>
-							</div>
-						</form>
 					</div>
-				</div>
+					<div>
+						<label className='sr-only' htmlFor='message'>
+							Job Description
+						</label>
+						<textarea
+							className='w-full rounded-lg border border-gray-300 p-3 text-sm'
+							placeholder='Job Description'
+							rows={8}
+							id='jobDescription'
+							value={formData.jobDescription.value}
+							onChange={handleOnChange}
+						/>
+					</div>
+					<div className='mt-4'>
+						<button
+							type='button'
+							onClick={handleSubmit}
+							className='inline-block w-full rounded-lg bg-blue-800 px-5 py-3 font-medium text-white sm:w-auto'
+						>
+							Create Job Posting
+						</button>
+					</div>
+				</form>
 			</div>
 		</section>
 	)
