@@ -3,7 +3,8 @@ import { useSession } from 'next-auth/react'
 
 import fetcher from '@/src/utils/fetcher'
 import { BASE_URL } from '@/src/utils/constants'
-import { JobPosting } from './useJobPostings'
+
+import { JobPosting } from '@/src/interfaces/models/JobPosting'
 
 interface JobPostingWorkerResponse {
 	jobPosting: JobPosting

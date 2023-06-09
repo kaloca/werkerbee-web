@@ -2,10 +2,10 @@ import useSWR from 'swr'
 import { useState, useEffect, useCallback } from 'react'
 import { useSession } from 'next-auth/react'
 
-import fetcher from '../utils/fetcher'
-
+import fetcher from '@/src/utils/fetcher'
 import { BASE_URL } from '@/src/utils/constants'
-import { Job } from './useJobs'
+
+import { Job } from '@/src/interfaces/models/Job'
 
 const useJob = (jobId: string) => {
 	const [isLoading, setIsLoading] = useState(true)
