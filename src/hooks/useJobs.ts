@@ -6,6 +6,16 @@ import fetcher from '../utils/fetcher'
 
 import { BASE_URL } from '@/src/utils/constants'
 
+export type TimelineEventType =
+	| 'CLOCK_IN'
+	| 'CLOCK_OUT'
+	| 'BREAK_START'
+	| 'BREAK_END'
+
+export interface ITimelineEvent {
+	status: TimelineEventType
+	time: Date
+}
 export interface Job {
 	_id: string
 	name: string
@@ -25,6 +35,7 @@ export interface Job {
 			_id: string
 		}
 	]
+	timeline: ITimelineEvent[]
 	createdAt: Date
 	updatedAt: Date
 }
