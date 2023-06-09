@@ -21,7 +21,7 @@ const NotificationsPage = () => {
 				className=' w-80 overflow-scroll h-full no-scrollbar'
 				id='notificationsContainer'
 			>
-				{!isLoading && data && total && (
+				{!isLoading && data && data.length > 0 && total && (
 					<InfiniteScroll
 						dataLength={data.length}
 						next={refetch}
@@ -41,6 +41,11 @@ const NotificationsPage = () => {
 							/>
 						))}
 					</InfiniteScroll>
+				)}
+				{!isLoading && data && data.length == 0 && (
+					<div className='bg-white px-5 py-5 shadow-md text-gray-700 mt-32 rounded font-bold'>
+						No new notifications
+					</div>
 				)}
 			</div>
 		</div>
