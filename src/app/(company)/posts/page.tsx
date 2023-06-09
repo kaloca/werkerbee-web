@@ -89,9 +89,20 @@ export default function JobPostsPage() {
 								<tr
 									key={post.name}
 									className='hover:bg-slate-50 hover:cursor-pointer'
-									onClick={() => router.push(`posts/${post._id}`)}
+									onClick={() =>
+										router.push(
+											post.job
+												? `/company/jobs/${post.job._id}`
+												: `posts/${post._id}`
+										)
+									}
 								>
 									<td className='whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-6'>
+										{post.job && (
+											<span className='mr-5 py-2 px-3 bg-blue-200 text-blue-900 rounded-2xl'>
+												Ongoing
+											</span>
+										)}
 										{post.name}
 									</td>
 									<td className='hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 sm:table-cell'>
@@ -104,14 +115,23 @@ export default function JobPostsPage() {
 										{post.applications.length}
 									</td>
 									<td className='whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6'>
-										{
+										{post.job.status == 'PENDING' ? (
+											<a
+												onClick={() =>
+													router.push(`/company/jobs/${post.job._id}`)
+												}
+												className='text-indigo-600 hover:text-indigo-900 z-50 p-2'
+											>
+												View Job<span className='sr-only'>, {post.name}</span>
+											</a>
+										) : (
 											<a
 												onClick={() => router.push(`posts/${post._id}/edit`)}
 												className='text-indigo-600 hover:text-indigo-900'
 											>
 												Edit<span className='sr-only'>, {post.name}</span>
 											</a>
-										}
+										)}
 									</td>
 								</tr>
 							))
