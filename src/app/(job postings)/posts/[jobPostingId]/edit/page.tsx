@@ -261,9 +261,9 @@ const EditJobPosting = ({ params }: { params: { jobPostingId: string } }) => {
 	// }, [jobTypes, formData.type])
 
 	return (
-		<section className='bg-gray-100 flex h-full flex-col justify-center items-center'>
+		<section className='bg-gray-100 flex h-full flex-col justify-start items-center pt-10 pb-10 overflow-scroll'>
 			<div className='mx-auto max-w-screen-xl px-4 py-16 sm:px-6 lg:px-8'>
-				<div className='rounded-lg bg-white p-8 shadow-lg lg:col-span-3 lg:p-12'>
+				<div className='rounded-lg bg-white p-8 shadow-lg lg:p-12'>
 					<form action='' className='space-y-4'>
 						<div>
 							<label

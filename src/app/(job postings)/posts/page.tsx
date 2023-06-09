@@ -95,7 +95,7 @@ export default function JobPostsPage() {
 										{post.name}
 									</td>
 									<td className='hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 sm:table-cell'>
-										{post.start}
+										{new Date(post.start).toLocaleString()}
 									</td>
 									<td className='hidden whitespace-nowrap px-3 py-4 text-sm text-gray-500 lg:table-cell capitalize'>
 										{post.type}
@@ -114,7 +114,9 @@ export default function JobPostsPage() {
 								</tr>
 							))
 						) : (
-							<div className='p-5'>You have not created any job posts yet.</div>
+							<div className='p-5'>
+								You don&apos;t have any ongoing job posts
+							</div>
 						)}
 					</tbody>
 				</table>
