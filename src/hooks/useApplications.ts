@@ -1,5 +1,5 @@
 import useSWR from 'swr'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import { useSession } from 'next-auth/react'
 
@@ -18,36 +18,58 @@ export interface JobApplication {
 	status: 'PENDING' | 'ACCEPTED' | 'REJECTED' | 'CANCELED' | 'SCHEDULED'
 }
 
+interface ApplicationsResponse {
+	applications: JobApplication[]
+	pagination: {
+		currentPage: number
+		totalApplications: number
+		totalPage: number
+	}
+}
+
 const useApplications = () => {
 	const [isLoading, setIsLoading] = useState(true)
-	const [data, setData] = useState<JobApplication[] | null>(null)
+	const [data, setData] = useState<ApplicationsResponse | null>(null)
 	const [error, setError] = useState<Error | null>(null)
+	const [page, setPage] = useState(1)
 
 	const { data: session } = useSession()
 	const applicationsUrl = `${BASE_URL}/worker/${session?.user.username}/applications`
 
-	useEffect(() => {
-		const fetchData = async () => {
+	const refetch = useCallback(
+		async (status?: string) => {
 			if (session) {
+				setIsLoading(true)
+				const url = new URL(applicationsUrl)
+				url.searchParams.append('page', String(page))
+				url.searchParams.append('limit', '10')
+				if (status) url.searchParams.append('status', status)
+
 				try {
-					const result = await fetcher(applicationsUrl, session.user.token)
+					const result = await fetcher(url.toString(), session.user.token)
 					setData(result)
-					setError(null)
 				} catch (e: any) {
 					setError(e)
-					setData(null)
 				} finally {
 					setIsLoading(false)
 				}
-			} else {
-				setIsLoading(true)
 			}
-		}
+		},
+		[session, applicationsUrl, page]
+	)
 
-		fetchData()
-	}, [session, applicationsUrl])
+	useEffect(() => {
+		refetch()
+	}, [refetch, page])
 
-	return { data: data as JobApplication[], error: error as Error, isLoading }
+	return {
+		data: data?.applications,
+		pagination: data?.pagination,
+		error: error as Error,
+		isLoading,
+		setPage,
+		refetch,
+	}
 }
 
 export default useApplications
