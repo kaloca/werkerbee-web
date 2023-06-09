@@ -20,14 +20,19 @@ export default function Calendar() {
 	const { data: days, isLoading, error } = useWorkerCalendar(28)
 	const selectedDay = days ? [2] : { events: [] }
 
+	const today = new Date()
+
 	return (
 		<div className='w-full h-full p-32 pt-20'>
 			<div className='lg:flex lg:h-full lg:flex-col'>
 				<header className='relative z-20 flex items-center justify-between border-b border-gray-200 py-4 px-6 lg:flex-none'>
 					<h1 className='text-lg font-semibold text-gray-900'>
-						<time dateTime='2022-01'>January 2022</time>
+						<time>
+							{today.toLocaleString('default', { month: 'long' })}{' '}
+							{today.getFullYear()}
+						</time>
 					</h1>
-					<div className='flex items-center'>
+					{/* <div className='flex items-center'>
 						<div className='flex items-center rounded-md shadow-sm md:items-stretch'>
 							<button
 								type='button'
@@ -243,7 +248,7 @@ export default function Calendar() {
 								</Menu.Items>
 							</Transition>
 						</Menu>
-					</div>
+					</div> */}
 				</header>
 				<MonthView days={days} />
 			</div>
