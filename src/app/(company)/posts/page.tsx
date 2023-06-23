@@ -115,7 +115,7 @@ export default function JobPostsPage() {
 										{post.applications.length}
 									</td>
 									<td className='whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-6'>
-										{post.job.status == 'PENDING' ? (
+										{post.job?.status == 'PENDING' ? (
 											<a
 												onClick={() =>
 													router.push(`/company/jobs/${post.job._id}`)
