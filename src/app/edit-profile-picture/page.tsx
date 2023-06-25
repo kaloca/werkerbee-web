@@ -1,15 +1,18 @@
 'use client'
 import React, { ChangeEvent, FormEvent, useState } from 'react'
 import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
+
+import { SyncLoader } from 'react-spinners'
 
 import apiClient from '@/src/utils/apiClient'
 import { BASE_URL } from '@/src/utils/constants'
-import { SyncLoader } from 'react-spinners'
 
 interface EditProfileModalProps {}
 
 const EditProfileModal: React.FC<EditProfileModalProps> = ({}) => {
 	const { data: session } = useSession()
+	const router = useRouter()
 
 	const [selectedFile, setSelectedFile] = useState<File | null>(null)
 	const [previewSrc, setPreviewSrc] = useState<string | null>(null)
@@ -53,6 +56,7 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({}) => {
 				})
 				.catch((error) => console.error('Error:', error))
 			setLoading(false)
+			router.push('/profile')
 		} catch (error) {
 			console.log(error)
 		}
