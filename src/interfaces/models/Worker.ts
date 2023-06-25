@@ -1,5 +1,16 @@
 import { Address, BankAccount } from '../UserData'
 
+export interface Certification {
+	certification: string
+	organization: string
+}
+export interface Experience {
+	_id: string
+	company: string
+	jobType: string
+	startDate: Date
+	endDate: Date
+}
 export interface Worker {
 	_id: string
 	name: string
@@ -16,7 +27,10 @@ export interface Worker {
 	ssn: string
 	birthday: Date
 	rating: number
+	profilePicture: string
+	certifications?: Certification[]
+	completedJobs?: number
 	jobTypes: string[]
-	// experiences?: Experience[]
+	experiences?: Experience[]
 	hashedPassword: string
 }

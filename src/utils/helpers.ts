@@ -97,6 +97,37 @@ const formatDate = (dateTimeString: string) => {
 	return `${yearString}-${monthString}-${dayString}`
 }
 
+function formatDateRange(start: Date, end: Date) {
+	// Array of month names for formatting
+	const monthNames = [
+		'Jan',
+		'Feb',
+		'Mar',
+		'Apr',
+		'May',
+		'Jun',
+		'Jul',
+		'Aug',
+		'Sep',
+		'Oct',
+		'Nov',
+		'Dec',
+	]
+
+	let startMonth = monthNames[start.getMonth()]
+	let startYear = start.getFullYear()
+
+	let endMonth = monthNames[end.getMonth()]
+	let endYear = end.getFullYear()
+
+	// If the start and end year are the same, don't repeat the year
+	if (startYear === endYear) {
+		return `${startMonth} - ${endMonth} ${endYear}`
+	} else {
+		return `${startMonth} ${startYear} - ${endMonth} ${endYear}`
+	}
+}
+
 const helpers = {
 	validateEmail,
 	validatePhoneNumber,
@@ -107,6 +138,7 @@ const helpers = {
 	classNames,
 	formatTime,
 	formatDate,
+	formatDateRange,
 }
 
 export default helpers
