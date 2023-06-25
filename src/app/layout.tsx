@@ -1,7 +1,7 @@
 import Provider from './context/provider'
 import { MenuBar } from '@/src/components/menuBar/menuBar'
 import './globals.css'
-import NavBar from '@/src/components/NavBar'
+import NavBar from '@/src/components/navBar/NavBar'
 import ErrorBar from '@/src/components/errorBar'
 import { ErrorBarProvider } from './context/errorContext'
 
