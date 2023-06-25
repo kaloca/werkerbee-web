@@ -6,13 +6,19 @@ import { usePathname, useRouter } from 'next/navigation'
 import Image from 'next/image'
 
 import { Disclosure, Menu, Transition } from '@headlessui/react'
-import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import {
+	Bars3Icon,
+	BellAlertIcon,
+	BellIcon,
+	XMarkIcon,
+} from '@heroicons/react/24/outline'
 import { PlusSmallIcon } from '@heroicons/react/20/solid'
 
 import WerkerBeeLogo from '@/src/assets/werkerbeelogo_new_white.png'
 import helpers from '@/src/utils/helpers'
 
 import MobileMenu from './components/MobileMenu'
+import useNavBarInfo from '@/src/hooks/useNavBarInfo'
 
 const classNames = helpers.classNames
 
@@ -23,6 +29,8 @@ const normal =
 
 export default function NavBar() {
 	const { data: session } = useSession()
+	const { data, error, isLoading, mutate } = useNavBarInfo()
+
 	const router = useRouter()
 	const pathname = usePathname()
 
@@ -137,20 +145,21 @@ export default function NavBar() {
 									</div>
 									{session && (
 										<div className='flex items-center'>
-											{session.user.type == 'company' && (
-												<div className='flex-shrink-0'>
-													<button
-														type='button'
-														className='relative inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
-													>
-														<PlusSmallIcon
-															className='-ml-1 mr-2 h-5 w-5'
-															aria-hidden='true'
-														/>
-														<span>New Job</span>
-													</button>
-												</div>
-											)}
+											{/* {session.user.type == 'company' &&
+												pathname != '/posts' && (
+													<div className='flex-shrink-0'>
+														<button
+															type='button'
+															className='relative inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
+														>
+															<PlusSmallIcon
+																className='-ml-1 mr-2 h-5 w-5'
+																aria-hidden='true'
+															/>
+															<span>New Job</span>
+														</button>
+													</div>
+												)} */}
 											<div className='hidden md:ml-4 md:flex-shrink-0 md:flex md:items-center'>
 												<button
 													type='button'
@@ -158,7 +167,14 @@ export default function NavBar() {
 													className='bg-white p-1 rounded-full text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
 												>
 													<span className='sr-only'>View notifications</span>
-													<BellIcon className='h-6 w-6' aria-hidden='true' />
+													{data?.unreadNotification ? (
+														<BellAlertIcon
+															className='h-6 w-6'
+															aria-hidden='true'
+														/>
+													) : (
+														<BellIcon className='h-6 w-6' aria-hidden='true' />
+													)}
 												</button>
 
 												{/* Profile dropdown */}
@@ -166,10 +182,12 @@ export default function NavBar() {
 													<div>
 														<Menu.Button className='bg-white rounded-full flex text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'>
 															<span className='sr-only'>Open user menu</span>
-															<img
-																className='h-8 w-8 rounded-full'
-																src='https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
-																alt=''
+															<Image
+																className='rounded-full h-8 w-8'
+																src={data?.profilePicture}
+																alt='profile-pic'
+																height={32}
+																width={32}
 															/>
 														</Menu.Button>
 													</div>
