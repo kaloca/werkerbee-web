@@ -4,18 +4,18 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 
+import { SyncLoader } from 'react-spinners'
+
 import helpers from '@/src/utils/helpers'
 import useJobPostings, { JobPostingsOptions } from '@/src/hooks/useJobPostings'
 
-import { subCategories, filters } from './components/SearchOptions/options'
+import ChooseLocationModal from '@/src/components/ChooseLocationModal'
 
+import { subCategories, filters } from './components/SearchOptions/options'
 import MobileFilter from './components/SearchOptions/MobileFilters'
 import JobCard from './components/JobCard'
 import SearchOptions from './components/SearchOptions/SearchOptions'
 import TopMenu from './components/SearchOptions/TopMenu'
-import { SyncLoader } from 'react-spinners'
-import useUser from '@/src/hooks/useUser'
-import ChooseLocationModal from '@/src/components/ChooseLocationModal'
 
 export default function Jobs() {
 	const { data: session } = useSession()
