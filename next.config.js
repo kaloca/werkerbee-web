@@ -11,6 +11,12 @@ const nextConfig = {
 				port: '',
 				pathname: '/assets/**',
 			},
+			{
+				protocol: 'https',
+				hostname: 'werkerbee.s3.us-west-2.amazonaws.com',
+				port: '',
+				pathname: '/*',
+			},
 		],
 	},
 }
