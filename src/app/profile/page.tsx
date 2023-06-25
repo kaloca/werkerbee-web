@@ -20,9 +20,11 @@ export default function ProfilePage({ params }: any) {
 		}
 	}, [session, status, router])
 
+	if (session?.user.type == 'worker')
+		router.push('/worker/' + session.user.username)
 	return (
 		<>
-			{session?.user.type === 'worker' ? <WorkerProfile /> : null}
+			{/* {session?.user.type === 'worker' ? <WorkerProfile /> : null} */}
 			{session?.user.type === 'company' ? <CompanyProfile /> : null}
 		</>
 	)
