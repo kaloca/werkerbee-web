@@ -2,6 +2,7 @@ import React from 'react'
 
 import helpers from '@/src/utils/helpers'
 import Rating from '@/src/components/rating'
+import Image from 'next/image'
 
 interface ProfileCardProps {
 	name: string
@@ -9,6 +10,7 @@ interface ProfileCardProps {
 	rating?: number
 	address: Record<string, any>
 	jobTypes: string[]
+	profilePicture: string
 }
 
 const ProfileCard: React.FC<ProfileCardProps> = ({
@@ -17,18 +19,21 @@ const ProfileCard: React.FC<ProfileCardProps> = ({
 	rating,
 	address,
 	jobTypes,
+	profilePicture,
 }) => {
 	return (
-		<div className='flex flex-col bg-white border border-white shadow-lg  rounded-3xl p-4 m-4 w-1/3'>
+		<div className='flex flex-col bg-white border border-white shadow-lg  rounded-3xl p-4 m-4'>
 			<div className='flex-none sm:flex'>
 				<div className=' relative h-32 w-32   sm:mb-0 mb-3'>
-					<img
-						src='https://tailwindcomponents.com/storage/avatars/njkIbPhyZCftc4g9XbMWwVsa7aGVPajYLRXhEeoo.jpg'
+					<Image
+						src={profilePicture}
 						alt='aji'
-						className=' w-32 h-32 object-cover rounded-2xl'
+						className='rounded-2xl'
+						width={140}
+						height={32}
 					/>
 					<a
-						href='#'
+						href='/edit-profile-picture'
 						className='absolute -right-2 bottom-2   -ml-3  text-white p-1 text-xs bg-green-400 hover:bg-green-500 font-medium tracking-wider rounded-full transition ease-in duration-300'
 					>
 						<svg
