@@ -12,7 +12,7 @@ import PastExperiencesModal from './components/PastExperiencesModal'
 export default function WorkerProfilePage({ params }: any) {
 	const { data: session } = useSession()
 
-	const { data: worker, isLoading } = useWorker(params.workerUsername)
+	const { data: worker, isLoading, mutate } = useWorker(params.workerUsername)
 	const [showJobTypes, setShowJobTypes] = useState(false)
 	const [showCertifications, setShowCertifications] = useState(false)
 	const [showPastExperiences, setShowPastExperiences] = useState(false)
@@ -25,12 +25,15 @@ export default function WorkerProfilePage({ params }: any) {
 					This worker does not exist
 				</div>
 			)}
-			{!isLoading && worker && (
+			{!isLoading && worker && session && (
 				<div className='flex items-center justify-center justify-items-center bg-slate-500 h-full w-full'>
 					{showPastExperiences && (
 						<PastExperiencesModal
 							experiences={worker.experiences}
 							closeModal={() => setShowPastExperiences(false)}
+							edit={session?.user.username == params.workerUsername}
+							session={session}
+							mutate={mutate}
 						/>
 					)}
 					<div className=' max-w-md mx-auto md:max-w-2xl min-w-0 break-words bg-white w-full mb-6 shadow-lg rounded-xl mt-16'>
@@ -38,28 +41,32 @@ export default function WorkerProfilePage({ params }: any) {
 							<div className='flex flex-wrap justify-center'>
 								<div className='w-full flex justify-center'>
 									<div className='relative'>
-										<Image
-											alt='profile-pic'
-											src={worker.profilePicture || BlankProfilePicture}
-											className='shadow-xl rounded-full align-middle border-none absolute -m-16 -ml-20 lg:-ml-16 max-w-[150px]'
-											width={150}
-											height={150}
-										/>
-										{session?.user.username == params.workerUsername && (
-											<a
-												href='/edit-profile-picture'
-												className='absolute -right-20 -bottom-20	-ml-3  text-white p-1 text-xs bg-green-400 hover:bg-green-500 font-medium tracking-wider rounded-full transition ease-in duration-300'
-											>
-												<svg
-													xmlns='http://www.w3.org/2000/svg'
-													viewBox='0 0 20 20'
-													fill='currentColor'
-													className='h-4 w-4'
+										<div className=' z-20 rounded-full overflow-hidden w-36 h-36 shadow-xl align-middle border-none absolute -m-16 -ml-20 lg:-ml-16'>
+											<Image
+												alt='profile-pic'
+												src={worker.profilePicture || BlankProfilePicture}
+												className=''
+												style={{ objectFit: 'cover' }}
+												width={150}
+												height={150}
+											/>
+										</div>
+										{session?.user.username == params.workerUsername &&
+											!showPastExperiences && (
+												<a
+													href='/edit-profile-picture'
+													className='absolute -right-20 -bottom-20 text-white p-1 text-xs bg-green-400 hover:bg-green-500 font-medium tracking-wider rounded-full transition ease-in duration-300'
 												>
-													<path d='M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z'></path>
-												</svg>
-											</a>
-										)}
+													<svg
+														xmlns='http://www.w3.org/2000/svg'
+														viewBox='0 0 20 20'
+														fill='currentColor'
+														className='h-4 w-4'
+													>
+														<path d='M13.586 3.586a2 2 0 112.828 2.828l-.793.793-2.828-2.828.793-.793zM11.379 5.793L3 14.172V17h2.828l8.38-8.379-2.83-2.828z'></path>
+													</svg>
+												</a>
+											)}
 									</div>
 								</div>
 							</div>
@@ -67,9 +74,9 @@ export default function WorkerProfilePage({ params }: any) {
 								<h3 className='text-2xl text-slate-700 font-bold leading-normal'>
 									{worker.name}
 								</h3>
-								<div className='text-xs text-slate-400 font-bold uppercase'>
-									<i className='fas fa-map-marker-alt mr-2 text-slate-400 opacity-75'></i>
-									{/* {JSON.stringify(data.location)} */}
+								<div className='text-xs text-slate-400 font-bold uppercase mb-3'>
+									{/* <i className='fas fa-map-marker-alt mr-2 text-slate-400 opacity-75'></i> */}
+									{worker.address.city}, {worker.address.country}
 								</div>
 
 								<div className='w-full text-center'>
@@ -153,7 +160,7 @@ export default function WorkerProfilePage({ params }: any) {
 											</a>
 											{session?.user.username == params.workerUsername && (
 												<a
-													href='/edit-profile-picture'
+													onClick={() => setShowPastExperiences(true)}
 													className='ml-2 text-white p-1 text-xs bg-green-400 hover:bg-green-500 font-medium tracking-wider rounded-full transition ease-in duration-300'
 												>
 													<svg

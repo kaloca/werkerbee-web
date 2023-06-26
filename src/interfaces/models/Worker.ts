@@ -8,8 +8,8 @@ export interface Experience {
 	_id: string
 	company: string
 	jobType: string
-	startDate: Date
-	endDate: Date
+	startDate: string
+	endDate: string
 }
 export interface Worker {
 	_id: string
@@ -29,7 +29,6 @@ export interface Worker {
 	rating: number
 	profilePicture: string
 	certifications?: Certification[]
-	completedJobs?: number
 	jobTypes: string[]
 	experiences?: Experience[]
 	hashedPassword: string
