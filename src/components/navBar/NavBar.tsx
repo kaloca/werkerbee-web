@@ -178,14 +178,15 @@ export default function NavBar() {
 												</button>
 
 												{/* Profile dropdown */}
-												<Menu as='div' className='ml-3 relative z-20'>
+												<Menu as='div' className='ml-3 relative z-5'>
 													<div>
-														<Menu.Button className='bg-white rounded-full flex text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'>
+														<Menu.Button className='bg-white rounded-full flex text-sm'>
 															<span className='sr-only'>Open user menu</span>
 															<Image
 																className='rounded-full h-8 w-8'
 																src={data?.profilePicture}
 																alt='profile-pic'
+																style={{ objectFit: 'cover' }}
 																height={32}
 																width={32}
 															/>
@@ -204,7 +205,7 @@ export default function NavBar() {
 															<Menu.Item>
 																{({ active }) => (
 																	<a
-																		href='/profile'
+																		href={`/${session.user.type}/${session.user.username}`}
 																		className={classNames(
 																			active ? 'bg-gray-100' : '',
 																			'block px-4 py-2 text-sm text-gray-700'

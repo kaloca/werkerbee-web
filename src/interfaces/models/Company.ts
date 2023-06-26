@@ -10,10 +10,11 @@ export interface Company {
 	}
 	type: string
 	overallRating: number
-	jobTypes: string[]
+	jobTypes: { type: string; _id: string }[]
 	hashedPassword: string
 	address: Address
 	bankInfo: BankAccount
+	profilePicture: string
 	createdAt: Date
 	updatedAt: Date
 }
