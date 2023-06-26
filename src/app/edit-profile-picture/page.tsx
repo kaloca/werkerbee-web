@@ -3,7 +3,7 @@ import React, { ChangeEvent, FormEvent, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 
-import { SyncLoader } from 'react-spinners'
+import { PulseLoader } from 'react-spinners'
 
 import apiClient from '@/src/utils/apiClient'
 import { BASE_URL } from '@/src/utils/constants'
@@ -81,17 +81,20 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({}) => {
 						<div
 							className={`${
 								loading
-									? ' bg-gray-400'
+									? ' bg-gray-400 '
 									: 'text-blue-700 bg-blue-100 hover:bg-blue-200 '
 							} mt-5 inline-flex items-center justify-center px-4 py-2 border border-transparent font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:text-sm`}
 						>
 							{!loading ? (
 								<button type='submit'>Update</button>
 							) : (
-								<SyncLoader className='h-4' />
+								<PulseLoader
+									color='gray'
+									className='h-4 w-10 inline-flex justify-center items-center'
+									size={6}
+								/>
 							)}
 						</div>
-						{loading && <p>LOADING</p>}
 					</form>
 				</div>
 			</div>
