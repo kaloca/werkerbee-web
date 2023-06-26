@@ -56,7 +56,7 @@ const EditProfileModal: React.FC<EditProfileModalProps> = ({}) => {
 				})
 				.catch((error) => console.error('Error:', error))
 			setLoading(false)
-			router.push('/profile')
+			router.push(`/${session?.user.type}/${session?.user.username}`)
 		} catch (error) {
 			console.log(error)
 		}
