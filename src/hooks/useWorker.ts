@@ -5,6 +5,10 @@ import { BASE_URL } from '@/src/utils/constants'
 
 import { Worker } from '@/src/interfaces/models/Worker'
 
+interface UseWorkerResponse extends Worker {
+	completedJobs: number
+}
+
 const useWorker = (workerUsername: string) => {
 	const { data, error, isLoading, mutate } = useSWR(
 		`${BASE_URL}/worker/${workerUsername}`,
@@ -12,7 +16,7 @@ const useWorker = (workerUsername: string) => {
 	)
 
 	return {
-		data: data as Worker,
+		data: data as UseWorkerResponse,
 		error,
 		isLoading,
 		mutate,
