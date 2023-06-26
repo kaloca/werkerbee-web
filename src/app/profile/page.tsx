@@ -25,9 +25,9 @@ export default function ProfilePage({ params }: any) {
 	else router.push('/login')
 
 	return (
-		<>
+		<div>
 			{/* {session?.user.type === 'worker' ? <WorkerProfile /> : null} */}
 			{/* {session?.user.type === 'company' ? <CompanyProfile /> : null} */}
-		</>
+		</div>
 	)
 }
