@@ -145,7 +145,7 @@ const CreateJobPostingPage: React.FC = () => {
 				})
 				if (response?.status === 201) {
 					console.log('Job application submitted successfully')
-					router.push('/jobs')
+					router.push('/posts')
 				} else {
 					console.error(
 						`Error submitting job application: ${
