@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 import { SyncLoader } from 'react-spinners'
@@ -16,11 +16,16 @@ import JobApplicationCard from './components/JobApplicationCard'
 import ApplicationStatusSelector from './components/ApplicationStatusSelector'
 
 const Applications = () => {
-	const { data: session } = useSession()
+	const { data: session, status } = useSession()
 	const router = useRouter()
 	const { showError } = useErrorBar()
 
-	if (!session) router.push('/login')
+	useEffect(() => {
+		if (status == 'unauthenticated' && !session) {
+			// Redirect to another page, e.g., the login page
+			router.push('/login')
+		}
+	}, [session, status, router])
 
 	const [acceptJobModalOpen, setAcceptJobModalOpen] = useState(false)
 	const [confirmJobLoading, setConfirmJobLoading] = useState(false)
