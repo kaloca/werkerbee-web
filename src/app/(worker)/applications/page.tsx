@@ -20,6 +20,8 @@ const Applications = () => {
 	const router = useRouter()
 	const { showError } = useErrorBar()
 
+	if (!session) router.push('/login')
+
 	const [acceptJobModalOpen, setAcceptJobModalOpen] = useState(false)
 	const [confirmJobLoading, setConfirmJobLoading] = useState(false)
 	const [chosenJob, setChosenJob] = useState<{
