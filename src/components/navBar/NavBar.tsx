@@ -59,7 +59,7 @@ export default function NavBar() {
 			type: 'company',
 		},
 		{
-			name: 'Applications',
+			name: 'Applications Statuses',
 			isSelected: false,
 			url: '/applications',
 			type: 'worker',
@@ -178,7 +178,7 @@ export default function NavBar() {
 												</button>
 
 												{/* Profile dropdown */}
-												<Menu as='div' className='ml-3 relative z-5'>
+												<Menu as='div' className='ml-3 relative z-20'>
 													<div>
 														<Menu.Button className='bg-white rounded-full flex text-sm'>
 															<span className='sr-only'>Open user menu</span>
