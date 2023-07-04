@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 
 import { SyncLoader } from 'react-spinners'
@@ -17,21 +17,31 @@ import JobCard from './components/JobCard'
 import SearchOptions from './components/SearchOptions/SearchOptions'
 import TopMenu from './components/SearchOptions/TopMenu'
 
-export default function Jobs() {
+export default function Jobs({ params }: any) {
 	const { data: session } = useSession()
+	const router = useRouter()
+	const searchParams = useSearchParams()
 
 	const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
 	const [locationModalOpen, setLocationModalOpen] = useState(false)
+
+	const companyType = searchParams?.get('companyType')
+
 	const [searchOptions, setSearchOptions] = useState<JobPostingsOptions>({
 		page: 1,
 		limit: 10,
 		dayOfWeek: [],
 		sortBy: 'start',
+		companyUsername: searchParams?.get('company') || undefined,
+		companyType:
+			companyType == 'hotel' || companyType == 'restaurant'
+				? companyType
+				: undefined,
 	})
 
 	const { data, error, isLoading } = useJobPostings(searchOptions)
-	const router = useRouter()
 
+	console.log(searchParams?.get('test'))
 	const handlePrevPage = () => {
 		if (searchOptions.page > 1) {
 			setSearchOptions({ ...searchOptions, page: searchOptions.page - 1 })

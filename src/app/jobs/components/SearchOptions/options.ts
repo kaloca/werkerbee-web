@@ -24,6 +24,7 @@ export const filters: Filter[] = [
 			{ value: 'Thursday', label: 'Thursday' },
 			{ value: 'Friday', label: 'Friday' },
 			{ value: 'Saturday', label: 'Saturday' },
+			{ value: 'Sunday', label: 'Sunday' },
 		],
 	},
 ]

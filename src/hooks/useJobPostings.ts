@@ -30,6 +30,8 @@ export interface JobPostingsOptions {
 	jobType?: string[]
 	requesterLocation?: string
 	requesterDistance?: number
+	companyType?: 'hotel' | 'restaurant'
+	companyUsername?: string
 	sortBy?: string // "bestRating", "mostPopular", "newest"
 }
 
