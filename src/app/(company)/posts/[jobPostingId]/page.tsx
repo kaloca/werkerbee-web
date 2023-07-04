@@ -12,6 +12,7 @@ import List from './components/List'
 import { BASE_URL } from '@/src/utils/constants'
 import fetcher from '@/src/utils/fetcher'
 import useSWR from 'swr'
+import { PulseLoader } from 'react-spinners'
 
 export default function CompanyPostsPage({ params }: any) {
 	const { data: session, status } = useSession()
@@ -92,13 +93,14 @@ export default function CompanyPostsPage({ params }: any) {
 					onApplicationUpdate={onApplicationUpdate}
 				/>
 			)}
-			{applications && applications.length == 0 && (
+			{isLoading && applications.length == 0 && (
 				<div>
 					<span>This job has no current applications</span>
 				</div>
 			)}
-			{isLoading && (
-				<div>
+			{!applications && isLoading && (
+				<div className='inline-flex justify-center w-full items-center'>
+					<PulseLoader size={8} className='mr-2' />
 					<span>Loading applications</span>
 				</div>
 			)}
