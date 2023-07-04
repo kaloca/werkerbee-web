@@ -2,6 +2,7 @@
 import { useState } from 'react'
 import { useSession } from 'next-auth/react'
 import Image from 'next/image'
+import { useRouter } from 'next/navigation'
 
 import useCompany from '@/src/hooks/useCompany'
 
@@ -9,6 +10,7 @@ import BlankProfilePicture from '@/src/assets/blank_profile_pic.webp'
 
 export default function CompanyProfilePage({ params }: any) {
 	const { data: session } = useSession()
+	const router = useRouter()
 
 	const { data: company, isLoading } = useCompany(params.companyUsername)
 	const [showJobTypes, setShowJobTypes] = useState(false)
@@ -33,7 +35,7 @@ export default function CompanyProfilePage({ params }: any) {
 										<div className='rounded-full overflow-hidden w-36 h-36 shadow-xl align-middle border-none absolute -m-16 -ml-20 lg:-ml-16'>
 											<Image
 												alt='profile-pic'
-												src={company.profilePicture || BlankProfilePicture}
+												src={company?.profilePicture || BlankProfilePicture}
 												className=''
 												style={{ objectFit: 'cover' }}
 												width={150}
@@ -69,6 +71,12 @@ export default function CompanyProfilePage({ params }: any) {
 
 								<div className='w-full text-center'>
 									<div className='flex justify-center '>
+										<div className='p-3 text-center bg-slate-100 mr-2 rounded-lg hover:cursor-pointer hover:bg-slate-200'>
+											<span className='text-xl font-bold block capitalize tracking-wide text-slate-700'>
+												{company.type}
+											</span>
+											<span className='text-sm text-slate-400 '>Type</span>
+										</div>
 										<div
 											onMouseEnter={() => setShowJobTypes(true)}
 											onMouseLeave={() => setShowJobTypes(false)}
@@ -91,29 +99,12 @@ export default function CompanyProfilePage({ params }: any) {
 											)}
 										</div>
 
-										<div className='p-3 text-center bg-slate-100 mr-2 rounded-lg hover:cursor-pointer hover:bg-slate-200'>
-											<span className='text-xl font-bold block uppercase tracking-wide text-slate-700'>
-												{/* {company. ?.length || 0} */}
-											</span>
-											<span className='text-sm text-slate-400 '>
-												Certifications
-											</span>
-											{/* {worker.certifications &&
-												worker.certifications?.length > 0 &&
-												showCertifications && (
-													<div className='flex flex-col rounded-md bg-white p-2 absolute z-10 border border-slate-100'>
-														{worker.certifications.map((c) => (
-															<span
-																className='capitalize py-1'
-																key={c.certification}
-															>
-																{c.certification}
-															</span>
-														))}
-													</div>
-												)} */}
-										</div>
-										<div className='p-3 text-center bg-slate-100 mr-2 rounded-lg hover:cursor-pointer hover:bg-slate-200'>
+										<div
+											onClick={() =>
+												router.push(`/jobs?company=${params.companyUsername}`)
+											}
+											className='p-3 text-center bg-slate-100 mr-2 rounded-lg hover:cursor-pointer hover:bg-slate-200'
+										>
 											<span className='text-xl font-bold block uppercase tracking-wide text-slate-700'>
 												{company.activeListings || 0}
 											</span>
@@ -122,7 +113,7 @@ export default function CompanyProfilePage({ params }: any) {
 											</span>
 										</div>
 
-										{company.overallRating && (
+										{company.overallRating != -1 && (
 											<div className='p-3 text-center bg-slate-100 mr-2 rounded-lg hover:cursor-pointer hover:bg-slate-200'>
 												<span className='text-xl font-bold block uppercase tracking-wide text-slate-700'>
 													{company.overallRating}
@@ -141,7 +132,7 @@ export default function CompanyProfilePage({ params }: any) {
 										<p className='font-light leading-relaxed text-slate-600 mb-4'>
 											{company.description}
 										</p>
-										<div className='flex flex-row justify-center'>
+										{/* <div className='flex flex-row justify-center'>
 											<a
 												onClick={() => setShowPastExperiences(true)}
 												className='font-normal text-slate-700 hover:text-slate-400'
@@ -163,7 +154,7 @@ export default function CompanyProfilePage({ params }: any) {
 													</svg>
 												</a>
 											)}
-										</div>
+										</div> */}
 									</div>
 								</div>
 							</div>
