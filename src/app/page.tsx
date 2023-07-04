@@ -1,10 +1,9 @@
-import Image from 'next/image'
-import { Inter } from 'next/font/google'
-import styles from './page.module.css'
-
-const inter = Inter({ subsets: ['latin'] })
+'use client'
+import { useSession } from 'next-auth/react'
 
 export default function Home() {
+	const { data: session } = useSession()
+
 	return (
 		<div className='flex flex-col pt-20 items-center h-full'>
 			<div className='relative pt-6 pb-16 sm:pb-24'>
@@ -23,22 +22,36 @@ export default function Home() {
 							fugiat aliqua.
 						</p>
 						<div className='mt-5 max-w-md mx-auto sm:flex sm:justify-center md:mt-8'>
-							<div className='rounded-md shadow'>
-								<a
-									href='/login'
-									className='w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10'
-								>
-									Get started
-								</a>
-							</div>
-							<div className='mt-3 rounded-md shadow sm:mt-0 sm:ml-3'>
-								<a
-									href='/jobs'
-									className='w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-600 bg-white hover:bg-gray-50 md:py-4 md:text-lg md:px-10'
-								>
-									View Jobs
-								</a>
-							</div>
+							{!session && (
+								<div className='rounded-md shadow'>
+									<a
+										href='/login'
+										className='w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 md:py-4 md:text-lg md:px-10'
+									>
+										Get started
+									</a>
+								</div>
+							)}
+							{session?.user.type == 'worker' && (
+								<div className='mt-3 rounded-md shadow sm:mt-0 sm:ml-3'>
+									<a
+										href='/jobs'
+										className='w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-600 bg-white hover:bg-gray-50 md:py-4 md:text-lg md:px-10'
+									>
+										View Jobs
+									</a>
+								</div>
+							)}
+							{session?.user.type == 'company' && (
+								<div className='mt-3 rounded-md shadow sm:mt-0 sm:ml-3'>
+									<a
+										href='/create-job-posting'
+										className='w-full flex items-center justify-center px-8 py-3 border border-transparent text-base font-medium rounded-md text-indigo-600 bg-white hover:bg-gray-50 md:py-4 md:text-lg md:px-10'
+									>
+										Create Job Posting
+									</a>
+								</div>
+							)}
 						</div>
 					</div>
 				</main>
