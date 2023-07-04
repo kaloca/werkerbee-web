@@ -5,6 +5,9 @@ import { useRouter } from 'next/navigation'
 
 import { Worker } from '@/src/interfaces/models/Worker'
 import { JobApplication } from '@/src/hooks/useApplications'
+import WorkerProfileCard from './WorkerProfileCard'
+
+import PlaceholerProfilePic from '@/src/assets/blank_profile_pic.webp'
 
 const tdStyle =
 	'text-sm pr-6 whitespace-no-wrap text-gray-800 dark:text-gray-100 tracking-normal leading-4'
@@ -21,6 +24,7 @@ const ListItem: React.FC<ListItemProps> = ({
 	const { worker, _id, status } = application
 	const router = useRouter()
 
+	const [showWorkerProfileCard, setShowWorkerProfileCard] = useState(false)
 	const [showMenu, setShowMenu] = useState(false)
 	const dropdownRef = useRef<HTMLUListElement>(null)
 
@@ -51,7 +55,7 @@ const ListItem: React.FC<ListItemProps> = ({
 				<div className='flex items-center'>
 					<div className='h-8 w-8'>
 						<Image
-							src='https://tuk-cdn.s3.amazonaws.com/assets/components/advance_tables/at_1.png'
+							src={worker.profilePicture || PlaceholerProfilePic}
 							alt='profilepic'
 							className='h-full w-full rounded-full overflow-hidden shadow'
 							width={50}
@@ -61,10 +65,17 @@ const ListItem: React.FC<ListItemProps> = ({
 					<p
 						className='ml-2 text-gray-800 dark:text-gray-100 tracking-normal leading-4 text-sm hover:text-blue-600 hover:cursor-pointer'
 						onClick={() => router.push(`/worker/${worker.username}`)}
+						onMouseEnter={() => setShowWorkerProfileCard(true)}
+						onMouseLeave={() => setShowWorkerProfileCard(false)}
 					>
 						{worker.name}
 					</p>
 				</div>
+				{showWorkerProfileCard && (
+					<div className='flex flex-col rounded-md bg-white p-2 absolute z-10 border border-slate-100'>
+						<WorkerProfileCard username={worker.username} />
+					</div>
+				)}
 			</td>
 			<td className={`${tdStyle}`}>{worker.rating}</td>
 			<td className={`${tdStyle}`}>{worker.phoneNumber}</td>
