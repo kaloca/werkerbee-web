@@ -93,15 +93,15 @@ export default function CompanyPostsPage({ params }: any) {
 					onApplicationUpdate={onApplicationUpdate}
 				/>
 			)}
-			{isLoading && applications.length == 0 && (
+			{!isLoading && applications?.length == 0 && (
 				<div>
 					<span>This job has no current applications</span>
 				</div>
 			)}
 			{!applications && isLoading && (
 				<div className='inline-flex justify-center w-full items-center'>
-					<PulseLoader size={8} className='mr-2' />
 					<span>Loading applications</span>
+					<PulseLoader size={5} className='ml-2' />
 				</div>
 			)}
 			{error && (
