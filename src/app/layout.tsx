@@ -1,8 +1,9 @@
-import Provider from './context/provider'
-import { MenuBar } from '@/src/components/menuBar/menuBar'
-import './globals.css'
+import { Analytics } from '@vercel/analytics/react'
+
 import NavBar from '@/src/components/navBar/NavBar'
 import ErrorBar from '@/src/components/errorBar'
+
+import Provider from './context/provider'
 import { ErrorBarProvider } from './context/errorContext'
 
 export const metadata = {
@@ -23,7 +24,10 @@ export default function RootLayout({
 						<ErrorBar />
 						{/* <MenuBar /> */}
 						<NavBar />
-						<div className='h-screen w-screen'>{children}</div>
+						<div className='h-screen w-screen'>
+							{children}
+							<Analytics />
+						</div>
 					</ErrorBarProvider>
 				</Provider>
 			</body>
