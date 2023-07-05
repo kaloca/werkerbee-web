@@ -3,6 +3,7 @@ import { Analytics } from '@vercel/analytics/react'
 import NavBar from '@/src/components/navBar/NavBar'
 import ErrorBar from '@/src/components/errorBar'
 
+import './globals.css'
 import Provider from './context/provider'
 import { ErrorBarProvider } from './context/errorContext'
 
