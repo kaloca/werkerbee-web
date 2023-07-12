@@ -537,7 +537,7 @@ export default function RegisterWorkerPage({ params }: any) {
 											</h1>
 										</div>
 										<p className='mt-4 text-sm leading-5 text-gray-600'>
-											Your password needs to be at least 8 digits long. Make
+											Your password needs to be at least 8 characters long. Make
 											sure to write it down somewhere so you don&apos;t forget
 											it!
 										</p>
@@ -559,6 +559,7 @@ export default function RegisterWorkerPage({ params }: any) {
 														}
 														inputName='password'
 														value={formData.password.value}
+														includeShowButton
 													/>
 												</div>
 												<div className='md:w-64 md:ml-12 md:mt-0 mt-4'>

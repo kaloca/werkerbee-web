@@ -526,6 +526,7 @@ export default function RegisterCompanyPage({ params }: any) {
 														}
 														inputName='password'
 														value={formData.password.value}
+														includeShowButton
 													/>
 												</div>
 												<div className='md:w-64 md:ml-12 md:mt-0 mt-4'>
