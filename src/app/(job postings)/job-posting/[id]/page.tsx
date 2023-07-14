@@ -74,27 +74,47 @@ const JobPostingDetailsPage = ({
 		company,
 	}: JobPosting = data!.jobPosting
 
+	interface Point {
+		coordinates : Array<string> 
+	}
+	const locationVal = location as unknown as Point
+	const longitude = parseFloat(locationVal.coordinates[0])
+	const latitude = parseFloat(locationVal.coordinates[1])//Prevent XSS attacks
+
 	return (
 		<div className='h-full flex flex-col justify-center items-center'>
 			{data && (
-				<div>
-					<div className='mb-10 border p-10 max-w-lg'>
-						<p>{name}</p>
-						<p className='first-letter:capitalize'>{type}</p>
-						<p className='first-letter:capitalize'>{description}</p>
-						<p>{dressCode}</p>
-						<p>
-							{company.address.street}, {company.address.city},{' '}
-							{company.address.state}, {company.address.zip}
-						</p>
-						<p>{payment}</p>
+				<div className='flex flex-col'>
+					<div className='flex flex-row p-4'>
+						<div className='mb-10 border p-10 max-w-lg rounded-md'>
+							<p>{name}</p>
+							<p className='first-letter:capitalize'>{type}</p>
+							<p className='first-letter:capitalize'>{description}</p>
+							<p>{dressCode}</p>
+							<p>
+								{company.address.street}, {company.address.city},{' '}
+								{company.address.state}, {company.address.zip}
+							</p>
+							<p>{payment}</p>
+						</div>
+						<div className='mb-10 border max-w-lg rounded-md'>
+							<iframe
+								width = "100%"
+								height = "100%"
+								loading = "lazy"
+								allowFullScreen
+								referrerPolicy='no-referrer-when-downgrade'
+								src = {`https://www.google.com/maps/embed/v1/place?key=AIzaSyAz8G543ARWTI1FDO40cpRTvwdw0HQT0Pg
+								&q=${latitude + ', ' + longitude}`}
+							/>
+						</div>
 					</div>
 					<button
-						onClick={handleApply}
-						className='group rounded-2xl h-12 w-48 bg-green-500 font-bold text-lg text-white relative overflow-hidden'
-					>
-						{data.alreadyApplied ? 'View Application' : 'Apply'}
-						<div className='absolute duration-300 inset-0 w-full h-full transition-all scale-0 group-hover:scale-100 group-hover:bg-white/30 rounded-2xl'></div>
+							onClick={handleApply}
+							className='group rounded-2xl h-12 w-48 bg-green-500 font-bold text-lg text-white relative overflow-hidden self-center'
+						>
+							{data.alreadyApplied ? 'View Application' : 'Apply'}
+							<div className='absolute duration-300 inset-0 w-full h-full transition-all scale-0 group-hover:scale-100 group-hover:bg-white/30 rounded-2xl'></div>
 					</button>
 				</div>
 			)}
