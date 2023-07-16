@@ -64,7 +64,7 @@ export default function LoginPage() {
 					setErrorMessage('Invalid email or password')
 				}
 			} else {
-				//window.location.href = '/'
+				window.location.href = '/jobs'
 			}
 		} catch (e: any) {
 			setShowError(true)

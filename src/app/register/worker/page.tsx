@@ -71,7 +71,7 @@ export default function RegisterWorkerPage({ params }: any) {
 		},
 		ssn: {
 			value: '',
-			required: true,
+			required: false,
 			step: 1,
 			hasChanged: false,
 		},
@@ -286,10 +286,7 @@ export default function RegisterWorkerPage({ params }: any) {
 		})
 
 		if (response.ok) {
-			const { email, password } = userObj
-			signIn('credentials', { email, password, callbackUrl: '/' }).catch(
-				(error) => console.error('Failed to sign in:', error)
-			)
+			window.location.href = '/register/success'
 		} else {
 			// Handle error
 			console.error('Registration failed:', await response.text())
@@ -336,7 +333,6 @@ export default function RegisterWorkerPage({ params }: any) {
 					currentStep == 2 &&
 					Object.values(formData.address.value).some((param) => param === ''))
 			) {
-				console.log('hello papa')
 				newError[key] = true
 				shouldReturn = true
 			} else {
@@ -502,7 +498,7 @@ export default function RegisterWorkerPage({ params }: any) {
 											</div>
 										</div>
 										<div className='md:flex items-center lg:ml-24 mt-8'>
-											<div className='md:w-64'>
+											{/* <div className='md:w-64'>
 												<RegisterInput
 													label='Social Security Number'
 													type='number'
@@ -513,8 +509,8 @@ export default function RegisterWorkerPage({ params }: any) {
 													inputName='ssn'
 													value={formData.ssn.value}
 												/>
-											</div>
-											<div className='md:w-64 md:ml-12 md:mt-0 mt-4'>
+											</div> */}
+											<div className='md:w-64 md:mt-0 mt-4'>
 												<RegisterInput
 													label='Birthday'
 													type='date'
