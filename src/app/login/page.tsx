@@ -46,20 +46,25 @@ export default function LoginPage() {
 	const [password, setPassword] = useState('')
 	const [showPassword, setShowPassword] = useState(false)
 	const [showError, setShowError] = useState(false)
+	const [errorMessage, setErrorMessage] = useState('')
 
 	const handleLogin = async () => {
 		try {
 			const result = await signIn('credentials', {
 				email,
 				password,
-				redirect: true,
+				redirect: false,
 				callbackUrl: '/',
 			})
 			if (result?.error) {
 				setShowError(true)
-				console.log(result.error)
+				if (result.error == '403') {
+					setErrorMessage('Your account has not been approved yet.')
+				} else {
+					setErrorMessage('Invalid email or password')
+				}
 			} else {
-				window.location.href = '/'
+				//window.location.href = '/'
 			}
 		} catch (e: any) {
 			setShowError(true)
@@ -135,7 +140,7 @@ export default function LoginPage() {
 								</div>
 								{showError && (
 									<div className='text-red-500 text-sm mb-2'>
-										<p>Invalid email or password</p>
+										<p>{errorMessage}</p>
 									</div>
 								)}
 								<div>
