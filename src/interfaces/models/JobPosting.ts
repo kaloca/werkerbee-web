@@ -1,8 +1,9 @@
+import { Company } from './Company'
 export interface JobPosting {
 	_id: string
 	name: string
 	description: string
-	company: any
+	company: Company
 	companyName: string
 	dayOfWeek: string
 	location: string
