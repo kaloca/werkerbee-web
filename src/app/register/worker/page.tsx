@@ -69,12 +69,12 @@ export default function RegisterWorkerPage({ params }: any) {
 			step: 1,
 			hasChanged: false,
 		},
-		ssn: {
-			value: '',
-			required: false,
-			step: 1,
-			hasChanged: false,
-		},
+		// ssn: {
+		// 	value: '',
+		// 	required: false,
+		// 	step: 1,
+		// 	hasChanged: false,
+		// },
 		birthday: {
 			value: '',
 			required: true,
@@ -116,11 +116,14 @@ export default function RegisterWorkerPage({ params }: any) {
 		coordinates: { lat: number; lng: number },
 		addressComponents: google.maps.GeocoderAddressComponent[]
 	) => {
-		const street = addressComponents.find(
-			(component) =>
-				component.types.includes('street_number') ||
-				component.types.includes('route')
-		)?.long_name
+		console.log(addressComponents)
+		const street =
+			addressComponents.find((component) =>
+				component.types.includes('street_number')
+			)?.long_name ||
+			'' +
+				addressComponents.find((component) => component.types.includes('route'))
+					?.long_name
 		const city = addressComponents.find((component) =>
 			component.types.includes('locality')
 		)?.long_name
@@ -269,7 +272,7 @@ export default function RegisterWorkerPage({ params }: any) {
 			username: formData.username.value,
 			email: formData.email.value,
 			location: formData.location.value,
-			ssn: formData.ssn.value,
+			//ssn: formData.ssn.value,
 			birthday: formData.birthday.value,
 			phoneNumber: formData.phoneNumber.value,
 			jobTypes: outputJobTypes,
