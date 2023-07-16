@@ -81,7 +81,7 @@ export default function CompanyPostsPage({ params }: any) {
 	return (
 		<div className='py-20 w-screen bg-slate-100 md:px-14 lg:px-20 xl:px-64 h-full'>
 			<TopBar
-				jobName={jobName || 'Loading'}
+				jobName={jobName || ''}
 				numberOfPages={1}
 				numberPerPage={applications ? applications.length : 0}
 				totalApplications={20}

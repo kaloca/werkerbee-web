@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
-import { SyncLoader } from 'react-spinners'
+import { PulseLoader, SyncLoader } from 'react-spinners'
 
 import apiClient from '@/src/utils/apiClient'
 
@@ -140,9 +140,9 @@ const Applications = () => {
 						</div>
 					))}
 				{isLoading && (
-					<div className='flex justify-center items-start'>
-						<h3>Loading applications</h3>
-						<SyncLoader size={8} className='m-4' />
+					<div className='inline-flex justify-center items-center'>
+						<h3 className='font-semibold'>Loading applications</h3>
+						<PulseLoader size={6} className='mt-1 mx-4' />
 					</div>
 				)}
 				{error && (
