@@ -70,6 +70,12 @@ export default function NavBar() {
 			url: '/calendar',
 			type: 'worker',
 		},
+		{
+			name: 'Login',
+			isSelected: false,
+			url: '/login',
+			type: 'unauthenticated',
+		},
 	])
 
 	const selectItem = (name: string, url: string) => {
@@ -143,7 +149,7 @@ export default function NavBar() {
 											})}
 										</div>
 									</div>
-									{session && (
+									{session ? (
 										<div className='flex items-center'>
 											{/* {session.user.type == 'company' &&
 												pathname != '/posts' && (
@@ -231,7 +237,9 @@ export default function NavBar() {
 															<Menu.Item>
 																{({ active }) => (
 																	<a
-																		onClick={() => signOut()}
+																		onClick={() =>
+																			signOut({ callbackUrl: '/login' })
+																		}
 																		className={classNames(
 																			active ? 'bg-gray-100' : '',
 																			'block px-4 py-2 text-sm text-gray-700'
@@ -246,6 +254,10 @@ export default function NavBar() {
 												</Menu>
 											</div>
 										</div>
+									) : (
+										<a className='flex flex-row items-center' href='/login'>
+											<span className='font-semibold'>Login</span>
+										</a>
 									)}
 								</div>
 							</div>

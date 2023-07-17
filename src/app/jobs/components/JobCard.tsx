@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import moment from 'moment'
-import { CurrencyDollarIcon } from '@heroicons/react/24/outline'
+import { BanknotesIcon, CurrencyDollarIcon } from '@heroicons/react/20/solid'
 
 import Rating from '@/src/components/rating'
 import helpers from '@/src/utils/helpers'
@@ -39,8 +39,12 @@ const JobCard: React.FC<JobCardProps> = ({
 	const endDate = new Date(jobPosting.end)
 	const router = useRouter()
 
+	console.log(jobPosting)
 	return (
-		<li className='bg-white shadow overflow-hidden px-4 py-4 sm:px-6 sm:rounded-md'>
+		<li
+			onClick={() => handleApply(jobPosting._id)}
+			className='bg-white shadow overflow-hidden px-4 py-4 sm:px-6 sm:rounded-md hover:cursor-pointer hover:shadow-md hover:shadow-gray-300'
+		>
 			<div className='flex-none sm:flex'>
 				<div className=' relative h-32 w-32   sm:mb-0 mb-3'>
 					<Image
@@ -71,24 +75,25 @@ const JobCard: React.FC<JobCardProps> = ({
 								<div className='w-full flex-none text-lg text-gray-800 font-bold leading-none'>
 									{jobPosting.name}
 								</div>
-								<div className='flex-auto text-gray-500 my-1'>
-									<span className='mr-3 first-letter:capitalize'>
+								<div className='inline-flex text-gray-500 my-1 items-center'>
+									<span className='mr-3 capitalize font-semibold'>
 										<button
 											onClick = {() => router.push("company/fabrizio_passione")}>
 											{jobPosting.companyName}
 										</button>
 									</span>
-									<span className='mr-3 border-r border-gray-200  max-h-0' />
-									<span className='mr-3 first-letter:capitalize'>
-										{jobPosting.type}
-									</span>
+									
+									<div className='mr-3 border-r border-gray-200 h-4 bg-slate-400 '></div>
+									<div>
+										<span className='mr-3 capitalize'>{jobPosting.type}</span>
+									</div>
 									<span className='mr-3 border-r border-gray-200  max-h-0' />
 									<span>{jobPosting.distance}</span>
 								</div>
 							</div>
 						</div>
 					</div>
-					<Rating rating={3.4} />
+
 					<div className='flex pt-2  text-sm text-gray-500 justify-between items-center'>
 						<div className='inline-flex'>
 							<div className='flex flex-col items-start'>
@@ -98,35 +103,24 @@ const JobCard: React.FC<JobCardProps> = ({
 								</p>
 							</div>
 							<div className='inline-flex items-center w-min mx-5'>
-								<svg
-									xmlns='http://www.w3.org/2000/svg'
-									className='icon icon-tabler icon-tabler-currency-dollar h-6'
-									width={34}
-									height={34}
-									viewBox='0 0 24 24'
-									strokeWidth={2}
-									stroke='currentColor'
-									fill='none'
-									strokeLinecap='round'
-									strokeLinejoin='round'
-								>
-									<path stroke='none' d='M0 0h24v24H0z' fill='none' />
-									<path d='M16.7 8a3 3 0 0 0 -2.7 -2h-4a3 3 0 0 0 0 6h4a3 3 0 0 1 0 6h-4a3 3 0 0 1 -2.7 -2' />
-									<path d='M12 3v3m0 12v3' />
-								</svg>
+								<CurrencyDollarIcon className='h-6 mr-1 text-green-500' />
 
-								<p className=' text-lg'>{jobPosting.payment}</p>
+								<span className='text-lg text-gray-500 font-light'>
+									{jobPosting.payment}
+									<span className='text-gray-500 font-light'>/hr</span>
+								</span>
 							</div>
+							<Rating rating={3.4} />
 						</div>
 
-						{showApply && (
+						{/* {showApply && (
 							<button
 								onClick={() => handleApply(jobPosting._id)}
 								className='flex-no-shrink bg-green-400 hover:bg-green-500 px-5 ml-4 py-2 text-xs shadow-sm hover:shadow-lg font-medium tracking-wider border-2 border-green-300 hover:border-green-500 text-white rounded-full transition ease-in duration-300'
 							>
 								Apply
 							</button>
-						)}
+						)} */}
 					</div>
 				</div>
 			</div>

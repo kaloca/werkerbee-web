@@ -9,6 +9,10 @@ import { useErrorBar } from '@/src/app/context/errorContext'
 
 import DropdownInput from './components/jobTypeInput'
 
+const calculateCost = (value: any) => {
+	return (value * 1.153 * 1.3).toFixed(2)
+}
+
 const CreateJobPostingPage: React.FC = () => {
 	const {
 		data: jobTypes,
@@ -249,14 +253,19 @@ const CreateJobPostingPage: React.FC = () => {
 							>
 								Payment ($ per hour)
 							</label>
-							<input
-								className='w-full rounded-lg border border-gray-300 p-3 text-sm'
-								placeholder='20'
-								type='number'
-								id='payment'
-								value={formData.payment.value}
-								onChange={handleOnChange}
-							/>
+							<div className='w-full flex flex-col'>
+								<input
+									className=' rounded-lg border border-gray-300 p-3 text-sm'
+									placeholder='20'
+									type='number'
+									id='payment'
+									value={formData.payment.value}
+									onChange={handleOnChange}
+								/>
+								<span className=''>
+									Cost for company: ${calculateCost(formData.payment.value)}
+								</span>
+							</div>
 						</div>
 					</div>
 					<div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>

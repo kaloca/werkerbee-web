@@ -109,11 +109,13 @@ export default function RegisterCompanyPage({ params }: any) {
 		coordinates: { lat: number; lng: number },
 		addressComponents: google.maps.GeocoderAddressComponent[]
 	) => {
-		const street = addressComponents.find(
-			(component) =>
-				component.types.includes('street_number') ||
-				component.types.includes('route')
-		)?.long_name
+		const street =
+			addressComponents.find((component) =>
+				component.types.includes('street_number')
+			)?.long_name ||
+			'' +
+				addressComponents.find((component) => component.types.includes('route'))
+					?.long_name
 		const city = addressComponents.find((component) =>
 			component.types.includes('locality')
 		)?.long_name
