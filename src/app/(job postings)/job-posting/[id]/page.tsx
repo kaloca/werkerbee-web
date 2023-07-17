@@ -341,9 +341,17 @@ const JobPostingDetailsPage = ({
 		end,
 		updatedAt,
 	}: JobPosting = data!.jobPosting
+	
 
 	const startDate = new Date(start)
 	const endDate = new Date(end)
+
+	interface Point {
+		coordinates : Array<string> 
+	}
+	const locationVal = location as unknown as Point
+	const longitude = parseFloat(locationVal.coordinates[0])
+	const latitude = parseFloat(locationVal.coordinates[1])
 
 	return (
 		<div className='bg-white'>
@@ -464,8 +472,23 @@ const JobPostingDetailsPage = ({
 							</div>
 						</div>
 
-						<div className='border-t border-gray-200 mt-10 pt-10'>
-							<h3 className='text-sm font-medium text-gray-900'>License</h3>
+						<div className='border-t border-gray-200 mt-10'>
+							<h3 className='text-sm font-medium text-gray-900 mt-6'>Location</h3>
+							<div className='mb-10 border max-w-lg rounded-md mt-2'>
+							<iframe
+								width = "100%"
+								height = "199"
+								loading = "lazy"
+								allowFullScreen
+								referrerPolicy='no-referrer-when-downgrade'
+								src = {`https://www.google.com/maps/embed/v1/place?key=AIzaSyAz8G543ARWTI1FDO40cpRTvwdw0HQT0Pg
+								&q=${latitude + ', ' + longitude}`}
+							/>
+							</div>
+						</div>
+
+						<div className='border-t border-gray-200 mt-10'>
+							<h3 className='text-sm font-medium text-gray-900 mt-6'>License</h3>
 							<p className='mt-4 text-sm text-gray-500'>
 								{license.summary}{' '}
 								<a
