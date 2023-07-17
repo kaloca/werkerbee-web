@@ -82,11 +82,13 @@ export default function Jobs({ params }: any) {
 				/>
 
 				<main className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 '>
-					<ChooseLocationModal
-						isOpen={locationModalOpen}
-						onClose={handleCloseLocationModal}
-						onLocationSelect={handleLocationSelect}
-					/>
+					{locationModalOpen && (
+						<ChooseLocationModal
+							isOpen={locationModalOpen}
+							onClose={handleCloseLocationModal}
+							onLocationSelect={handleLocationSelect}
+						/>
+					)}
 					<TopMenu />
 					<section aria-labelledby='products-heading' className='pb-24 pt-6'>
 						<div className='grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4'>
