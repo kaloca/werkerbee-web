@@ -18,4 +18,5 @@ export interface JobPosting {
 	applications: string[]
 	createdAt: Date
 	updatedAt: Date
+	companyUsername: string
 }

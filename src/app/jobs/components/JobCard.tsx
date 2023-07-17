@@ -39,6 +39,11 @@ const JobCard: React.FC<JobCardProps> = ({
 	const endDate = new Date(jobPosting.end)
 	const router = useRouter()
 
+	const handleViewCompany = (e) => {
+		e.stopPropagation()
+		router.push("company/" + jobPosting.companyUsername)
+	}
+
 	console.log(jobPosting)
 	return (
 		<li
@@ -76,10 +81,10 @@ const JobCard: React.FC<JobCardProps> = ({
 									{jobPosting.name}
 								</div>
 								<div className='inline-flex text-gray-500 my-1 items-center'>
-									<span className='mr-3 capitalize font-semibold'>
+									<span className='mr-3 capitalize font-semibold hover:text-black'>
 										<button
-											onClick = {() => router.push("company/fabrizio_passione")}>
-											{jobPosting.companyName}
+											onClick = {(event) => handleViewCompany(event)}>
+											<u>{jobPosting.companyName}</u>
 										</button>
 									</span>
 									
