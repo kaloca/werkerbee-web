@@ -50,6 +50,8 @@ export default NextAuth({
 							return { token: authToken, ...data } as UserWithToken
 						}
 					}
+				} else if (res.status === 403) {
+					throw new Error('403') // Include error info
 				}
 				return null
 			},
