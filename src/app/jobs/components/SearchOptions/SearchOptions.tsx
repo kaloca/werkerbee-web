@@ -7,6 +7,7 @@ import { sortOptions, subCategories, filters } from './options'
 
 import FilterTextInput from './FilterTextInput'
 import SearchButton from './SearchButton'
+import JobTypeSelector from './JobTypeSelector/JobTypeSelector'
 
 interface SearchOptionsProps {
 	options: JobPostingsOptions
@@ -16,7 +17,11 @@ interface SearchOptionsProps {
 	) => void
 	handleOpenLocationModal: () => void
 }
-
+const notificationMethods = [
+	{ id: 'email', title: 'Email' },
+	{ id: 'sms', title: 'Phone (SMS)' },
+	{ id: 'push', title: 'Push notification' },
+]
 const SearchOptions: React.FC<SearchOptionsProps> = ({
 	options,
 	handleToggleOption,
@@ -45,6 +50,7 @@ const SearchOptions: React.FC<SearchOptionsProps> = ({
 				type='number'
 				id='max-distance'
 			/>
+			<JobTypeSelector handleToggleOption={handleToggleOption} />
 			{filters.map((filter) => (
 				<Disclosure
 					as='div'
@@ -67,6 +73,7 @@ const SearchOptions: React.FC<SearchOptionsProps> = ({
 									</span>
 								</Disclosure.Button>
 							</h3>
+
 							<Disclosure.Panel className='pt-6'>
 								<div className='space-y-4'>
 									{filter.options.map((option, optionIdx) => (
@@ -98,6 +105,7 @@ const SearchOptions: React.FC<SearchOptionsProps> = ({
 					)}
 				</Disclosure>
 			))}
+
 			<SearchButton />
 		</form>
 	)

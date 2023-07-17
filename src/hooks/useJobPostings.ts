@@ -16,7 +16,7 @@ const buildParams = (params: Record<string, any>) => {
 		.flatMap(([k, v]) =>
 			Array.isArray(v)
 				? v.map(
-						(item) => `${encodeURIComponent(k)}=${encodeURIComponent(item)}`
+						(item) => `${encodeURIComponent(k)}[]=${encodeURIComponent(item)}`
 				  )
 				: `${encodeURIComponent(k)}=${encodeURIComponent(v)}`
 		)
