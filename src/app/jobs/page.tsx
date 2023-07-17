@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 
@@ -41,7 +41,6 @@ export default function Jobs({ params }: any) {
 
 	const { data, error, isLoading } = useJobPostings(searchOptions)
 
-	console.log(searchParams?.get('test'))
 	const handlePrevPage = () => {
 		if (searchOptions.page > 1) {
 			setSearchOptions({ ...searchOptions, page: searchOptions.page - 1 })
@@ -83,25 +82,34 @@ export default function Jobs({ params }: any) {
 				/>
 
 				<main className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 '>
-					<ChooseLocationModal
-						isOpen={locationModalOpen}
-						onClose={handleCloseLocationModal}
-						onLocationSelect={handleLocationSelect}
-					/>
+					{locationModalOpen && (
+						<ChooseLocationModal
+							isOpen={locationModalOpen}
+							onClose={handleCloseLocationModal}
+							onLocationSelect={handleLocationSelect}
+						/>
+					)}
 					<TopMenu />
 					<section aria-labelledby='products-heading' className='pb-24 pt-6'>
 						<div className='grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4'>
 							{/* Filters */}
 							<SearchOptions
 								options={searchOptions}
-								handleToggleOption={(filter, option) =>
-									setSearchOptions((options: any) => ({
-										...options,
-										[filter]: options[filter].includes(option)
-											? options[filter].filter((o: any) => o !== option)
-											: [...options[filter], option],
-									}))
-								}
+								handleToggleOption={useCallback((filter, option) => {
+									if ((filter as any) == 'jobType') {
+										console.log('hey')
+										setSearchOptions((options: any) => ({
+											...options,
+											jobType: option as any,
+										}))
+									} else
+										setSearchOptions((options: any) => ({
+											...options,
+											[filter]: options[filter].includes(option)
+												? options[filter].filter((o: any) => o !== option)
+												: [...options[filter], option],
+										}))
+								}, [])}
 								handleOpenLocationModal={handleOpenLocationModal}
 							/>
 
