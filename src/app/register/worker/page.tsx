@@ -69,12 +69,12 @@ export default function RegisterWorkerPage({ params }: any) {
 			step: 1,
 			hasChanged: false,
 		},
-		ssn: {
-			value: '',
-			required: true,
-			step: 1,
-			hasChanged: false,
-		},
+		// ssn: {
+		// 	value: '',
+		// 	required: false,
+		// 	step: 1,
+		// 	hasChanged: false,
+		// },
 		birthday: {
 			value: '',
 			required: true,
@@ -116,11 +116,14 @@ export default function RegisterWorkerPage({ params }: any) {
 		coordinates: { lat: number; lng: number },
 		addressComponents: google.maps.GeocoderAddressComponent[]
 	) => {
-		const street = addressComponents.find(
-			(component) =>
-				component.types.includes('street_number') ||
-				component.types.includes('route')
-		)?.long_name
+		console.log(addressComponents)
+		const street =
+			addressComponents.find((component) =>
+				component.types.includes('street_number')
+			)?.long_name ||
+			'' +
+				addressComponents.find((component) => component.types.includes('route'))
+					?.long_name
 		const city = addressComponents.find((component) =>
 			component.types.includes('locality')
 		)?.long_name
@@ -269,7 +272,7 @@ export default function RegisterWorkerPage({ params }: any) {
 			username: formData.username.value,
 			email: formData.email.value,
 			location: formData.location.value,
-			ssn: formData.ssn.value,
+			//ssn: formData.ssn.value,
 			birthday: formData.birthday.value,
 			phoneNumber: formData.phoneNumber.value,
 			jobTypes: outputJobTypes,
@@ -286,10 +289,7 @@ export default function RegisterWorkerPage({ params }: any) {
 		})
 
 		if (response.ok) {
-			const { email, password } = userObj
-			signIn('credentials', { email, password, callbackUrl: '/' }).catch(
-				(error) => console.error('Failed to sign in:', error)
-			)
+			window.location.href = '/register/success'
 		} else {
 			// Handle error
 			console.error('Registration failed:', await response.text())
@@ -336,7 +336,6 @@ export default function RegisterWorkerPage({ params }: any) {
 					currentStep == 2 &&
 					Object.values(formData.address.value).some((param) => param === ''))
 			) {
-				console.log('hello papa')
 				newError[key] = true
 				shouldReturn = true
 			} else {
@@ -502,7 +501,7 @@ export default function RegisterWorkerPage({ params }: any) {
 											</div>
 										</div>
 										<div className='md:flex items-center lg:ml-24 mt-8'>
-											<div className='md:w-64'>
+											{/* <div className='md:w-64'>
 												<RegisterInput
 													label='Social Security Number'
 													type='number'
@@ -513,8 +512,8 @@ export default function RegisterWorkerPage({ params }: any) {
 													inputName='ssn'
 													value={formData.ssn.value}
 												/>
-											</div>
-											<div className='md:w-64 md:ml-12 md:mt-0 mt-4'>
+											</div> */}
+											<div className='md:w-64 md:mt-0 mt-4'>
 												<RegisterInput
 													label='Birthday'
 													type='date'
