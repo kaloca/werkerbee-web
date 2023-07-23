@@ -15,6 +15,7 @@ import {
 import { PlusSmallIcon } from '@heroicons/react/20/solid'
 
 import WerkerBeeLogo from '@/src/assets/werkerbeelogo_new_white.png'
+import LightGraySquare from '@/src/assets/lighter-gray.jpeg'
 import helpers from '@/src/utils/helpers'
 
 import MobileMenu from './components/MobileMenu'
@@ -28,7 +29,7 @@ const normal =
 	'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700 inline-flex items-center px-1 pt-1 border-b-2 text-sm font-medium'
 
 export default function NavBar() {
-	const { data: session } = useSession()
+	const { data: session, status } = useSession()
 	const { data, error, isLoading, mutate } = useNavBarInfo()
 
 	const router = useRouter()
@@ -149,23 +150,27 @@ export default function NavBar() {
 											})}
 										</div>
 									</div>
-									{session ? (
+									{status == 'unauthenticated' && !session ? (
+										<a className='flex flex-row items-center' href='/login'>
+											<span className='font-semibold'>Login</span>
+										</a>
+									) : (
 										<div className='flex items-center'>
 											{/* {session.user.type == 'company' &&
-												pathname != '/posts' && (
-													<div className='flex-shrink-0'>
-														<button
-															type='button'
-															className='relative inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
-														>
-															<PlusSmallIcon
-																className='-ml-1 mr-2 h-5 w-5'
-																aria-hidden='true'
-															/>
-															<span>New Job</span>
-														</button>
-													</div>
-												)} */}
+											pathname != '/posts' && (
+												<div className='flex-shrink-0'>
+													<button
+														type='button'
+														className='relative inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500'
+													>
+														<PlusSmallIcon
+															className='-ml-1 mr-2 h-5 w-5'
+															aria-hidden='true'
+														/>
+														<span>New Job</span>
+													</button>
+												</div>
+											)} */}
 											<div className='hidden md:ml-4 md:flex-shrink-0 md:flex md:items-center'>
 												<button
 													type='button'
@@ -190,7 +195,7 @@ export default function NavBar() {
 															<span className='sr-only'>Open user menu</span>
 															<Image
 																className='rounded-full h-8 w-8'
-																src={data?.profilePicture}
+																src={data?.profilePicture || LightGraySquare}
 																alt='profile-pic'
 																style={{ objectFit: 'cover' }}
 																height={32}
@@ -211,7 +216,7 @@ export default function NavBar() {
 															<Menu.Item>
 																{({ active }) => (
 																	<a
-																		href={`/${session.user.type}/${session.user.username}`}
+																		href={`/${session?.user.type}/${session?.user.username}`}
 																		className={classNames(
 																			active ? 'bg-gray-100' : '',
 																			'block px-4 py-2 text-sm text-gray-700'
@@ -254,10 +259,6 @@ export default function NavBar() {
 												</Menu>
 											</div>
 										</div>
-									) : (
-										<a className='flex flex-row items-center' href='/login'>
-											<span className='font-semibold'>Login</span>
-										</a>
 									)}
 								</div>
 							</div>

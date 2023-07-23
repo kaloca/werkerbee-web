@@ -398,8 +398,9 @@ const JobPostingDetailsPage = ({
 												height={100}
 												className='rounded-full h-14 w-14 mr-2'
 												alt='profile-pic'
+												style={{ objectFit: 'cover' }}
 											/>
-											<span className='capitalize w-min text-lg font-bold text-gray-900'>
+											<span className='capitalize w-min min-w-[150px] text-lg font-bold text-gray-900'>
 												{company.name}
 											</span>
 										</a>
