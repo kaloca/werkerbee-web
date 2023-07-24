@@ -1,6 +1,7 @@
 import { Address, BankAccount } from '../UserData'
 
 export interface Company {
+	_id: string
 	name: string
 	username: string
 	description: string

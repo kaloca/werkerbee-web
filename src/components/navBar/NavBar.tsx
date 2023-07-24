@@ -66,9 +66,15 @@ export default function NavBar() {
 			type: 'worker',
 		},
 		{
-			name: 'My Jobs',
+			name: 'Current Jobs',
 			isSelected: false,
 			url: '/calendar',
+			type: 'worker',
+		},
+		{
+			name: 'Job History',
+			isSelected: false,
+			url: '/job-history',
 			type: 'worker',
 		},
 		{

@@ -1,3 +1,6 @@
+import { Company } from './Company'
+import { Rating } from './Rating'
+
 export type TimelineEventType =
 	| 'CLOCK_IN'
 	| 'CLOCK_OUT'
@@ -13,7 +16,7 @@ export interface Job {
 	name: string
 	rating?: number
 	worker: string
-	company: string
+	companyId: Company
 	jobPosting: string
 	status: 'PENDING' | 'COMPLETE' | 'CANCELED'
 	shiftStart: Date
@@ -28,6 +31,7 @@ export interface Job {
 		}
 	]
 	timeline: ITimelineEvent[]
+	workerRating?: Rating
 	createdAt: Date
 	updatedAt: Date
 }
