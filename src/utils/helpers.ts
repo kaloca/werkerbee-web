@@ -75,8 +75,8 @@ const classNames = (...classes: any) => {
 
 const formatTime = (dateTimeString: string) => {
 	const date = new Date(dateTimeString)
-	let hours = date.getUTCHours()
-	let minutes = date.getUTCMinutes()
+	let hours = date.getHours()
+	let minutes = date.getMinutes()
 
 	let hoursString = hours < 10 ? '0' + hours : '' + hours
 	let minutesString = minutes < 10 ? '0' + minutes : '' + minutes
@@ -128,6 +128,10 @@ function formatDateRange(start: Date, end: Date) {
 	}
 }
 
+const differenceInMinutes = (date1: Date, date2: Date) => {
+	return (date2.getTime() - date1.getTime()) / (1000 * 60)
+}
+
 const helpers = {
 	validateEmail,
 	validatePhoneNumber,
@@ -139,6 +143,7 @@ const helpers = {
 	formatTime,
 	formatDate,
 	formatDateRange,
+	differenceInMinutes,
 }
 
 export default helpers

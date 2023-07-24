@@ -1,143 +1,22 @@
 'use client'
 import { Fragment, useState } from 'react'
-import { Dialog, Popover, Tab, Transition } from '@headlessui/react'
-import {
-	Bars3Icon,
-	ShoppingBagIcon,
-	XMarkIcon,
-} from '@heroicons/react/24/outline'
-import { MagnifyingGlassIcon, StarIcon } from '@heroicons/react/20/solid'
-import helpers from '@/src/utils/helpers'
-import { JobPosting } from '@/src/interfaces/models/JobPosting'
-import useJobPostingWorker from '@/src/hooks/useJobPostingWorker'
-import { useSession } from 'next-auth/react'
-import { useErrorBar } from '@/src/app/context/errorContext'
 import { useRouter } from 'next/navigation'
-import apiClient from '@/src/utils/apiClient'
+import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import moment from 'moment'
-import { PulseLoader } from 'react-spinners'
 
-const navigation = {
-	categories: [
-		{
-			id: 'wireframe',
-			name: 'Wireframe Kits',
-			featured: [
-				{
-					name: 'Scaffold',
-					href: '#',
-					imageSrc:
-						'https://tailwindui.com/img/ecommerce-images/product-page-05-menu-03.jpg',
-					imageAlt:
-						'Pricing page screenshot with tiered plan options and comparison table on colorful blue and green background.',
-				},
-				{
-					name: 'Bones',
-					href: '#',
-					imageSrc:
-						'https://tailwindui.com/img/ecommerce-images/product-page-05-menu-04.jpg',
-					imageAlt:
-						'Application screenshot with tiered navigation and account settings form on color red and purple background.',
-				},
-			],
-			sections: [
-				{
-					id: 'application',
-					name: 'Application UI',
-					items: [
-						{ name: 'Home Screens', href: '#' },
-						{ name: 'Detail Screens', href: '#' },
-						{ name: 'Settings Screens', href: '#' },
-					],
-				},
-				{
-					id: 'marketing',
-					name: 'Marketing',
-					items: [
-						{ name: 'Landing Pages', href: '#' },
-						{ name: 'Pricing Pages', href: '#' },
-						{ name: 'Contact Pages', href: '#' },
-					],
-				},
-				{
-					id: 'ecommerce',
-					name: 'Ecommerce',
-					items: [
-						{ name: 'Storefront Pages', href: '#' },
-						{ name: 'Product Pages', href: '#' },
-						{ name: 'Category Pages', href: '#' },
-						{ name: 'Shopping Cart Pages', href: '#' },
-						{ name: 'Checkout Pages', href: '#' },
-					],
-				},
-			],
-		},
-		{
-			id: 'icons',
-			name: 'Icons',
-			featured: [
-				{
-					name: 'Application UI Pack',
-					href: '#',
-					imageSrc:
-						'https://tailwindui.com/img/ecommerce-images/product-page-05-menu-01.jpg',
-					imageAlt:
-						'Payment application dashboard screenshot with transaction table, financial highlights, and main clients on colorful purple background.',
-				},
-				{
-					name: 'Marketing Icon Pack',
-					href: '#',
-					imageSrc:
-						'https://tailwindui.com/img/ecommerce-images/product-page-05-menu-02.jpg',
-					imageAlt:
-						'Calendar user interface screenshot with icon buttons and orange-yellow theme.',
-				},
-			],
-			sections: [
-				{
-					id: 'general',
-					name: 'General Use',
-					items: [
-						{ name: 'Heroicons Solid', href: '#' },
-						{ name: 'Heroicons Outline', href: '#' },
-						{ name: 'Line Illustrations', href: '#' },
-						{ name: 'Hero Illustrations', href: '#' },
-						{ name: 'Branded Illustrations', href: '#' },
-						{ name: 'Skeuomorphic Illustrations', href: '#' },
-						{ name: 'Hand Drawn Illustrations', href: '#' },
-					],
-				},
-				{
-					id: 'application',
-					name: 'Application UI',
-					items: [
-						{ name: 'Outlined', href: '#' },
-						{ name: 'Solid', href: '#' },
-						{ name: 'Branded', href: '#' },
-						{ name: 'Small', href: '#' },
-						{ name: 'Illustrations', href: '#' },
-					],
-				},
-				{
-					id: 'marketing',
-					name: 'Marketing',
-					items: [
-						{ name: 'Outlined', href: '#' },
-						{ name: 'Solid', href: '#' },
-						{ name: 'Branded', href: '#' },
-						{ name: 'Small', href: '#' },
-						{ name: 'Illustrations', href: '#' },
-					],
-				},
-			],
-		},
-	],
-	pages: [
-		{ name: 'UI Kits', href: '#' },
-		{ name: 'Themes', href: '#' },
-	],
-}
+import { PulseLoader } from 'react-spinners'
+import { Tab } from '@headlessui/react'
+import { StarIcon } from '@heroicons/react/24/solid'
+
+import { useSnackbar } from '@/src/app/context/snackbarContext'
+
+import helpers from '@/src/utils/helpers'
+import apiClient from '@/src/utils/apiClient'
+
+import useJobPostingWorker from '@/src/hooks/useJobPostingWorker'
+import { JobPosting } from '@/src/interfaces/models/JobPosting'
+
 const product = {
 	name: 'Application UI Icon Pack',
 	version: { name: '1.0', date: 'June 5, 2021', datetime: '2021-06-05' },
@@ -240,28 +119,6 @@ const relatedProducts = [
 	},
 	// More products...
 ]
-const footerNavigation = {
-	products: [
-		{ name: 'Wireframe Kits', href: '#' },
-		{ name: 'Icons', href: '#' },
-		{ name: 'UI Kits', href: '#' },
-		{ name: 'Themes', href: '#' },
-	],
-	company: [
-		{ name: 'Who we are', href: '#' },
-		{ name: 'Open Source', href: '#' },
-		{ name: 'Press', href: '#' },
-		{ name: 'Careers', href: '#' },
-		{ name: 'License', href: '#' },
-		{ name: 'Privacy', href: '#' },
-	],
-	customerService: [
-		{ name: 'Chat', href: '#' },
-		{ name: 'Contact', href: '#' },
-		{ name: 'Secure Payments', href: '#' },
-		{ name: 'FAQ', href: '#' },
-	],
-}
 
 const classNames = helpers.classNames
 
@@ -278,7 +135,7 @@ const JobPostingDetailsPage = ({
 
 	const { data, isLoading, error } = useJobPostingWorker(params.id)
 	const { data: session } = useSession()
-	const { showError } = useErrorBar()
+	const { showSnackbar } = useSnackbar()
 
 	const router = useRouter()
 
@@ -300,6 +157,7 @@ const JobPostingDetailsPage = ({
 
 				if (response?.status === 200) {
 					console.log('Job application submitted successfully')
+					showSnackbar('success', 'Job application submitted successfully')
 				} else {
 					console.error(
 						`Error submitting job application: ${response.data.message}`
@@ -311,7 +169,7 @@ const JobPostingDetailsPage = ({
 					'Error submitting job application:',
 					error.response.data.message
 				)
-				showError(error.response.data.message)
+				showSnackbar('error', error.response.data.message)
 				setLoadingApply(false)
 			}
 		else {
