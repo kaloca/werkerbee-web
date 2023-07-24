@@ -16,6 +16,7 @@ import apiClient from '@/src/utils/apiClient'
 
 import useJobPostingWorker from '@/src/hooks/useJobPostingWorker'
 import { JobPosting } from '@/src/interfaces/models/JobPosting'
+import { Skeleton } from '@mui/material'
 
 const product = {
 	name: 'Application UI Icon Pack',
@@ -176,17 +177,13 @@ const JobPostingDetailsPage = ({
 			router.push('/login')
 		}
 	}
-	if (isLoading) {
-		return <div>Loading Job Posting</div>
-	}
 
 	if (error) {
 		return <div>Error</div>
 	}
 	console.log(data)
 
-	const {
-		name,
+	let name,
 		description,
 		type,
 		location,
@@ -198,10 +195,27 @@ const JobPostingDetailsPage = ({
 		start,
 		end,
 		updatedAt,
-	}: JobPosting = data!.jobPosting
+		startDate,
+		endDate
 
-	const startDate = new Date(start)
-	const endDate = new Date(end)
+	if (data) {
+		;({
+			name,
+			description,
+			type,
+			location,
+			dressCode,
+			payment,
+			company,
+			requiredSkills,
+			requiredCertifications,
+			start,
+			end,
+			updatedAt,
+		} = data.jobPosting)
+		startDate = new Date(start)
+		endDate = new Date(end)
+	}
 
 	return (
 		<div className='bg-white'>
@@ -224,7 +238,11 @@ const JobPostingDetailsPage = ({
 						<div className='flex flex-col-reverse'>
 							<div className='mt-4'>
 								<h1 className='text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl'>
-									{name}
+									{isLoading ? (
+										<Skeleton className='w-64' variant='rounded' />
+									) : (
+										name
+									)}
 								</h1>
 
 								<h2 id='information-heading' className='sr-only'>
@@ -232,36 +250,57 @@ const JobPostingDetailsPage = ({
 								</h2>
 								<div className='inline-flex items-center mt-2'>
 									<div className='mr-4 flex-col justify-between'>
-										<p>{moment(startDate).format('ddd, MMMM Do')}</p>
-										<p>
-											{helpers.formatAMPM(startDate)}-
-											{helpers.formatAMPM(endDate)}
-										</p>
-										<p className='text-sm'>
-											(Updated{' '}
-											<time dateTime={updatedAt as any}>
-												{new Date(updatedAt).toDateString()}
-											</time>
-											)
-										</p>
+										{isLoading ? (
+											<div className='flex flex-row'>
+												<div className='flex flex-col'>
+													<Skeleton className='w-44 mb-1' variant='rounded' />
+													<Skeleton className='w-44 mb-1' variant='rounded' />
+													<Skeleton className='w-44' variant='rounded' />
+												</div>
+												<Skeleton
+													className='w-44 ml-2'
+													height={65}
+													variant='rounded'
+												/>
+											</div>
+										) : (
+											<>
+												<p>{moment(startDate).format('ddd, MMMM Do')}</p>
+												<p>
+													{helpers.formatAMPM(startDate!)}-
+													{helpers.formatAMPM(endDate!)}
+												</p>
+												<p className='text-sm'>
+													(Updated{' '}
+													<time dateTime={updatedAt as any}>
+														{new Date(updatedAt!).toDateString()}
+													</time>
+													)
+												</p>
+											</>
+										)}
 									</div>
 									<div>
-										<a
-											href={`/company/${company.username}`}
-											className='hover:shadow py-2 pl-2 pr-4 rounded-lg inline-flex items-center bg-slate-100'
-										>
-											<Image
-												src={company.profilePicture}
-												width={100}
-												height={100}
-												className='rounded-full h-14 w-14 mr-2'
-												alt='profile-pic'
-												style={{ objectFit: 'cover' }}
-											/>
-											<span className='capitalize w-min min-w-[150px] text-lg font-bold text-gray-900'>
-												{company.name}
-											</span>
-										</a>
+										{isLoading ? (
+											<div></div>
+										) : (
+											<a
+												href={`/company/${company!.username}`}
+												className='hover:shadow py-2 pl-2 pr-4 rounded-lg inline-flex items-center bg-slate-100'
+											>
+												<Image
+													src={company!.profilePicture}
+													width={100}
+													height={100}
+													className='rounded-full h-14 w-14 mr-2'
+													alt='profile-pic'
+													style={{ objectFit: 'cover' }}
+												/>
+												<span className='capitalize w-min min-w-[150px] text-lg font-bold text-gray-900'>
+													{company!.name}
+												</span>
+											</a>
+										)}
 									</div>
 								</div>
 							</div>
@@ -287,28 +326,45 @@ const JobPostingDetailsPage = ({
 						</div>
 
 						<p className='text-gray-500 mt-6 first-letter:uppercase'>
-							{description}
+							{isLoading ? (
+								<Skeleton className='w-full' height={40} />
+							) : (
+								description
+							)}
 						</p>
 
-						<div className='mt-10 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2'>
-							<button
-								disabled={loadingApply}
-								onClick={handleApply}
-								type='button'
-								className='w-full bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500'
-							>
-								{!loadingApply ? (
-									'Apply'
-								) : (
-									<PulseLoader size={6} color={'white'} />
-								)}
-							</button>
-							<button
-								type='button'
-								className='w-full bg-indigo-50 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-indigo-700 hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500'
-							>
-								Contact
-							</button>
+						<div
+							className={`${
+								isLoading ? '' : 'mt-10'
+							} grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2`}
+						>
+							{isLoading ? (
+								<>
+									<Skeleton className='w-full' height={90} />
+									<Skeleton className='w-full' height={90} />
+								</>
+							) : (
+								<>
+									<button
+										disabled={loadingApply}
+										onClick={handleApply}
+										type='button'
+										className='w-full bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500'
+									>
+										{!loadingApply ? (
+											'Apply'
+										) : (
+											<PulseLoader size={6} color={'white'} />
+										)}
+									</button>
+									<button
+										type='button'
+										className='w-full bg-indigo-50 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-indigo-700 hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500'
+									>
+										Contact
+									</button>
+								</>
+							)}
 						</div>
 
 						<div className='border-t border-gray-200 mt-10'>
@@ -317,8 +373,22 @@ const JobPostingDetailsPage = ({
 							</h3>
 							<div className='mt-4 prose prose-sm text-gray-500'>
 								<ul role='list'>
-									<li>Required Skills: {requiredSkills}</li>
-									<li>Dress code: {dressCode}</li>
+									<li>
+										Required Skills:{' '}
+										{isLoading ? (
+											<Skeleton className='w-20' variant='rounded' />
+										) : (
+											requiredSkills
+										)}
+									</li>
+									<li>
+										Dress code:{' '}
+										{isLoading ? (
+											<Skeleton className='w-20' variant='rounded' />
+										) : (
+											dressCode
+										)}
+									</li>
 								</ul>
 							</div>
 						</div>
