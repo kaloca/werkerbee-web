@@ -16,6 +16,7 @@ import MobileFilter from './components/SearchOptions/MobileFilters'
 import JobCard from './components/JobCard'
 import SearchOptions from './components/SearchOptions/SearchOptions'
 import TopMenu from './components/SearchOptions/TopMenu'
+import JobCardSkeleton from './components/JobCardSkeleton'
 
 export default function Jobs({ params }: any) {
 	const { data: session } = useSession()
@@ -55,7 +56,6 @@ export default function Jobs({ params }: any) {
 
 	const handleOpenLocationModal = () => {
 		setLocationModalOpen(true)
-		console.log('hello')
 	}
 
 	const handleCloseLocationModal = () => {
@@ -116,29 +116,28 @@ export default function Jobs({ params }: any) {
 							{/* Product grid */}
 							<div className='lg:col-span-3'>
 								<div className='bg-white shadow p-4 overflow-hidden sm:rounded-md'>
-									{isLoading && (
-										<div className='w-full h-max flex justify-center items-center'>
-											<span>Loading job posts</span>
-											<SyncLoader size={5} className='m-4' />
-										</div>
-									)}
-									{!isLoading && (
-										<ul role='list' className='space-y-3 '>
-											{data &&
-												data.jobPostings.length > 0 &&
-												data.jobPostings.map((jobPosting) => (
-													<JobCard
-														key={jobPosting._id}
-														jobPosting={jobPosting}
-														handleApply={handleApply}
-														showApply={session?.user.type != 'company'}
-													/>
-												))}
-											{data && data.jobPostings.length == 0 && (
-												<div>No job postings match these criteria</div>
-											)}
-										</ul>
-									)}
+									<ul role='list' className='space-y-3 '>
+										{isLoading ? (
+											<>
+												<JobCardSkeleton />
+												<JobCardSkeleton />
+											</>
+										) : (
+											data &&
+											data.jobPostings.length > 0 &&
+											data.jobPostings.map((jobPosting) => (
+												<JobCard
+													key={jobPosting._id}
+													jobPosting={jobPosting}
+													handleApply={handleApply}
+												/>
+											))
+										)}
+										{data && data.jobPostings.length == 0 && (
+											<div>No job postings match these criteria</div>
+										)}
+									</ul>
+
 									{error && <div>Error: {error.message}</div>}
 								</div>
 							</div>
