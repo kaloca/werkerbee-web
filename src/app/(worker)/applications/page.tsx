@@ -9,7 +9,7 @@ import apiClient from '@/src/utils/apiClient'
 import { JobPosting } from '@/src/interfaces/models/JobPosting'
 import useApplications, { JobApplication } from '@/src/hooks/useApplications'
 
-import { useErrorBar } from '@/src/app/context/errorContext'
+import { useSnackbar } from '@/src/app/context/snackbarContext'
 import AcceptDeclineModal from '@/src/components/AcceptDeclineModal'
 
 import JobApplicationCard from './components/JobApplicationCard'
@@ -18,7 +18,7 @@ import ApplicationStatusSelector from './components/ApplicationStatusSelector'
 const Applications = () => {
 	const { data: session, status } = useSession()
 	const router = useRouter()
-	const { showError } = useErrorBar()
+	const { showSnackbar } = useSnackbar()
 
 	useEffect(() => {
 		if (status == 'unauthenticated' && !session) {
@@ -91,7 +91,10 @@ const Applications = () => {
 				}
 			} catch (error: any) {
 				console.error('Error confirming job:', error.response.data.message)
-				showError(`Error confirming job: ${error.response.data.message}`)
+				showSnackbar(
+					'error',
+					`Error confirming job: ${error.response.data.message}`
+				)
 			}
 			setConfirmJobLoading(false)
 		}

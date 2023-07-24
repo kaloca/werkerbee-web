@@ -74,7 +74,7 @@ const PastExperiencesModal: React.FC<PastExperiencesModalProps> = ({
 			}
 		} catch (error: any) {
 			console.error('Error editing experience:', error.response.data.message)
-			//showError(error.response.data.message)
+			//showSnackbar('error', error.response.data.message)
 		}
 	}
 
@@ -98,7 +98,7 @@ const PastExperiencesModal: React.FC<PastExperiencesModalProps> = ({
 			}
 		} catch (error: any) {
 			console.error('Error deleting experience:', error.response.data.message)
-			//showError(error.response.data.message)
+			//showSnackbar('error', error.response.data.message)
 		}
 	}
 
@@ -135,7 +135,7 @@ const PastExperiencesModal: React.FC<PastExperiencesModalProps> = ({
 			}
 		} catch (error: any) {
 			console.error('Error adding experience:', error.response.data.message)
-			//showError(error.response.data.message)
+			//showSnackbar('error', error.response.data.message)
 		}
 	}
 

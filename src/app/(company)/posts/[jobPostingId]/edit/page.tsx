@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 
 import apiClient from '@/src/utils/apiClient'
 import useJobTypes from '@/src/hooks/useJobTypes'
-import { useErrorBar } from '@/src/app/context/errorContext'
+import { useSnackbar } from '@/src/app/context/snackbarContext'
 
 import { BASE_URL } from '@/src/utils/constants'
 
@@ -25,7 +25,7 @@ const EditJobPosting = ({ params }: { params: { jobPostingId: string } }) => {
 	const { data: session } = useSession()
 	const router = useRouter()
 
-	const { showError } = useErrorBar()
+	const { showSnackbar } = useSnackbar()
 
 	const dropdownRef = useRef<HTMLDivElement>(null)
 
@@ -207,7 +207,7 @@ const EditJobPosting = ({ params }: { params: { jobPostingId: string } }) => {
 
 	const handleSubmit = async () => {
 		if (Object.values(formData).some((item) => item.value === '')) {
-			showError('Please fill all job posting fields')
+			showSnackbar('error', 'Please fill all job posting fields')
 			return
 		}
 
@@ -252,7 +252,7 @@ const EditJobPosting = ({ params }: { params: { jobPostingId: string } }) => {
 					'Error submitting job application:',
 					error.response.data.message
 				)
-				showError(error.response.data.message)
+				showSnackbar('error', error.response.data.message)
 			}
 		}
 	}

@@ -5,9 +5,9 @@ import { useRouter } from 'next/navigation'
 
 import apiClient from '@/src/utils/apiClient'
 import useJobTypes from '@/src/hooks/useJobTypes'
-import { useErrorBar } from '@/src/app/context/errorContext'
 
 import DropdownInput from './components/jobTypeInput'
+import { useSnackbar } from '../../context/snackbarContext'
 
 const calculateCost = (value: any) => {
 	return (value * 1.153 * 1.3).toFixed(2)
@@ -23,7 +23,7 @@ const CreateJobPostingPage: React.FC = () => {
 	const { data: session } = useSession()
 	const router = useRouter()
 
-	const { showError } = useErrorBar()
+	const { showSnackbar } = useSnackbar()
 
 	const dropdownRef = useRef<HTMLDivElement>(null)
 
@@ -117,7 +117,7 @@ const CreateJobPostingPage: React.FC = () => {
 	const handleSubmit = async () => {
 		if (Object.values(formData).some((item) => item.value === '')) {
 			console.log(formData)
-			showError('Please fill all job posting fields')
+			showSnackbar('error', 'Please fill all job posting fields')
 			return
 		}
 
@@ -162,7 +162,7 @@ const CreateJobPostingPage: React.FC = () => {
 					'Error submitting job application:',
 					error.response.data.message
 				)
-				showError(error.response.data.message)
+				showSnackbar('error', error.response.data.message)
 			}
 		}
 	}
