@@ -7,33 +7,12 @@ import helpers from '@/src/utils/helpers'
 import { JobPosting } from '@/src/interfaces/models/JobPosting'
 
 import Placeholder from '@/src/assets/placeholder.jpg'
-
-const jobPosting = {
-	name: 'Cashier at Shake Shack',
-	location: 'Stanford Mall, Stanford, CA',
-	type: 'Cashier',
-	payment: '40$/hr',
-	start: '2023-05-24T19:00:00.000+00:00',
-	end: '2023-05-25T00:00:00.000+00:00',
-	company: {
-		name: 'Shake Shack',
-	},
-}
-
-const showApply = true
-
 interface JobCardProps {
 	jobPosting: JobPosting
 	handleApply: (id: string) => void
-	showApply: boolean
-	showEdit?: boolean
 }
 
-const JobCard: React.FC<JobCardProps> = ({
-	jobPosting,
-	handleApply,
-	showApply,
-}) => {
+const JobCard: React.FC<JobCardProps> = ({ jobPosting, handleApply }) => {
 	const startDate = new Date(jobPosting.start)
 	const endDate = new Date(jobPosting.end)
 	// console.log(jobPosting)
