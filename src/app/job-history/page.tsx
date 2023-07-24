@@ -19,6 +19,7 @@ export default function JobHistoryPage() {
 		jobId: '',
 		jobPostingId: '',
 		ratingType: session?.user.type == 'worker' ? 'company' : 'worker',
+		name: '',
 	})
 	const {
 		data: jobs,
