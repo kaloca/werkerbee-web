@@ -1,12 +1,9 @@
 'use client'
 
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useSession } from 'next-auth/react'
 
-import { SyncLoader } from 'react-spinners'
-
-import helpers from '@/src/utils/helpers'
 import useJobPostings, { JobPostingsOptions } from '@/src/hooks/useJobPostings'
 
 import ChooseLocationModal from '@/src/components/ChooseLocationModal'
@@ -17,6 +14,8 @@ import JobCard from './components/JobCard'
 import SearchOptions from './components/SearchOptions/SearchOptions'
 import TopMenu from './components/SearchOptions/TopMenu'
 import JobCardSkeleton from './components/JobCardSkeleton'
+
+import { mockData } from './mockData'
 
 export default function Jobs({ params }: any) {
 	const { data: session } = useSession()
@@ -40,7 +39,8 @@ export default function Jobs({ params }: any) {
 				: undefined,
 	})
 
-	const { data, error, isLoading } = useJobPostings(searchOptions)
+	// const { data, error, isLoading } = useJobPostings(searchOptions)
+	const { data, error, isLoading } = mockData
 
 	const handlePrevPage = () => {
 		if (searchOptions.page > 1) {
