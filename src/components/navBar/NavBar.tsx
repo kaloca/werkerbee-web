@@ -104,7 +104,7 @@ export default function NavBar() {
 	return (
 		<>
 			{showNavBar && (
-				<Disclosure as='nav' className='bg-white shadow absolute w-full'>
+				<Disclosure as='nav' className='bg-white shadow absolute w-full z-50'>
 					{({ open }) => (
 						<>
 							<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
@@ -274,6 +274,7 @@ export default function NavBar() {
 								session={session}
 								selectItem={selectItem}
 								router={router}
+								profilePic={data?.profilePicture}
 							/>
 						</>
 					)}

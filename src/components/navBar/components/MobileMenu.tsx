@@ -3,12 +3,15 @@ import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context'
 
 import { Disclosure } from '@headlessui/react'
 import { BellIcon } from '@heroicons/react/24/outline'
+import Image from 'next/image'
 
+import LightGraySquare from '@/src/assets/lighter-gray.jpeg'
 interface MobileMenuProps {
 	navBarItems: any
 	session?: any
 	selectItem: (name: string, url: string) => void
 	router: AppRouterInstance
+	profilePic?: string
 }
 
 const selected =
@@ -21,9 +24,10 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
 	session,
 	selectItem,
 	router,
+	profilePic,
 }) => {
 	return (
-		<Disclosure.Panel className='md:hidden'>
+		<Disclosure.Panel className='md:hidden z-50'>
 			<div className='pt-2 pb-3 space-y-1'>
 				{navBarItems.map((item: any) => {
 					if (item.type == 'all' || item.type == session?.user.type)
@@ -42,10 +46,13 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
 			<div className='pt-4 pb-3 border-t border-gray-200'>
 				<div className='flex items-center px-4 sm:px-6'>
 					<div className='flex-shrink-0'>
-						<img
-							className='h-10 w-10 rounded-full'
-							src='https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80'
-							alt=''
+						<Image
+							className='rounded-full h-10 w-10'
+							src={profilePic || LightGraySquare}
+							alt='profile-pic'
+							style={{ objectFit: 'cover' }}
+							height={32}
+							width={32}
 						/>
 					</div>
 					<div className='ml-3'>
