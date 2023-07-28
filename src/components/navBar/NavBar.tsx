@@ -104,7 +104,12 @@ export default function NavBar() {
 	return (
 		<>
 			{showNavBar && (
-				<Disclosure as='nav' className='bg-white shadow absolute w-full z-50'>
+				<Disclosure
+					as='nav'
+					className={`${
+						pathname == '/' ? 'bg-transparent' : 'bg-white'
+					} shadow absolute w-full z-50`}
+				>
 					{({ open }) => (
 						<>
 							<div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
