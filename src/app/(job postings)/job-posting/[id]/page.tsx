@@ -190,7 +190,7 @@ const JobPostingDetailsPage = ({
 		location,
 		dressCode,
 		payment,
-		company,
+		company: any,
 		requiredSkills,
 		requiredCertifications,
 		start,
