@@ -1,19 +1,19 @@
 'use client'
 import React, { useEffect, useState } from 'react'
 
-import { useErrorBar } from '@/src/app/context/errorContext'
+// import { useSnackbar } from '@/src/app/context/snackbarContext'
 
 const ErrorBar: React.FC = () => {
-	const { error, hideError } = useErrorBar()
-	const [visible, setVisible] = useState(false)
+	// const { error, hideError } = useSnackbar()
+	// const [visible, setVisible] = useState(false)
 
-	useEffect(() => {
-		if (error) {
-			setVisible(true)
-		}
-	}, [error])
+	// useEffect(() => {
+	// 	if (error) {
+	// 		setVisible(true)
+	// 	}
+	// }, [error])
 
-	if (!visible) return null
+	// if (!visible) return null
 
 	return (
 		<div className='fixed inset-0 flex z-50 justify-center'>
@@ -25,13 +25,13 @@ const ErrorBar: React.FC = () => {
 							<p className='text-red-500 font-bold'>Error:</p>
 						</div>
 						<p className='text-red-500 max-h-20 overflow-scroll no-scrollbar'>
-							{error}
+							{/* {error} */}
 						</p>
 						<button
-							onClick={() => {
-								setVisible(false)
-								setTimeout(hideError, 300)
-							}}
+							// onClick={() => {
+							// 	setVisible(false)
+							// 	setTimeout(hideError, 300)
+							// }}
 							className='text-red-500 font-bold'
 						>
 							Dismiss

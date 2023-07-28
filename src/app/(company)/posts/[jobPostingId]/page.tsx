@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import { useSession } from 'next-auth/react'
-import { useErrorBar } from '@/src/app/context/errorContext'
+import { useSnackbar } from '@/src/app/context/snackbarContext'
 
 import useJobPostingApplications from '@/src/hooks/useJobPostingApplications'
 import apiClient from '@/src/utils/apiClient'
@@ -17,7 +17,7 @@ import { PulseLoader } from 'react-spinners'
 export default function CompanyPostsPage({ params }: any) {
 	const { data: session, status } = useSession()
 	const router = useRouter()
-	const { showError } = useErrorBar()
+	const { showSnackbar } = useSnackbar()
 	const {
 		data: applications,
 		jobName,
@@ -69,7 +69,7 @@ export default function CompanyPostsPage({ params }: any) {
 					'Error accepting job application:',
 					error.response.data.message
 				)
-				showError(error.response.data.message)
+				showSnackbar('error', error.response.data.message)
 			}
 		}
 	}

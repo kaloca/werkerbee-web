@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 
 import useJobPostingWorker from '@/src/hooks/useJobPostingWorker'
 import { JobPosting } from '@/src/interfaces/models/JobPosting'
-import { useErrorBar } from '@/src/app/context/errorContext'
+import { useSnackbar } from '@/src/app/context/snackbarContext'
 
 import apiClient from '@/src/utils/apiClient'
 
@@ -20,7 +20,7 @@ const JobPostingDetailsPage = ({
 }) => {
 	const { data, isLoading, error } = useJobPostingWorker(params.id)
 	const { data: session } = useSession()
-	const { showError } = useErrorBar()
+	const { showSnackbar } = useSnackbar()
 
 	const router = useRouter()
 
@@ -49,7 +49,7 @@ const JobPostingDetailsPage = ({
 					'Error submitting job application:',
 					error.response.data.message
 				)
-				showError(error.response.data.message)
+				showSnackbar('error', error.response.data.message)
 			}
 		else {
 			router.push('/login')

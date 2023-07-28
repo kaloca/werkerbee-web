@@ -89,7 +89,7 @@ const RatingModal: React.FC<RatingModalProps> = ({
 				}
 			} catch (error: any) {
 				console.error('Error creating rating:', error.response.data.message)
-				//showError(error.response.data.message)
+				//showSnackbar('error', error.response.data.message)
 			}
 		setLoading(false)
 	}
@@ -121,7 +121,7 @@ const RatingModal: React.FC<RatingModalProps> = ({
 				}
 			} catch (error: any) {
 				console.error('Error updating rating:', error.response.data.message)
-				//showError(error.response.data.message)
+				//showSnackbar('error', error.response.data.message)
 			}
 		setLoading(false)
 	}

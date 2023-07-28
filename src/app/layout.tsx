@@ -1,11 +1,11 @@
 import { Analytics } from '@vercel/analytics/react'
 
 import NavBar from '@/src/components/navBar/NavBar'
-import ErrorBar from '@/src/components/errorBar'
+import Snackbar from '@/src/components/snackbar'
 
 import './globals.css'
 import Provider from './context/provider'
-import { ErrorBarProvider } from './context/errorContext'
+import { SnackbarProvider } from './context/snackbarContext'
 
 export const metadata = {
 	title: 'WerkerBee',
@@ -21,15 +21,15 @@ export default function RootLayout({
 		<html lang='en'>
 			<body>
 				<Provider>
-					<ErrorBarProvider>
-						<ErrorBar />
+					<SnackbarProvider>
+						<Snackbar />
 						{/* <MenuBar /> */}
 						<NavBar />
 						<div className='h-screen w-screen'>
 							{children}
 							<Analytics />
 						</div>
-					</ErrorBarProvider>
+					</SnackbarProvider>
 				</Provider>
 			</body>
 		</html>

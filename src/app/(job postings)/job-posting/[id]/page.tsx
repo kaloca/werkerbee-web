@@ -1,143 +1,24 @@
 'use client'
 import { Fragment, useState } from 'react'
-import { Dialog, Popover, Tab, Transition } from '@headlessui/react'
-import {
-	Bars3Icon,
-	ShoppingBagIcon,
-	XMarkIcon,
-} from '@heroicons/react/24/outline'
-import { MagnifyingGlassIcon, StarIcon } from '@heroicons/react/20/solid'
-import helpers from '@/src/utils/helpers'
-import { JobPosting } from '@/src/interfaces/models/JobPosting'
-import useJobPostingWorker from '@/src/hooks/useJobPostingWorker'
-import { useSession } from 'next-auth/react'
-import { useErrorBar } from '@/src/app/context/errorContext'
 import { useRouter } from 'next/navigation'
-import apiClient from '@/src/utils/apiClient'
+import { useSession } from 'next-auth/react'
 import Image from 'next/image'
 import moment from 'moment'
-import { PulseLoader } from 'react-spinners'
 
-const navigation = {
-	categories: [
-		{
-			id: 'wireframe',
-			name: 'Wireframe Kits',
-			featured: [
-				{
-					name: 'Scaffold',
-					href: '#',
-					imageSrc:
-						'https://tailwindui.com/img/ecommerce-images/product-page-05-menu-03.jpg',
-					imageAlt:
-						'Pricing page screenshot with tiered plan options and comparison table on colorful blue and green background.',
-				},
-				{
-					name: 'Bones',
-					href: '#',
-					imageSrc:
-						'https://tailwindui.com/img/ecommerce-images/product-page-05-menu-04.jpg',
-					imageAlt:
-						'Application screenshot with tiered navigation and account settings form on color red and purple background.',
-				},
-			],
-			sections: [
-				{
-					id: 'application',
-					name: 'Application UI',
-					items: [
-						{ name: 'Home Screens', href: '#' },
-						{ name: 'Detail Screens', href: '#' },
-						{ name: 'Settings Screens', href: '#' },
-					],
-				},
-				{
-					id: 'marketing',
-					name: 'Marketing',
-					items: [
-						{ name: 'Landing Pages', href: '#' },
-						{ name: 'Pricing Pages', href: '#' },
-						{ name: 'Contact Pages', href: '#' },
-					],
-				},
-				{
-					id: 'ecommerce',
-					name: 'Ecommerce',
-					items: [
-						{ name: 'Storefront Pages', href: '#' },
-						{ name: 'Product Pages', href: '#' },
-						{ name: 'Category Pages', href: '#' },
-						{ name: 'Shopping Cart Pages', href: '#' },
-						{ name: 'Checkout Pages', href: '#' },
-					],
-				},
-			],
-		},
-		{
-			id: 'icons',
-			name: 'Icons',
-			featured: [
-				{
-					name: 'Application UI Pack',
-					href: '#',
-					imageSrc:
-						'https://tailwindui.com/img/ecommerce-images/product-page-05-menu-01.jpg',
-					imageAlt:
-						'Payment application dashboard screenshot with transaction table, financial highlights, and main clients on colorful purple background.',
-				},
-				{
-					name: 'Marketing Icon Pack',
-					href: '#',
-					imageSrc:
-						'https://tailwindui.com/img/ecommerce-images/product-page-05-menu-02.jpg',
-					imageAlt:
-						'Calendar user interface screenshot with icon buttons and orange-yellow theme.',
-				},
-			],
-			sections: [
-				{
-					id: 'general',
-					name: 'General Use',
-					items: [
-						{ name: 'Heroicons Solid', href: '#' },
-						{ name: 'Heroicons Outline', href: '#' },
-						{ name: 'Line Illustrations', href: '#' },
-						{ name: 'Hero Illustrations', href: '#' },
-						{ name: 'Branded Illustrations', href: '#' },
-						{ name: 'Skeuomorphic Illustrations', href: '#' },
-						{ name: 'Hand Drawn Illustrations', href: '#' },
-					],
-				},
-				{
-					id: 'application',
-					name: 'Application UI',
-					items: [
-						{ name: 'Outlined', href: '#' },
-						{ name: 'Solid', href: '#' },
-						{ name: 'Branded', href: '#' },
-						{ name: 'Small', href: '#' },
-						{ name: 'Illustrations', href: '#' },
-					],
-				},
-				{
-					id: 'marketing',
-					name: 'Marketing',
-					items: [
-						{ name: 'Outlined', href: '#' },
-						{ name: 'Solid', href: '#' },
-						{ name: 'Branded', href: '#' },
-						{ name: 'Small', href: '#' },
-						{ name: 'Illustrations', href: '#' },
-					],
-				},
-			],
-		},
-	],
-	pages: [
-		{ name: 'UI Kits', href: '#' },
-		{ name: 'Themes', href: '#' },
-	],
-}
+import { PulseLoader } from 'react-spinners'
+import { Tab } from '@headlessui/react'
+import { StarIcon } from '@heroicons/react/24/solid'
+
+import { useSnackbar } from '@/src/app/context/snackbarContext'
+
+import helpers from '@/src/utils/helpers'
+import apiClient from '@/src/utils/apiClient'
+
+import useJobPostingWorker from '@/src/hooks/useJobPostingWorker'
+import { JobPosting } from '@/src/interfaces/models/JobPosting'
+import { Skeleton } from '@mui/material'
+import GenericError from '@/src/components/GenericError'
+
 const product = {
 	name: 'Application UI Icon Pack',
 	version: { name: '1.0', date: 'June 5, 2021', datetime: '2021-06-05' },
@@ -240,28 +121,6 @@ const relatedProducts = [
 	},
 	// More products...
 ]
-const footerNavigation = {
-	products: [
-		{ name: 'Wireframe Kits', href: '#' },
-		{ name: 'Icons', href: '#' },
-		{ name: 'UI Kits', href: '#' },
-		{ name: 'Themes', href: '#' },
-	],
-	company: [
-		{ name: 'Who we are', href: '#' },
-		{ name: 'Open Source', href: '#' },
-		{ name: 'Press', href: '#' },
-		{ name: 'Careers', href: '#' },
-		{ name: 'License', href: '#' },
-		{ name: 'Privacy', href: '#' },
-	],
-	customerService: [
-		{ name: 'Chat', href: '#' },
-		{ name: 'Contact', href: '#' },
-		{ name: 'Secure Payments', href: '#' },
-		{ name: 'FAQ', href: '#' },
-	],
-}
 
 const classNames = helpers.classNames
 
@@ -278,7 +137,7 @@ const JobPostingDetailsPage = ({
 
 	const { data, isLoading, error } = useJobPostingWorker(params.id)
 	const { data: session } = useSession()
-	const { showError } = useErrorBar()
+	const { showSnackbar } = useSnackbar()
 
 	const router = useRouter()
 
@@ -300,6 +159,7 @@ const JobPostingDetailsPage = ({
 
 				if (response?.status === 200) {
 					console.log('Job application submitted successfully')
+					showSnackbar('success', 'Job application submitted successfully')
 				} else {
 					console.error(
 						`Error submitting job application: ${response.data.message}`
@@ -311,15 +171,12 @@ const JobPostingDetailsPage = ({
 					'Error submitting job application:',
 					error.response.data.message
 				)
-				showError(error.response.data.message)
+				showSnackbar('error', error.response.data.message)
 				setLoadingApply(false)
 			}
 		else {
 			router.push('/login')
 		}
-	}
-	if (isLoading) {
-		return <div>Loading Job Posting</div>
 	}
 
 	if (error) {
@@ -327,23 +184,41 @@ const JobPostingDetailsPage = ({
 	}
 	console.log(data)
 
-	const {
-		name,
+	let name,
 		description,
 		type,
 		location,
 		dressCode,
 		payment,
-		company,
+		company: any,
 		requiredSkills,
 		requiredCertifications,
 		start,
 		end,
-		updatedAt,
-	}: JobPosting = data!.jobPosting
+		updatedAt: any,
+		startDate: any,
+		endDate: any
 
-	const startDate = new Date(start)
-	const endDate = new Date(end)
+	if (data && data.jobPosting) {
+		;({
+			name,
+			description,
+			type,
+			location,
+			dressCode,
+			payment,
+			company,
+			requiredSkills,
+			requiredCertifications,
+			start,
+			end,
+			updatedAt,
+		} = data.jobPosting)
+		startDate = new Date(start)
+		endDate = new Date(end)
+	} else if (!isLoading) {
+		return <GenericError />
+	}
 
 	return (
 		<div className='bg-white'>
@@ -353,20 +228,33 @@ const JobPostingDetailsPage = ({
 					{/* Job Posting image */}
 					<div className='lg:row-end-1 lg:col-span-4'>
 						<div className='aspect-w-4 aspect-h-3 rounded-lg bg-gray-100 overflow-hidden'>
-							<img
-								src={product.imageSrc}
-								alt={product.imageAlt}
-								className='object-center object-cover'
-							/>
+							{isLoading ? (
+								// <Skeleton
+								// 	className='w-full h-full'
+								// 	variant='rounded'
+								// 	animation='wave'
+								// />
+								<div></div>
+							) : (
+								<img
+									src={product.imageSrc}
+									alt={product.imageAlt}
+									className='object-center object-cover'
+								/>
+							)}
 						</div>
 					</div>
 
 					{/* Job Posting details */}
 					<div className='max-w-2xl mx-auto mt-14 sm:mt-16 lg:max-w-none lg:mt-0 lg:row-end-2 lg:row-span-2 lg:col-span-3'>
 						<div className='flex flex-col-reverse'>
-							<div className='mt-4'>
-								<h1 className='text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl'>
-									{name}
+							<div className=''>
+								<h1 className='first-letter:uppercase text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl'>
+									{isLoading ? (
+										<Skeleton className='w-64' variant='rounded' />
+									) : (
+										name
+									)}
 								</h1>
 
 								<h2 id='information-heading' className='sr-only'>
@@ -374,41 +262,62 @@ const JobPostingDetailsPage = ({
 								</h2>
 								<div className='inline-flex items-center mt-2'>
 									<div className='mr-4 flex-col justify-between'>
-										<p>{moment(startDate).format('ddd, MMMM Do')}</p>
-										<p>
-											{helpers.formatAMPM(startDate)}-
-											{helpers.formatAMPM(endDate)}
-										</p>
-										<p className='text-sm'>
-											(Updated{' '}
-											<time dateTime={updatedAt as any}>
-												{new Date(updatedAt).toDateString()}
-											</time>
-											)
-										</p>
+										{isLoading ? (
+											<div className='flex flex-row'>
+												<div className='flex flex-col'>
+													<Skeleton className='w-44 mb-1' variant='rounded' />
+													<Skeleton className='w-44 mb-1' variant='rounded' />
+													<Skeleton className='w-44' variant='rounded' />
+												</div>
+												<Skeleton
+													className='w-44 ml-2'
+													height={65}
+													variant='rounded'
+												/>
+											</div>
+										) : (
+											<>
+												<p>{moment(startDate).format('ddd, MMMM Do')}</p>
+												<p>
+													{helpers.formatAMPM(startDate!)}-
+													{helpers.formatAMPM(endDate!)}
+												</p>
+												<p className='text-sm'>
+													(Updated{' '}
+													<time dateTime={updatedAt as any}>
+														{new Date(updatedAt!).toDateString()}
+													</time>
+													)
+												</p>
+											</>
+										)}
 									</div>
 									<div>
-										<a
-											href={`/company/${company.username}`}
-											className='hover:shadow py-2 pl-2 pr-4 rounded-lg inline-flex items-center bg-slate-100'
-										>
-											<Image
-												src={company.profilePicture}
-												width={100}
-												height={100}
-												className='rounded-full h-14 w-14 mr-2'
-												alt='profile-pic'
-												style={{ objectFit: 'cover' }}
-											/>
-											<span className='capitalize w-min min-w-[150px] text-lg font-bold text-gray-900'>
-												{company.name}
-											</span>
-										</a>
+										{isLoading ? (
+											<div></div>
+										) : (
+											<a
+												href={`/company/${company!.username}`}
+												className='hover:shadow py-2 pl-2 pr-4 rounded-lg inline-flex items-center bg-slate-100'
+											>
+												<Image
+													src={company!.profilePicture}
+													width={100}
+													height={100}
+													className='rounded-full h-14 w-14 mr-2'
+													alt='profile-pic'
+													style={{ objectFit: 'cover' }}
+												/>
+												<span className='capitalize w-min min-w-[150px] text-lg font-bold text-gray-900'>
+													{company!.name}
+												</span>
+											</a>
+										)}
 									</div>
 								</div>
 							</div>
 
-							<div>
+							{/* <div>
 								<h3 className='sr-only'>Reviews</h3>
 								<div className='flex items-center'>
 									{[0, 1, 2, 3, 4].map((rating) => (
@@ -425,32 +334,49 @@ const JobPostingDetailsPage = ({
 									))}
 								</div>
 								<p className='sr-only'>{reviews.average} out of 5 stars</p>
-							</div>
+							</div> */}
 						</div>
 
 						<p className='text-gray-500 mt-6 first-letter:uppercase'>
-							{description}
+							{isLoading ? (
+								<Skeleton className='w-full' height={40} />
+							) : (
+								description
+							)}
 						</p>
 
-						<div className='mt-10 grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2'>
-							<button
-								disabled={loadingApply}
-								onClick={handleApply}
-								type='button'
-								className='w-full bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500'
-							>
-								{!loadingApply ? (
-									'Apply'
-								) : (
-									<PulseLoader size={6} color={'white'} />
-								)}
-							</button>
-							<button
-								type='button'
-								className='w-full bg-indigo-50 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-indigo-700 hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500'
-							>
-								Contact
-							</button>
+						<div
+							className={`${
+								isLoading ? '' : 'mt-10'
+							} grid grid-cols-1 gap-x-6 gap-y-4 sm:grid-cols-2`}
+						>
+							{isLoading ? (
+								<>
+									<Skeleton className='w-full' height={90} />
+									<Skeleton className='w-full' height={90} />
+								</>
+							) : (
+								<>
+									<button
+										disabled={loadingApply}
+										onClick={handleApply}
+										type='button'
+										className='w-full bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500'
+									>
+										{!loadingApply ? (
+											'Apply'
+										) : (
+											<PulseLoader size={6} color={'white'} />
+										)}
+									</button>
+									<button
+										type='button'
+										className='w-full bg-indigo-50 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-indigo-700 hover:bg-indigo-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500'
+									>
+										Contact
+									</button>
+								</>
+							)}
 						</div>
 
 						<div className='border-t border-gray-200 mt-10'>
@@ -459,8 +385,22 @@ const JobPostingDetailsPage = ({
 							</h3>
 							<div className='mt-4 prose prose-sm text-gray-500'>
 								<ul role='list'>
-									<li>Required Skills: {requiredSkills}</li>
-									<li>Dress code: {dressCode}</li>
+									<li>
+										Required Skills:{' '}
+										{isLoading ? (
+											<Skeleton className='w-20' variant='rounded' />
+										) : (
+											requiredSkills
+										)}
+									</li>
+									<li>
+										Dress code:{' '}
+										{isLoading ? (
+											<Skeleton className='w-20' variant='rounded' />
+										) : (
+											dressCode
+										)}
+									</li>
 								</ul>
 							</div>
 						</div>
