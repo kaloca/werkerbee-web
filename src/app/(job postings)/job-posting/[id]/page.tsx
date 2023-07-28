@@ -190,14 +190,14 @@ const JobPostingDetailsPage = ({
 		location,
 		dressCode,
 		payment,
-		company: unknown,
+		company: any,
 		requiredSkills,
 		requiredCertifications,
 		start,
 		end,
-		updatedAt: unknown,
-		startDate: unknown,
-		endDate: unknown
+		updatedAt: any,
+		startDate: any,
+		endDate: any
 
 	if (data && data.jobPosting) {
 		;({
