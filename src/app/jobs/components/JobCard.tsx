@@ -36,7 +36,7 @@ const JobCard: React.FC<JobCardProps> = ({
 }) => {
 	const startDate = new Date(jobPosting.start)
 	const endDate = new Date(jobPosting.end)
-	console.log(jobPosting)
+	// console.log(jobPosting)
 	return (
 		<li
 			onClick={() => handleApply(jobPosting._id)}

@@ -32,6 +32,7 @@ const MobileMenu: React.FC<MobileMenuProps> = ({
 								onClick={() => selectItem(item.name, item.url)}
 								as='a'
 								className={item.isSelected ? selected : normal}
+								key={item.name}
 							>
 								{item.name}
 							</Disclosure.Button>

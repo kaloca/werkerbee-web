@@ -17,23 +17,21 @@ const useJobPostingWorker = (id: string) => {
 	const [error, setError] = useState<Error | null>(null)
 
 	const { data: session } = useSession()
-	const postingUrl = `${BASE_URL}/job-post/${id}/w?worker=true`
+	const postingUrl = `${BASE_URL}/job-post/${id}/w?worker=${
+		session?.user != undefined
+	}`
 
 	useEffect(() => {
 		const fetchData = async () => {
-			if (session) {
-				try {
-					const result = await fetcher(postingUrl, session.user.token)
-					setData(result)
-					setError(null)
-				} catch (e: any) {
-					setError(e)
-					setData(null)
-				} finally {
-					setIsLoading(false)
-				}
-			} else {
-				setIsLoading(true)
+			try {
+				const result = await fetcher(postingUrl, session?.user.token || '')
+				setData(result)
+				setError(null)
+			} catch (e: any) {
+				setError(e)
+				setData(null)
+			} finally {
+				setIsLoading(false)
 			}
 		}
 
