@@ -15,6 +15,7 @@ export interface JobApplication {
 	worker: Worker
 	jobPosting: JobPosting
 	status: 'PENDING' | 'ACCEPTED' | 'REJECTED' | 'CANCELED' | 'SCHEDULED'
+	timeAccepted: Date
 }
 
 interface ApplicationsResponse {

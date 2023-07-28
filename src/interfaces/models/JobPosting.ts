@@ -16,6 +16,7 @@ export interface JobPosting {
 	payment: string
 	distance: number
 	applications: string[]
+	confirmationTimeLimitInHours?: number
 	createdAt: Date
 	updatedAt: Date
 }

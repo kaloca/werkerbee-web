@@ -14,7 +14,14 @@ const JobApplicationCard: React.FC<JobApplicationCardProps> = ({
 	onClickStatus,
 	onClickJobTitle,
 }) => {
-	const { jobPosting, status, _id } = application
+	const { jobPosting, status, _id, timeAccepted } = application
+	const timeAcceptedDate = new Date(timeAccepted)
+	const timeDue = new Date(timeAcceptedDate)
+					.setHours(timeAcceptedDate.getHours() + 3)
+	const timeDueFormat = new Date(timeDue).toLocaleString("en-US", {
+		dateStyle : "short",
+		timeStyle : "short"
+	})
 
 	const now = new Date()
 	const jobStart = new Date(jobPosting.start)
@@ -77,6 +84,11 @@ const JobApplicationCard: React.FC<JobApplicationCardProps> = ({
 						{expired && <span className='text-red-500 mr-4'>Expired</span>}
 					</div>
 				</div>
+				{(status == "ACCEPTED" && !expired) ? 
+				(
+					"Must be confirmed by " + timeDue
+				): (null)
+				}
 			</div>
 		</div>
 	)
