@@ -17,6 +17,7 @@ import apiClient from '@/src/utils/apiClient'
 import useJobPostingWorker from '@/src/hooks/useJobPostingWorker'
 import { JobPosting } from '@/src/interfaces/models/JobPosting'
 import { Skeleton } from '@mui/material'
+import GenericError from '@/src/components/GenericError'
 
 const product = {
 	name: 'Application UI Icon Pack',
@@ -198,7 +199,7 @@ const JobPostingDetailsPage = ({
 		startDate,
 		endDate
 
-	if (data) {
+	if (data && data.jobPosting) {
 		;({
 			name,
 			description,
@@ -215,6 +216,8 @@ const JobPostingDetailsPage = ({
 		} = data.jobPosting)
 		startDate = new Date(start)
 		endDate = new Date(end)
+	} else if (!isLoading) {
+		return <GenericError />
 	}
 
 	return (
@@ -225,19 +228,28 @@ const JobPostingDetailsPage = ({
 					{/* Job Posting image */}
 					<div className='lg:row-end-1 lg:col-span-4'>
 						<div className='aspect-w-4 aspect-h-3 rounded-lg bg-gray-100 overflow-hidden'>
-							<img
-								src={product.imageSrc}
-								alt={product.imageAlt}
-								className='object-center object-cover'
-							/>
+							{isLoading ? (
+								// <Skeleton
+								// 	className='w-full h-full'
+								// 	variant='rounded'
+								// 	animation='wave'
+								// />
+								<div></div>
+							) : (
+								<img
+									src={product.imageSrc}
+									alt={product.imageAlt}
+									className='object-center object-cover'
+								/>
+							)}
 						</div>
 					</div>
 
 					{/* Job Posting details */}
 					<div className='max-w-2xl mx-auto mt-14 sm:mt-16 lg:max-w-none lg:mt-0 lg:row-end-2 lg:row-span-2 lg:col-span-3'>
 						<div className='flex flex-col-reverse'>
-							<div className='mt-4'>
-								<h1 className='text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl'>
+							<div className=''>
+								<h1 className='first-letter:uppercase text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl'>
 									{isLoading ? (
 										<Skeleton className='w-64' variant='rounded' />
 									) : (
@@ -305,7 +317,7 @@ const JobPostingDetailsPage = ({
 								</div>
 							</div>
 
-							<div>
+							{/* <div>
 								<h3 className='sr-only'>Reviews</h3>
 								<div className='flex items-center'>
 									{[0, 1, 2, 3, 4].map((rating) => (
@@ -322,7 +334,7 @@ const JobPostingDetailsPage = ({
 									))}
 								</div>
 								<p className='sr-only'>{reviews.average} out of 5 stars</p>
-							</div>
+							</div> */}
 						</div>
 
 						<p className='text-gray-500 mt-6 first-letter:uppercase'>

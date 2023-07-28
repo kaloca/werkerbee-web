@@ -24,9 +24,11 @@ const JobCard: React.FC<JobCardProps> = ({ jobPosting, handleApply }) => {
 			<div className='flex-none sm:flex'>
 				<div className=' relative h-32 w-32   sm:mb-0 mb-3'>
 					<Image
-						src={Placeholder}
+						src={jobPosting.frontPicture || Placeholder}
 						alt='aji'
 						className=' w-32 h-32 object-cover rounded-2xl'
+						width={300}
+						height={300}
 					/>
 					{/* {showEdit && (
 							<a
@@ -59,8 +61,8 @@ const JobCard: React.FC<JobCardProps> = ({ jobPosting, handleApply }) => {
 									<div>
 										<span className='mr-3 capitalize'>{jobPosting.type}</span>
 									</div>
-									<span className='mr-3 border-r border-gray-200  max-h-0' />
-									<span>{jobPosting.distance}</span>
+									<span className='mr-3 border-r border-gray-200 h-4 bg-slate-400 ' />
+									<span>{jobPosting.distance} miles away</span>
 								</div>
 							</div>
 						</div>
@@ -82,7 +84,7 @@ const JobCard: React.FC<JobCardProps> = ({ jobPosting, handleApply }) => {
 									<span className='text-gray-500 font-light'>/hr</span>
 								</span>
 							</div>
-							<Rating rating={3.4} />
+							<Rating rating={jobPosting.rating || 3.4} />
 						</div>
 
 						{/* {showApply && (

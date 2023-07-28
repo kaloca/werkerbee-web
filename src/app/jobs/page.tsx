@@ -39,8 +39,8 @@ export default function Jobs({ params }: any) {
 				: undefined,
 	})
 
-	// const { data, error, isLoading } = useJobPostings(searchOptions)
-	const { data, error, isLoading } = mockData
+	const { data, error, isLoading } = useJobPostings(searchOptions)
+	// MOCK DATA const { data, error, isLoading } = mockData
 
 	const handlePrevPage = () => {
 		if (searchOptions.page > 1) {
