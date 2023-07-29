@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { ComponentProps, useEffect, useRef, useState } from 'react'
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 
@@ -29,6 +29,7 @@ const CreateJobPostingPage: React.FC = () => {
 
 	const [showDropDown, setShowDropDown] = useState(false)
 	const [showDropDownError, setShowDropDownError] = useState(false)
+	const [confirmationTimeLimitCheckboxState, setConfirmationTimeLimitCheckboxState] = useState(false)
 	const [formData, setFormData] = useState({
 		jobTitle: {
 			value: '',
@@ -77,6 +78,18 @@ const CreateJobPostingPage: React.FC = () => {
 			required: true,
 			step: 1,
 			hasChanged: false,
+		},
+		confirmationTimeLimitCheck: {
+			value: false,
+			required: true,
+			step: 1,
+			hasChanged: false
+		},
+		confirmationTimeLimitInHours: {
+			value: 3,
+			required: false,
+			step: 1,
+			hasChanged: false
 		},
 		type: {
 			value: '',
@@ -145,6 +158,8 @@ const CreateJobPostingPage: React.FC = () => {
 						end: endDate,
 						type: formData.type.value,
 						payment: formData.payment.value,
+						confirmationTimeLimitInHours: formData.confirmationTimeLimitInHours.value,
+						confirmationTimeLimitExists: confirmationTimeLimitCheckboxState
 					},
 				})
 				if (response?.status === 201) {
@@ -169,6 +184,17 @@ const CreateJobPostingPage: React.FC = () => {
 	// useEffect(() => {
 	// 	if (jobTypes && jobTypes.types) setShowDropDownError(true)
 	// }, [jobTypes, formData.type])
+	/*function ConfirmationTimeLimitInput(props) {
+		console.log(props.enable)
+		if (props.enable) {
+			return (
+				<div>
+					
+				</div>
+			)
+		}
+		return <div/>
+	}*/
 
 	return (
 		<section className='flex flex-row bg-gray-100 h-full justify-center items-start pt-28 pb-10 overflow-scroll '>
@@ -300,6 +326,38 @@ const CreateJobPostingPage: React.FC = () => {
 								value={formData.requiredCertifications.value}
 								onChange={handleOnChange}
 							/>
+						</div>
+						<div className = "flex flex-row">
+							<label
+								htmlFor="confirmationTimeLimitCheck"
+								className='block text-sm font-medium leading-6 text-gray-900 mb-1 ml-1 w-25 mt-0.5'
+							>
+								Limit Time to Confirm
+							</label>
+							<div className='mb-1 block min-h-3 pl-2'>
+							<input
+								className='rounded-md'
+								id = "confirmationTimeLimitCheck"
+								type="checkbox"
+								onChange={()=>{setConfirmationTimeLimitCheckboxState(!confirmationTimeLimitCheckboxState)}}
+							/>
+							</div>
+						</div>
+						<div className={confirmationTimeLimitCheckboxState?'flex flex-row w-48':"hidden w-52"}>
+							<input
+								className="w-1/3 border rounded-md border-gray-300 p-3 text-sm h-1"
+								id = "confirmationTimeLimitInHours"
+								type = "number"
+								onChange={handleOnChange}
+								defaultValue={3}
+							/>
+							<div className='text-sm font-medium leading-6 mb-1 ml-1' >
+							<label
+								htmlFor='confirmationTimeLimitInHours'
+							>
+								Hours
+							</label>
+							</div>
 						</div>
 					</div>
 					<div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>

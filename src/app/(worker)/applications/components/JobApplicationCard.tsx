@@ -16,17 +16,23 @@ const JobApplicationCard: React.FC<JobApplicationCardProps> = ({
 }) => {
 	const { jobPosting, status, _id, timeAccepted } = application
 	const timeAcceptedDate = new Date(timeAccepted)
-	const timeDue = new Date(timeAcceptedDate)
-					.setHours(timeAcceptedDate.getHours() + 3)
-	const timeDueFormat = new Date(timeDue).toLocaleString("en-US", {
-		dateStyle : "short",
-		timeStyle : "short"
-	})
+	var timeDue = new Date()
+	var timeDueFormat
+	if (jobPosting.confirmationTimeLimitExists) {
+		timeDue = new Date(new Date(timeAcceptedDate)
+					.setHours(timeAcceptedDate.getHours() + jobPosting.confirmationTimeLimitInHours!))
+		timeDueFormat = new Date(timeDue).toLocaleString("en-US", {
+			dateStyle : "short",
+			timeStyle : "short"
+		})
+	}
+	console.log(jobPosting)
 
 	const now = new Date()
 	const jobStart = new Date(jobPosting.start)
 
-	const expired = now.getTime() > jobStart.getTime()
+	const expired = (now.getTime() > jobStart.getTime()) || 
+						(jobPosting.confirmationTimeLimitExists && (now.getTime() > timeDue.getTime()))
 
 	let statusColor
 	switch (status) {
@@ -47,7 +53,7 @@ const JobApplicationCard: React.FC<JobApplicationCardProps> = ({
 	return (
 		<div className='w-full max-w-md  my-1 bg-white shadow-xl overflow-hidden'>
 			<div className='max-w-md mx-auto'>
-				<div className='p-4 sm:p-6'>
+				<div className='p-4 sm:pt-4 pl-6 pr-6'>
 					<p
 						onClick={() => onClickJobTitle(jobPosting._id)}
 						className='font-bold text-gray-700 text-[22px] leading-7 mb-1 hover:text-blue-600 hover:underline hover:cursor-pointer'
@@ -83,12 +89,14 @@ const JobApplicationCard: React.FC<JobApplicationCardProps> = ({
 						)}
 						{expired && <span className='text-red-500 mr-4'>Expired</span>}
 					</div>
+					<div className='text-center mt-3'>
+						{(status == "ACCEPTED" && !expired && jobPosting.confirmationTimeLimitExists) ? 
+						(
+							"Must be confirmed by " + timeDueFormat
+						): (null)
+						}
+					</div>
 				</div>
-				{(status == "ACCEPTED" && !expired) ? 
-				(
-					"Must be confirmed by " + timeDue
-				): (null)
-				}
 			</div>
 		</div>
 	)
