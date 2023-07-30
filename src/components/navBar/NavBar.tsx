@@ -108,7 +108,7 @@ export default function NavBar() {
 					as='nav'
 					className={`${
 						pathname == '/' ? 'bg-transparent' : 'bg-white'
-					} shadow absolute w-full z-50`}
+					} shadow absolute w-full z-40`}
 				>
 					{({ open }) => (
 						<>
