@@ -163,7 +163,7 @@ export default function NavBar() {
 									</div>
 									{status == 'unauthenticated' && !session ? (
 										<a className='flex flex-row items-center' href='/login'>
-											<span className='font-semibold'>Login</span>
+											<span className='font-semibold'>Login | Sign Up</span>
 										</a>
 									) : (
 										<div className='flex items-center'>

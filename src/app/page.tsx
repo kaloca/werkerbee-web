@@ -2,15 +2,13 @@
 
 import {
 	ArrowPathIcon,
-	Bars3Icon,
-	CloudArrowUpIcon,
+	BanknotesIcon,
+	ClockIcon,
 	CogIcon,
-	LockClosedIcon,
+	HandThumbUpIcon,
 	ServerIcon,
-	ShieldCheckIcon,
-	XMarkIcon,
 } from '@heroicons/react/24/outline'
-import { ChevronRightIcon, LinkIcon } from '@heroicons/react/24/solid'
+import { ChevronRightIcon } from '@heroicons/react/24/solid'
 
 import WerkerBeeLogo from '@/src/assets/werkerbeelogo_new_white.png'
 
@@ -20,40 +18,22 @@ import Image from 'next/image'
 
 const features = [
 	{
-		name: 'Push to Deploy',
+		name: 'Save Money',
 		description:
-			'Ac tincidunt sapien vehicula erat auctor pellentesque rhoncus. Et magna sit morbi vitae lobortis.',
-		icon: CloudArrowUpIcon,
+			'Building your own pool of flexible workers through WerkerBee costs less than using hiring websites, temp agencies, or independent contractor platforms.',
+		icon: BanknotesIcon,
 	},
 	{
-		name: 'SSL Certificates',
+		name: 'Save Time',
 		description:
-			'Qui aut temporibus nesciunt vitae dicta repellat sit dolores pariatur. Temporibus qui illum aut.',
-		icon: LockClosedIcon,
+			'WerkerBee does the hiring work for you by prescreening all our employed flexible workers. You can skip the emails, phone calls, interviews, verifications, and focus on running your business!',
+		icon: ClockIcon,
 	},
 	{
-		name: 'Simple Queues',
+		name: 'Hire Away',
 		description:
-			'Rerum quas incidunt deleniti quaerat suscipit mollitia. Amet repellendus ut odit dolores qui.',
-		icon: ArrowPathIcon,
-	},
-	{
-		name: 'Advanced Security',
-		description:
-			'Ullam laboriosam est voluptatem maxime ut mollitia commodi. Et dignissimos suscipit perspiciatis.',
-		icon: ShieldCheckIcon,
-	},
-	{
-		name: 'Powerful API',
-		description:
-			'Ab a facere voluptatem in quia corrupti veritatis aliquam. Veritatis labore quaerat ipsum quaerat id.',
-		icon: CogIcon,
-	},
-	{
-		name: 'Database Backups',
-		description:
-			'Quia qui et est officia cupiditate qui consectetur. Ratione similique et impedit ea ipsum et.',
-		icon: ServerIcon,
+			"Hire away our WerkerBees! WerkerBee doesn't charge businesses if they want to hire away our workers. Why would we? WerkerBee is here to support the hospitality industry!",
+		icon: HandThumbUpIcon,
 	},
 ]
 const blogPosts = [
@@ -299,12 +279,13 @@ export default function Example() {
 									Job search
 								</h2>
 								<p className='mt-2 text-3xl font-extrabold text-gray-900 tracking-tight sm:text-4xl'>
-									Want to find a shift for this weekend? No problem.
+									Want to work in hospitality, but need a flexible schedule?
 								</p>
 								<p className='mt-5 max-w-prose mx-auto text-xl text-gray-500'>
-									Phasellus lorem quam molestie id quisque diam aenean nulla in.
-									Accumsan in quis quis nunc, ullamcorper malesuada. Eleifend
-									condimentum id viverra nulla.
+									When hired by WerkerBee, you will be trained at hospitality
+									businesses that need your skills and match your availability.
+									You&apos;ll also have the chance to advance your career
+									through WerkerBee&apos;s upskilling program!
 								</p>
 							</div>
 							<div className='mt-12 -mb-10 sm:-mb-24 lg:-mb-80'>
@@ -329,9 +310,11 @@ export default function Example() {
 								Say goodbye to your worker shortage issues
 							</p>
 							<p className='mt-5 max-w-prose mx-auto text-xl text-gray-500'>
-								Phasellus lorem quam molestie id quisque diam aenean nulla in.
-								Accumsan in quis quis nunc, ullamcorper malesuada. Eleifend
-								condimentum id viverra nulla.
+								Run your hospitality business seamlessly using your own
+								dedicated pools of flexible workers. WerkerBee&apos;s employed
+								flexible workers are trained by you at your business so you have
+								a reliable solution for all your planned and unplanned labor
+								shortages.
 							</p>
 							<div className='mt-12'>
 								<div className='grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3'>
@@ -363,7 +346,7 @@ export default function Example() {
 					</div>
 
 					{/* Testimonial section */}
-					<div className='pb-16 bg-gradient-to-r from-teal-500 to-cyan-600 lg:pb-0 lg:z-10 lg:relative'>
+					{/* <div className='pb-16 bg-gradient-to-r from-teal-500 to-cyan-600 lg:pb-0 lg:z-10 lg:relative'>
 						<div className='lg:mx-auto lg:max-w-7xl lg:px-8 lg:grid lg:grid-cols-3 lg:gap-8'>
 							<div className='relative lg:-my-8'>
 								<div
@@ -410,10 +393,10 @@ export default function Example() {
 								</div>
 							</div>
 						</div>
-					</div>
+					</div> */}
 
 					{/* Blog section */}
-					<div className='relative bg-gray-50 py-16 sm:py-24 lg:py-32'>
+					{/* <div className='relative bg-gray-50 py-16 sm:py-24 lg:py-32'>
 						<div className='relative'>
 							<div className='text-center mx-auto max-w-md px-4 sm:max-w-3xl sm:px-6 lg:px-8 lg:max-w-7xl'>
 								<h2 className='text-base font-semibold tracking-wider text-cyan-600 uppercase'>
@@ -491,10 +474,10 @@ export default function Example() {
 								))}
 							</div>
 						</div>
-					</div>
+					</div> */}
 
 					{/* CTA Section */}
-					<div className='relative bg-gray-900'>
+					{/* <div className='relative bg-gray-900'>
 						<div className='relative h-56 bg-indigo-600 sm:h-72 md:absolute md:left-0 md:h-full md:w-1/2'>
 							<img
 								className='w-full h-full object-cover'
@@ -536,7 +519,7 @@ export default function Example() {
 								</div>
 							</div>
 						</div>
-					</div>
+					</div> */}
 				</main>
 				<footer className='bg-gray-50' aria-labelledby='footer-heading'>
 					<h2 id='footer-heading' className='sr-only'>
