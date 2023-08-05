@@ -1,6 +1,9 @@
-import { UseJobsResponse } from '@/src/hooks/useJobs'
-import { Rating } from '@mui/material'
 import Image from 'next/image'
+import { Rating } from '@mui/material'
+
+import { UseJobsResponse } from '@/src/hooks/useJobs'
+
+import EmptyProfilePicture from '@/src/assets/blank_profile_pic.webp'
 
 interface JobHistoryCardProps {
 	job: UseJobsResponse
@@ -47,7 +50,7 @@ const JobHistoryCard: React.FC<JobHistoryCardProps> = ({
 				<div className='py-6 sm:flex'>
 					<div className='flex space-x-4 sm:min-w-0 sm:flex-1 sm:space-x-6 lg:space-x-8'>
 						<Image
-							src={job.companyId.profilePicture || ''}
+							src={job.companyId.profilePicture || EmptyProfilePicture}
 							alt={'company-profile-pic'}
 							width={150}
 							height={150}
