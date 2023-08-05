@@ -1,7 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
+import { notFound, useRouter } from 'next/navigation'
 
 import Image from 'next/image'
 import { Skeleton } from '@mui/material'
@@ -67,10 +67,19 @@ export default function WorkerProfilePage({ params }: any) {
 	const { data: session } = useSession()
 	const router = useRouter()
 
-	const { data: worker, isLoading, mutate } = useWorker(params.workerUsername)
+	const {
+		data: worker,
+		isLoading,
+		mutate,
+		error,
+	} = useWorker(params.workerUsername)
 	const [showJobTypes, setShowJobTypes] = useState(true)
 	const [showCertifications, setShowCertifications] = useState(true)
 	const [showPastExperiences, setShowPastExperiences] = useState(false)
+
+	if (error || (!isLoading && !worker)) {
+		notFound()
+	}
 
 	return (
 		<div>
