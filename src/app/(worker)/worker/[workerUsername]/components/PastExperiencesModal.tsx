@@ -17,7 +17,7 @@ interface PastExperiencesModalProps {
 	experiences?: Experience[]
 	closeModal: () => void
 	edit: boolean
-	session: Session
+	session?: Session
 	mutate: KeyedMutator<any>
 }
 
@@ -58,8 +58,8 @@ const PastExperiencesModal: React.FC<PastExperiencesModalProps> = ({
 		try {
 			const response = await apiClient({
 				method: 'put',
-				url: `/worker/${session.user.username}/experience=${experienceForm._id}`,
-				token: session.user.token,
+				url: `/worker/${session?.user.username}/experience=${experienceForm._id}`,
+				token: session?.user.token || '',
 				data: experienceForm,
 			})
 			if (response?.status === 200) {
@@ -82,8 +82,8 @@ const PastExperiencesModal: React.FC<PastExperiencesModalProps> = ({
 		try {
 			const response = await apiClient({
 				method: 'delete',
-				url: `/worker/${session.user.username}/experience=${experienceForm._id}`,
-				token: session.user.token,
+				url: `/worker/${session?.user.username}/experience=${experienceForm._id}`,
+				token: session?.user.token || '',
 				data: {},
 			})
 			if (response?.status === 200) {
@@ -113,8 +113,8 @@ const PastExperiencesModal: React.FC<PastExperiencesModalProps> = ({
 		try {
 			const response = await apiClient({
 				method: 'post',
-				url: `/worker/${session.user.username}/experience`,
-				token: session.user.token,
+				url: `/worker/${session?.user.username}/experience`,
+				token: session?.user.token || '',
 				data: newExperienceForm,
 			})
 			if (response?.status === 200) {
