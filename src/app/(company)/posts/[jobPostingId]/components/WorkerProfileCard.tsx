@@ -58,14 +58,14 @@ const WorkerProfileCard: React.FC<WorkerProfileCardProps> = ({ username }) => {
 										className='p-3 text-center bg-slate-100 mr-2 rounded-lg hover:cursor-pointer hover:bg-slate-200'
 									>
 										<span className='text-xl font-bold block uppercase tracking-wide text-slate-700'>
-											{worker.jobTypes.length || 0}
+											{worker.jobTypesIds.length || 0}
 										</span>
 										<span className='text-sm text-slate-400 '>Job Types</span>
 										{showJobTypes && (
 											<div className='flex flex-col rounded-md bg-white p-2 absolute z-10 border border-slate-100'>
-												{worker.jobTypes.map((jobType) => (
-													<span className='capitalize py-1' key={jobType}>
-														{jobType}
+												{worker.jobTypesIds.map((jobType) => (
+													<span className='capitalize py-1' key={jobType._id}>
+														{jobType.type}
 													</span>
 												))}
 											</div>
