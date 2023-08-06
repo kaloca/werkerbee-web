@@ -177,7 +177,7 @@ export default function WorkerProfilePage({ params }: any) {
 									{isLoading ? (
 										<Skeleton className='h-5' />
 									) : (
-										worker?.jobTypes.length
+										worker?.jobTypesIds.length
 									)}
 								</div>
 							</dd>
@@ -211,12 +211,12 @@ export default function WorkerProfilePage({ params }: any) {
 					<div className='flex flex-col space-y-2 w-1/3 px-2'>
 						{showJobTypes && (
 							<>
-								{worker?.jobTypes.map((jobType) => (
+								{worker?.jobTypesIds.map((jobType) => (
 									<div
-										key={jobType}
+										key={jobType._id}
 										className='flex flex-row items-center justify-between px-3 py-1.5 border rounded w-full'
 									>
-										<p className='capitalize'>{jobType}</p>
+										<p className='capitalize'>{jobType.type}</p>
 										<CheckBadgeIcon className='h-5 ml-1 text-indigo-400' />
 									</div>
 								))}

@@ -4,9 +4,11 @@ import fetcher from '@/src/utils/fetcher'
 import { BASE_URL } from '@/src/utils/constants'
 
 import { Worker } from '@/src/interfaces/models/Worker'
+import { JobType } from '../interfaces/models/JobType'
 
 interface UseWorkerResponse extends Worker {
 	completedJobs: number
+	jobTypesIds: JobType[]
 }
 
 const useWorker = (workerUsername: string) => {

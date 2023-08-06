@@ -29,7 +29,7 @@ const JobTypeOptions: React.FC<JobTypeOptionsProps> = ({
 	}
 
 	const selectQualified = () => {
-		const workerJobTypes = data?.jobTypes
+		const workerJobTypes = data?.jobTypesIds.map((jobType) => jobType.type)
 		setSelectedJobTypes([...workerJobTypes])
 	}
 

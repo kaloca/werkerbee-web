@@ -1,4 +1,5 @@
 import { Address, BankAccount } from '../UserData'
+import { JobType } from './JobType'
 
 export interface Certification {
 	certification: string
@@ -29,7 +30,8 @@ export interface Worker {
 	rating: number
 	profilePicture: string
 	certifications?: Certification[]
-	jobTypes: string[]
+	jobTypes?: string[]
+	jobTypesIds: string[] | JobType[]
 	experiences?: Experience[]
 	hashedPassword: string
 }
