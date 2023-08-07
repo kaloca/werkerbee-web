@@ -107,7 +107,7 @@ export default function NavBar() {
 				<Disclosure
 					as='nav'
 					className={`${
-						pathname == '/' ? 'bg-transparent' : 'bg-white'
+						pathname == '/' ? 'md:bg-transparent bg-white' : 'bg-white'
 					} shadow absolute w-full z-40`}
 				>
 					{({ open }) => (
