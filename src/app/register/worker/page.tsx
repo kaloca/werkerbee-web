@@ -1,17 +1,22 @@
 'use client'
-import React, { useCallback, useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { LoadScript } from '@react-google-maps/api'
 
-import { BASE_URL } from '@/src/utils/constants'
-import helpers from '@/src/utils/helpers'
-import useJobTypes from '@/src/hooks/useJobTypes'
+import {
+	ArrowLeftIcon,
+	EyeIcon,
+	EyeSlashIcon,
+} from '@heroicons/react/24/outline'
+import { PhotoIcon, UserCircleIcon } from '@heroicons/react/24/solid'
 
-import RegisterTabs from '../components/registerTabs'
-import RegisterInput from '../components/registerInput'
-import AddressAutocomplete from '../components/mapsEmbedding/mapsEmbedding'
-import RegisterDropdownInput from '../components/registerDropdownInput'
-import RegisterChecklistInput from '../components/jobTypesInput'
-import { signIn } from 'next-auth/react'
+import apiClient from '@/src/utils/apiClient'
+import helpers from '@/src/utils/helpers'
+import { useSnackbar } from '@/src/app/context/snackbarContext'
+
+import JobTypesInput from '../components/JobTypesInput'
+import CertifiicationsInput from '../components/CertificationsInput'
+import AddressAutocomplete from '../components/mapsEmbedding/newMapsEmbedding'
 
 const libraries: (
 	| 'places'
@@ -21,95 +26,65 @@ const libraries: (
 	| 'visualization'
 )[] = ['places']
 
-export default function RegisterWorkerPage({ params }: any) {
-	const [currentStep, setCurrentStep] = useState(1)
-	const [reenterPassword, setReenterPassword] = useState('')
-	const [address, setAddress] = useState('')
-	const [error, setError] = useState({
-		name: false,
-		username: false,
-		email: false,
-		phoneNumber: false,
-		location: false,
-		jobTypes: false,
-		ssn: false,
-		birthday: false,
-		address: {
-			street: false,
-			city: false,
-			state: false,
-			country: false,
-			zip: false,
-		},
-		password: false,
-		reenterPassword: false,
+export interface CreateWorkerForm {
+	firstName: string
+	lastName: string
+	email: string
+	country: string
+	streetAddress: string
+	city: string
+	state: string
+	zip: string
+	jobTypes: string[]
+	upskillingTypes: string[]
+	username: string
+	birthday: string
+	phoneNumber: string
+	certifications: string[]
+	password: string
+	location?: {
+		type: string
+		coordinates: [number, number]
+	}
+}
+
+export default function NewWorkerPage() {
+	const router = useRouter()
+	const { showSnackbar } = useSnackbar()
+	const searchParams = useSearchParams()
+
+	const formRef = useRef<HTMLFormElement>(null)
+
+	const [formData, setFormData] = useState<CreateWorkerForm>({
+		firstName: '',
+		lastName: '',
+		email: searchParams?.get('email') || '',
+		country: 'United States',
+		streetAddress: '',
+		city: '',
+		state: '',
+		zip: '',
+		jobTypes: [],
+		upskillingTypes: [],
+		username: '',
+		birthday: '',
+		phoneNumber: '',
+		certifications: [],
+		password: '',
 	})
-	const [formData, setFormData] = useState({
-		name: {
-			value: '',
-			required: true,
-			step: 1,
-			hasChanged: false,
-		},
-		username: {
-			value: '',
-			required: true,
-			step: 1,
-			hasChanged: false,
-		},
-		email: {
-			value: '',
-			required: true,
-			step: 1,
-			hasChanged: false,
-		},
-		phoneNumber: {
-			value: '',
-			required: true,
-			step: 1,
-			hasChanged: false,
-		},
-		// ssn: {
-		// 	value: '',
-		// 	required: false,
-		// 	step: 1,
-		// 	hasChanged: false,
-		// },
-		birthday: {
-			value: '',
-			required: true,
-			step: 1,
-			hasChanged: false,
-		},
-		location: {
-			value: {
-				type: 'Point',
-				coordinates: [0, 0],
-			},
-			required: true,
-			step: 2,
-			hasChanged: false,
-		},
-		jobTypes: {
-			value: [''],
-			required: true,
-			step: 2,
-			hasChanged: false,
-		},
-		address: {
-			value: {
-				street: '',
-				city: '',
-				state: '',
-				country: '',
-				zip: '',
-			},
-			required: true,
-			step: 2,
-			hasChanged: false,
-		},
-		password: { value: '', required: true, step: 1, hasChanged: false },
-	})
+
+	const [confirmPassword, setConfirmPassword] = useState('')
+	const [showConfirmPasswordError, setShowConfirmPasswordError] =
+		useState(false)
+	const [showPassword, setShowPassword] = useState(false)
+
+	useEffect(() => {
+		if (confirmPassword.length > 0 && confirmPassword != formData.password) {
+			setShowConfirmPasswordError(true)
+		} else {
+			setShowConfirmPasswordError(false)
+		}
+	}, [confirmPassword, formData.password])
 
 	const handleAddressSelect = (
 		address: string,
@@ -117,13 +92,14 @@ export default function RegisterWorkerPage({ params }: any) {
 		addressComponents: google.maps.GeocoderAddressComponent[]
 	) => {
 		console.log(addressComponents)
+
 		const street =
 			addressComponents.find((component) =>
 				component.types.includes('street_number')
-			)?.long_name ||
-			'' +
-				addressComponents.find((component) => component.types.includes('route'))
-					?.long_name
+			)?.short_name +
+			' ' +
+			addressComponents.find((component) => component.types.includes('route'))
+				?.short_name
 		const city = addressComponents.find((component) =>
 			component.types.includes('locality')
 		)?.long_name
@@ -139,630 +115,832 @@ export default function RegisterWorkerPage({ params }: any) {
 
 		setFormData({
 			...formData,
-			address: {
-				value: {
-					street: street as string,
-					city: city as string,
-					state: state as string,
-					country: country as string,
-					zip: zip as string,
-				},
-				required: true,
-				step: 2,
-				hasChanged: true,
-			},
+			streetAddress: street as string,
+			city: city as string,
+			state: state as string,
+			country: country as string,
+			zip: zip as string,
 			location: {
-				value: {
-					type: 'Point',
-					coordinates: [coordinates.lng, coordinates.lat],
-				},
-				required: true,
-				step: 2,
-				hasChanged: true,
-			},
-		})
-	}
-
-	const setShowError = (errorName: string, value: boolean) => {
-		setError((prevState) => ({ ...prevState, [errorName]: value }))
-	}
-
-	useEffect(() => {
-		if (
-			formData.email.hasChanged &&
-			(formData.email.value == '' ||
-				!helpers.validateEmail(formData.email.value))
-		) {
-			setShowError('email', true)
-		} else {
-			setShowError('email', false)
-		}
-	}, [formData.email])
-
-	useEffect(() => {
-		if (
-			formData.username.hasChanged &&
-			(formData.username.value == '' ||
-				!helpers.validateUsername(formData.username.value))
-		) {
-			setShowError('username', true)
-		} else {
-			setShowError('username', false)
-		}
-	}, [formData.username])
-
-	useEffect(() => {
-		if (formData.address.hasChanged && address == '') {
-			setShowError('address', true)
-		} else {
-			setShowError('address', false)
-		}
-	}, [address, formData.address.hasChanged])
-
-	useEffect(() => {
-		if (
-			formData.phoneNumber.hasChanged &&
-			(formData.phoneNumber.value == '' ||
-				!helpers.validatePhoneNumber(formData.phoneNumber.value))
-		) {
-			setShowError('phoneNumber', true)
-		} else {
-			setShowError('phoneNumber', false)
-		}
-	}, [formData.phoneNumber])
-
-	useEffect(() => {
-		if (formData.name.hasChanged && formData.name.value == '') {
-			setShowError('name', true)
-		} else {
-			setShowError('name', false)
-		}
-	}, [formData.name])
-
-	useEffect(() => {
-		if (
-			formData.password.hasChanged &&
-			(reenterPassword == '' || reenterPassword != formData.password.value)
-		) {
-			setShowError('reenterPassword', true)
-		} else {
-			setShowError('reenterPassword', false)
-		}
-	}, [reenterPassword, formData.password])
-
-	useEffect(() => {
-		if (
-			formData.password.hasChanged &&
-			(formData.password.value == '' || formData.password.value.length < 8)
-		) {
-			setShowError('password', true)
-		} else {
-			setShowError('password', false)
-		}
-	}, [formData.password])
-
-	const handleChange = (e: any) => {
-		const { name: fieldName, value } = e.target
-		setFormData({
-			...formData,
-			[fieldName]: { value: value, hasChanged: true },
-		})
-	}
-
-	const handlePhoneNumberChange = (e: any) => {
-		const { value } = e.target
-		setFormData({
-			...formData,
-			phoneNumber: {
-				value: helpers.autoFormatPhoneNumber(value),
-				required: false,
-				step: 1,
-				hasChanged: true,
+				type: 'Point',
+				coordinates: [coordinates.lng, coordinates.lat],
 			},
 		})
 	}
 
 	const handleSubmit = async () => {
-		// e.preventDefault()
-
-		const outputJobTypes = formData.jobTypes.value.filter((item) => item != '')
-
-		const userObj = {
-			name: formData.name.value,
-			username: formData.username.value,
-			email: formData.email.value,
-			location: formData.location.value,
-			//ssn: formData.ssn.value,
-			birthday: formData.birthday.value,
-			phoneNumber: formData.phoneNumber.value,
-			jobTypes: outputJobTypes,
-			address: formData.address.value,
-			password: formData.password.value,
-		}
-
-		const response = await fetch(`${BASE_URL}/register/worker`, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
+		const workerObj = {
+			name: formData.firstName + ' ' + formData.lastName,
+			username: formData.username,
+			email: formData.email,
+			//ssn: formData.ssn,
+			birthday: formData.birthday,
+			phoneNumber: formData.phoneNumber,
+			jobTypesIds: formData.jobTypes,
+			address: {
+				country: formData.country,
+				state: formData.state,
+				city: formData.city,
+				street: formData.streetAddress,
+				zip: formData.zip,
 			},
-			body: JSON.stringify(userObj),
-		})
-
-		if (response.ok) {
-			window.location.href = '/register/success'
-		} else {
-			// Handle error
-			console.error('Registration failed:', await response.text())
+			certifications: formData.certifications,
+			...(formData.location ? { location: formData.location } : {}),
+			password: formData.password,
 		}
-	}
 
-	const handleCheckUsernameEmail = async () => {
-		const response = await fetch(`${BASE_URL}/check-email-username`, {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({
-				email: formData.email.value,
-				username: formData.username.value,
-			}),
-		})
-		if (response.ok) {
-			const { emailExists, usernameExists } = await response.json()
-			console.log(emailExists, usernameExists)
-			if (emailExists != null) {
-				setShowError('email', true)
-			}
-			if (usernameExists != null) {
-				setShowError('username', true)
-			}
+		try {
+			const response = await apiClient({
+				method: 'post',
+				url: '/register/worker',
+				token: '',
+				data: workerObj,
+			})
 
-			if (!emailExists && !usernameExists) {
-				return true
-			}
-		}
-	}
-
-	const handleNextStep = async () => {
-		let newError: any = { ...error } // Create a copy of the error object to update
-		let shouldReturn = false
-
-		Object.entries(formData).forEach(([key, field]) => {
-			if (
-				(field.required === true &&
-					field.value === '' &&
-					field.step == currentStep) ||
-				(key == 'address' &&
-					currentStep == 2 &&
-					Object.values(formData.address.value).some((param) => param === ''))
-			) {
-				newError[key] = true
-				shouldReturn = true
+			if (response?.status === 200) {
+				console.log('Worker profile created successfuly')
+				window.location.href = '/register/success'
 			} else {
-				newError[key] = false
+				console.error(`Error creating worker profile: ${response.data.message}`)
 			}
-		})
-
-		setError(newError)
-
-		if (shouldReturn) return
-
-		if (
-			Object.entries(error).some(
-				([key, value]) =>
-					value === true && (formData as any)[key].step === currentStep
+		} catch (error: any) {
+			console.error(
+				'Error creating worker profile:',
+				error.response.data.message
 			)
-		) {
-		} else if (currentStep == 1) {
-			if (await handleCheckUsernameEmail()) setCurrentStep(currentStep + 1)
-			else return
-		} else handleSubmit()
+			showSnackbar('error', error.response.data.message)
+		}
 	}
 
 	return (
-		<>
-			<div className='flex items-center justify-center'>
-				<div className='xl:w-8/12 w-full px-16 pt-7'>
-					<div className='flex flex-row w-full justify-between items-center h-20'>
-						{currentStep > 1 ? (
-							<button
-								role='button'
-								onClick={() => setCurrentStep(currentStep - 1)}
-								aria-label='Next step'
-								className='flex items-center justify-center py-2 px-7 focus:outline-none bg-white border rounded border-gray-400 hover:bg-gray-100  focus:ring-2 focus:ring-offset-2 focus:ring-gray-700'
-							>
-								<svg
-									className='mr-3'
-									width={24}
-									height={24}
-									viewBox='0 0 24 24'
-									strokeWidth='2'
-									stroke='currentColor'
-									fill='none'
-									strokeLinecap='round'
-									strokeLinejoin='round'
-								>
-									<path stroke='none' d='M0 0h24v24H0z' fill='none'></path>
-									<path d='M9 11l-4 4l4 4m-4 -4h11a4 4 0 0 0 0 -8h-1'></path>
-								</svg>
-								<span className='text-sm font-medium text-center text-gray-800 capitalize'>
-									Previous Step
-								</span>
-							</button>
-						) : (
-							<div className=' w-28'></div>
-						)}
-						{/* <RegisterTabs currentStep={currentStep} /> */}
-						{currentStep < 2 && (
-							<button
-								role='button'
-								onClick={handleNextStep}
-								aria-label='Next step'
-								className='flex items-center justify-center py-2 px-7 focus:outline-none bg-white border rounded border-gray-400 hover:bg-gray-100  focus:ring-2 focus:ring-offset-2 focus:ring-gray-700'
-							>
-								<span className='text-sm font-medium text-center text-gray-800 capitalize'>
-									Next Step
-								</span>
-								<svg
-									className='ml-3'
-									width={12}
-									height={8}
-									viewBox='0 0 12 8'
-									fill='none'
-									xmlns='http://www.w3.org/2000/svg'
-								>
-									<path d='M8.01 3H0V5H8.01V8L12 4L8.01 0V3Z' fill='#242731' />
-								</svg>
-							</button>
-						)}
-						{currentStep == 2 && (
-							<button
-								role='button'
-								onClick={handleNextStep}
-								aria-label='Next step'
-								className='flex items-center justify-center py-2 px-7 focus:outline-none bg-blue-600 border rounded border-gray-400 hover:bg-gray-100  focus:ring-2 focus:ring-offset-2 focus:ring-gray-700'
-							>
-								<span className='text-sm font-medium text-center text-white capitalize'>
-									Submit
-								</span>
-							</button>
-						)}
-					</div>
-					<form onSubmit={handleSubmit}>
-						{currentStep == 1 ? (
-							<div className='xl:px-24'>
-								<div className='mt-16 lg:flex justify-between border-b border-gray-200 pb-16'>
-									<div className='w-80'>
-										<div className='flex items-center'>
-											<h1 className='text-xl font-medium pr-2 leading-5 text-gray-800'>
-												Login Information
-											</h1>
-										</div>
-										<p className='mt-4 text-sm leading-5 text-gray-600'>
-											Make sure to type these details in exactly as they are
-											written in your I.D.
-										</p>
-									</div>
-									<div>
-										<div className='md:flex items-center lg:ml-24 lg:mt-0 mt-4'>
-											<div className='md:w-64'>
-												<RegisterInput
-													label='Full Name'
-													type='name'
-													onChange={handleChange}
-													placeholder='John Smith'
-													showError={error}
-													error='Enter a valid name'
-													inputName='name'
-													value={formData.name.value}
-												/>
-											</div>
-											<div className='md:w-64 md:ml-12 md:mt-0 mt-4'>
-												<RegisterInput
-													label='Username'
-													type='name'
-													onChange={handleChange}
-													placeholder='Choose a username'
-													showError={error}
-													error={
-														formData.username.value == ''
-															? 'Username is required'
-															: 'Username not valid'
-													}
-													inputName='username'
-													value={formData.username.value}
-												/>
-											</div>
-										</div>
-										<div className='md:flex items-center lg:ml-24 mt-8'>
-											<div className='md:w-64'>
-												<RegisterInput
-													label='Email address'
-													type='email'
-													onChange={handleChange}
-													placeholder='youremail@example.com'
-													showError={error}
-													error='Enter a valid email address'
-													inputName='email'
-													value={formData.email.value}
-												/>
-											</div>
-											<div className='md:w-64 md:ml-12 md:mt-0 mt-4'>
-												<RegisterInput
-													label='Phone number'
-													type='name'
-													onChange={handlePhoneNumberChange}
-													placeholder='123-1234567'
-													value={formData.phoneNumber.value}
-													showError={error}
-													error='Enter a valid phone number'
-													inputName='phoneNumber'
-												/>
-											</div>
-										</div>
-										<div className='md:flex items-center lg:ml-24 mt-8'>
-											{/* <div className='md:w-64'>
-												<RegisterInput
-													label='Social Security Number'
-													type='number'
-													onChange={handleChange}
-													placeholder='111-222-3333'
-													showError={error}
-													error='Enter a valid SSN'
-													inputName='ssn'
-													value={formData.ssn.value}
-												/>
-											</div> */}
-											<div className='md:w-64 md:mt-0 mt-4'>
-												<RegisterInput
-													label='Birthday'
-													type='date'
-													onChange={handleChange}
-													placeholder='01/02/1993'
-													value={formData.birthday.value}
-													showError={error}
-													error='Enter a valid birthday'
-													inputName='birthday'
-												/>
-											</div>
-										</div>
-									</div>
-								</div>
-								<div className='mt-16 lg:flex justify-between border-b border-gray-200 pb-16 mb-4'>
-									<div className='w-80'>
-										<div className='flex items-center'>
-											<h1 className='text-xl font-medium pr-2 leading-5 text-gray-800'>
-												Security
-											</h1>
-										</div>
-										<p className='mt-4 text-sm leading-5 text-gray-600'>
-											Your password needs to be at least 8 digits long. Make
-											sure to write it down somewhere so you don&apos;t forget
-											it!
-										</p>
-									</div>
-									<div className='flex flex-col  p-1'>
-										<div className='flex flex-row '>
-											<div className='md:flex items-center lg:ml-24 lg:mt-0 mt-4'>
-												<div className='md:w-64'>
-													<RegisterInput
-														label='Password'
-														type='password'
-														onChange={handleChange}
-														placeholder='Enter your password'
-														showError={error}
-														error={
-															formData.password.value.length == 0
-																? 'Password is required'
-																: 'Invalid Password'
-														}
-														inputName='password'
-														value={formData.password.value}
-													/>
-												</div>
-												<div className='md:w-64 md:ml-12 md:mt-0 mt-4'>
-													<RegisterInput
-														label='Re-enter Your Password'
-														type='password'
-														onChange={(e: any) =>
-															setReenterPassword(e.target.value)
-														}
-														placeholder='Re-enter your password'
-														showError={error}
-														error='Passwords do not match'
-														inputName='reenterPassword'
-														value={reenterPassword}
-													/>
-												</div>
-											</div>
-											{/* <div className='md:flex items-center lg:ml-24 mt-8'>
-        										<div className='md:w-64'>
-        											<label
-        												className='text-sm leading-none text-gray-800'
-        												id='recoverEmail'
-        											>
-        												Recovery Email address
-        											</label>
-        											<input
-        												type='name'
-        												tabIndex={0}
-        												className='w-full p-3 mt-3 bg-gray-100 border rounded border-gray-200 focus:outline-none focus:border-gray-600 text-sm font-medium leading-none text-gray-800'
-        												aria-labelledby='recoveryEmail'
-        												placeholder='Your recovery email'
-        											/>
-        										</div>
-        										<div className='md:w-64 md:ml-12 md:mt-0 mt-4'>
-        											<label
-        												className='text-sm leading-none text-gray-800'
-        												id='altPhone'
-        											>
-        												Alternate phone number
-        											</label>
-        											<input
-        												type='name'
-        												tabIndex={0}
-        												className='w-full p-3 mt-3 bg-gray-100 border rounded border-gray-200 focus:outline-none focus:border-gray-600 text-sm font-medium leading-none text-gray-800'
-        												aria-labelledby='altPhone'
-        												placeholder='Your alternate phone number'
-        											/>
-        										</div>
-        									</div> */}
-										</div>
-									</div>
-								</div>
-							</div>
-						) : null}
-						{currentStep == 2 ? (
-							<div className='xl:px-24'>
-								<div className='mt-16 lg:flex justify-between border-b border-gray-200 pb-16'>
-									<div className='w-80'>
-										<div className='flex items-center'>
-											<h1 className='text-xl font-medium pr-2 leading-5 text-gray-800'>
-												Address
-											</h1>
-										</div>
-										<p className='mt-4 text-sm leading-5 text-gray-600'>
-											Choose the address where you are located at currently and
-											where you want to work from. We will use this to recommend
-											the best jobs around you. This can always be changed!
-										</p>
-									</div>
-									<div>
-										<div className='md:flex items-center lg:ml-24 lg:mt-0 mt-4'>
-											<div className=''>
-												<LoadScript
-													googleMapsApiKey={
-														process.env.NEXT_PUBLIC_GOOGLEMAPS_KEY as string
-													}
-													libraries={libraries}
-												>
-													<AddressAutocomplete
-														onSelect={handleAddressSelect}
-														value={address}
-														onChangeValue={(value) => {
-															setFormData({
-																...formData,
-																address: {
-																	...formData.address,
-																	hasChanged: true,
-																},
-															})
-															setAddress(value)
-														}}
-														showError={error}
-														error='Please add valid address'
-													/>
-												</LoadScript>
-											</div>
-										</div>
-										<div className='md:flex items-start justify-start lg:ml-24 mt-8'>
-											<div className='md:w-64 md:mt-0 mt-4'>
-												<RegisterChecklistInput
-													label='Types of work you are qualified for'
-													onChange={(value) => {
-														let currentTypes = formData.jobTypes.value
-														if (currentTypes.includes(value)) {
-															currentTypes = currentTypes.filter(
-																(type) => type != value
-															)
-														} else {
-															currentTypes.push(value)
-														}
-														setFormData({
-															...formData,
-															jobTypes: {
-																value: currentTypes,
-																required: true,
-																step: 2,
-																hasChanged: true,
-															},
-														})
-													}}
-													placeholder='Select job types'
-													showError={error}
-													error='Enter a valid job type'
-													inputName='type'
-													value={formData.jobTypes.value}
-												/>
-											</div>
-											<div className='md:w-64'>
-												{/* <RegisterDropdownInput
-													label='Business Type'
-													onChange={(value) =>
-														setFormData({
-															...formData,
-															type: {
-																value,
-																required: true,
-																step: 2,
-															},
-														})
-													}
-													placeholder='Select'
-													showError={error}
-													error='Enter a business type'
-													inputName='type'
-													value={formData.type.value}
-													dropdownItems={['Restaurant', 'Hotel']}
-												/> */}
-											</div>
-										</div>
-									</div>
-								</div>
-								<div className='mt-16 lg:flex justify-between border-b border-gray-200 pb-16 mb-4'>
-									<div className='w-80'>
-										<div className='flex items-center'>
-											<h1 className='text-xl font-medium pr-2 leading-5 text-gray-800'>
-												Upload Photo
-											</h1>
-										</div>
-										<p className='mt-4 text-sm leading-5 text-gray-600'>Soon</p>
-									</div>
-								</div>
-							</div>
-						) : null}
-						{currentStep == 3 ? <div></div> : null}
-					</form>
-					<div className='px-5 py-4 bg-gray-100 rounded-lg flex items-center justify-between mt-7'>
-						<div className='flex items-center'>
-							<div className='flex-shrink-0'>
-								<svg
-									width='24'
-									height='24'
-									viewBox='0 0 24 24'
-									fill='none'
-									xmlns='http://www.w3.org/2000/svg'
-								>
-									<path
-										d='M19 9.99999H20C20.2652 9.99999 20.5196 10.1054 20.7071 10.2929C20.8946 10.4804 21 10.7348 21 11V21C21 21.2652 20.8946 21.5196 20.7071 21.7071C20.5196 21.8946 20.2652 22 20 22H4C3.73478 22 3.48043 21.8946 3.29289 21.7071C3.10536 21.5196 3 21.2652 3 21V11C3 10.7348 3.10536 10.4804 3.29289 10.2929C3.48043 10.1054 3.73478 9.99999 4 9.99999H5V8.99999C5 8.08074 5.18106 7.17049 5.53284 6.32121C5.88463 5.47193 6.40024 4.70026 7.05025 4.05025C7.70026 3.40023 8.47194 2.88462 9.32122 2.53284C10.1705 2.18105 11.0807 1.99999 12 1.99999C12.9193 1.99999 13.8295 2.18105 14.6788 2.53284C15.5281 2.88462 16.2997 3.40023 16.9497 4.05025C17.5998 4.70026 18.1154 5.47193 18.4672 6.32121C18.8189 7.17049 19 8.08074 19 8.99999V9.99999ZM17 9.99999V8.99999C17 7.67391 16.4732 6.40214 15.5355 5.46446C14.5979 4.52678 13.3261 3.99999 12 3.99999C10.6739 3.99999 9.40215 4.52678 8.46447 5.46446C7.52678 6.40214 7 7.67391 7 8.99999V9.99999H17ZM11 14V18H13V14H11Z'
-										fill='#4B5563'
-									/>
-								</svg>
-							</div>
-
-							<p className='text-sm text-gray-800 pl-3'>
-								We take privacy issues seriously. You can be sure that your
-								personal data is securely protected.
-							</p>
-						</div>
-						<button className='md:block hidden focus:outline-none focus:ring-2 focus:ring-gray-700 rounded'>
-							<svg
-								aria-label='Close this banner'
-								width='20'
-								height='20'
-								viewBox='0 0 20 20'
-								fill='none'
-								xmlns='http://www.w3.org/2000/svg'
-							>
-								<path
-									d='M15.8337 5.34166L14.6587 4.16666L10.0003 8.825L5.34199 4.16666L4.16699 5.34166L8.82533 10L4.16699 14.6583L5.34199 15.8333L10.0003 11.175L14.6587 15.8333L15.8337 14.6583L11.1753 10L15.8337 5.34166Z'
-									fill='#79808F'
-								/>
-							</svg>
-						</button>
+		<div className='px-4 sm:px-6 lg:px-44 xl:px-72 pt-10'>
+			<div className='inline-flex items-center justify-between w-full'>
+				<div className='inline-flex'>
+					<ArrowLeftIcon
+						onClick={() => router.push('/')}
+						className='h-12 mr-5 p-2 rounded hover:cursor-pointer hover:bg-gray-200'
+					/>
+					<div>
+						<h1 className='text-xl font-semibold text-gray-900'>
+							Sign up to WerkerBee
+						</h1>
+						<p className='mt-2 text-sm text-gray-700'>
+							Manually register a worker profile
+						</p>
 					</div>
 				</div>
+				<div className='mt-4 sm:mt-0 sm:ml-16 sm:flex-none'>
+					{/* <button
+						onClick={() => {}}
+						type='button'
+						className='inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto'
+					>
+						Add Worker
+					</button> */}
+				</div>
 			</div>
-		</>
+			<div className='bg-white px-12 py-10 rounded-lg'>
+				<form ref={formRef}>
+					<div className='space-y-12'>
+						<div className='border-b border-gray-900/10 pb-12'>
+							{/* <h2 className='text-base font-semibold leading-7 text-gray-900'>
+								Personal Information
+							</h2>
+							<p className='mt-1 text-sm leading-6 text-gray-600'>
+								Use a permanent address where you can receive mail.
+							</p> */}
+
+							<div className='grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6'>
+								<div className='sm:col-span-3'>
+									<label
+										htmlFor='first-name'
+										className='block text-sm font-medium leading-6 text-gray-900'
+									>
+										First name
+									</label>
+									<div className='mt-2'>
+										<input
+											required
+											type='text'
+											name='first-name'
+											id='first-name'
+											autoComplete='given-name'
+											className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
+											value={formData.firstName}
+											onChange={(e) =>
+												setFormData({ ...formData, firstName: e.target.value })
+											}
+										/>
+									</div>
+								</div>
+
+								<div className='sm:col-span-3'>
+									<label
+										htmlFor='last-name'
+										className='block text-sm font-medium leading-6 text-gray-900'
+									>
+										Last name
+									</label>
+									<div className='mt-2'>
+										<input
+											required
+											type='text'
+											name='last-name'
+											id='last-name'
+											autoComplete='family-name'
+											className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
+											value={formData.lastName}
+											onChange={(e) =>
+												setFormData({ ...formData, lastName: e.target.value })
+											}
+										/>
+									</div>
+								</div>
+
+								<div className='sm:col-span-4'>
+									<label
+										htmlFor='birthday'
+										className='block text-sm font-medium leading-6 text-gray-900'
+									>
+										Birthday
+									</label>
+									<div className='mt-2'>
+										<input
+											required
+											id='birthday'
+											name='birthday'
+											type='date'
+											autoComplete='birthday'
+											className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
+											value={formData.birthday}
+											onChange={(e) =>
+												setFormData({ ...formData, birthday: e.target.value })
+											}
+										/>
+									</div>
+								</div>
+								<div className='sm:col-span-4'>
+									<label
+										htmlFor='email'
+										className='block text-sm font-medium leading-6 text-gray-900'
+									>
+										Email address
+									</label>
+									<div className='mt-2'>
+										<input
+											required
+											id='email'
+											name='email'
+											type='email'
+											autoComplete='email'
+											className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
+											value={formData.email}
+											onChange={(e) =>
+												setFormData({ ...formData, email: e.target.value })
+											}
+										/>
+									</div>
+								</div>
+								<div className='sm:col-span-2'>
+									<label
+										htmlFor='email'
+										className='block text-sm font-medium leading-6 text-gray-900'
+									>
+										Phone Number
+									</label>
+									<div className='mt-2'>
+										<input
+											required
+											id='phone-number'
+											name='phone-number'
+											type='text'
+											autoComplete='phonenumber'
+											className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
+											value={formData.phoneNumber}
+											onChange={(e) =>
+												setFormData({
+													...formData,
+													phoneNumber: helpers.autoFormatPhoneNumber(
+														e.target.value
+													),
+												})
+											}
+										/>
+									</div>
+								</div>
+
+								<div className='sm:col-span-3'>
+									<label
+										htmlFor='country'
+										className='block text-sm font-medium leading-6 text-gray-900'
+									>
+										Country
+									</label>
+									<div className='mt-2'>
+										<select
+											id='country'
+											name='country'
+											autoComplete='country-name'
+											className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6'
+											value={formData.country}
+											onChange={(e) =>
+												setFormData({ ...formData, country: e.target.value })
+											}
+										>
+											<option>United States</option>
+											{/* <option>Canada</option>
+											<option>Mexico</option> */}
+										</select>
+									</div>
+								</div>
+
+								<div className='col-span-full'>
+									<label
+										htmlFor='street-address'
+										className='block text-sm font-medium leading-6 text-gray-900'
+									>
+										Street address
+									</label>
+									<div className='mt-2'>
+										<LoadScript
+											googleMapsApiKey={
+												process.env.NEXT_PUBLIC_GOOGLEMAPS_KEY as string
+											}
+											libraries={libraries}
+										>
+											<AddressAutocomplete
+												onSelect={handleAddressSelect}
+												value={formData.streetAddress}
+												onChangeValue={(value) => {
+													setFormData({
+														...formData,
+														streetAddress: value,
+													})
+												}}
+											/>
+										</LoadScript>
+										{/* <input
+											required
+											type='text'
+											name='street-address'
+											id='street-address'
+											autoComplete='street-address'
+											className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
+											value={formData.streetAddress}
+											onChange={(e) =>
+												setFormData({
+													...formData,
+													streetAddress: e.target.value,
+												})
+											}
+										/> */}
+									</div>
+								</div>
+
+								<div className='sm:col-span-2 sm:col-start-1'>
+									<label
+										htmlFor='city'
+										className='block text-sm font-medium leading-6 text-gray-900'
+									>
+										City
+									</label>
+									<div className='mt-2'>
+										<input
+											required
+											type='text'
+											name='city'
+											id='city'
+											autoComplete='address-level2'
+											className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
+											value={formData.city}
+											onChange={(e) =>
+												setFormData({ ...formData, city: e.target.value })
+											}
+										/>
+									</div>
+								</div>
+
+								<div className='sm:col-span-2'>
+									<label
+										htmlFor='region'
+										className='block text-sm font-medium leading-6 text-gray-900'
+									>
+										State / Province
+									</label>
+									<div className='mt-2'>
+										<input
+											required
+											type='text'
+											name='region'
+											id='region'
+											autoComplete='address-level1'
+											className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
+											value={formData.state}
+											onChange={(e) =>
+												setFormData({ ...formData, state: e.target.value })
+											}
+										/>
+									</div>
+								</div>
+
+								<div className='sm:col-span-2'>
+									<label
+										htmlFor='postal-code'
+										className='block text-sm font-medium leading-6 text-gray-900'
+									>
+										ZIP / Postal code
+									</label>
+									<div className='mt-2'>
+										<input
+											required
+											type='text'
+											name='postal-code'
+											id='postal-code'
+											autoComplete='postal-code'
+											className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
+											value={formData.zip}
+											onChange={(e) =>
+												setFormData({ ...formData, zip: e.target.value })
+											}
+										/>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div className='border-b border-gray-900/10 pb-12'>
+							{/* <h2 className='text-base font-semibold leading-7 text-gray-900'>
+								Profile
+							</h2> */}
+							{/* <p className='mt-1 text-sm leading-6 text-gray-600'>
+								This information will be displayed publicly so be careful what
+								you share.
+							</p> */}
+
+							<div className='grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6'>
+								<div className='sm:col-span-4'>
+									<label
+										htmlFor='username'
+										className='block text-sm font-medium leading-6 text-gray-900'
+									>
+										Username
+									</label>
+									<div className='mt-2'>
+										<div className='flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-600 sm:max-w-md'>
+											<span className='flex select-none items-center pl-3 text-gray-500 sm:text-sm'>
+												werkerbee.com/worker/
+											</span>
+											<input
+												required
+												type='text'
+												name='username'
+												id='username'
+												autoComplete='username'
+												className='block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6'
+												placeholder='janesmith'
+												value={formData.username}
+												onChange={(e) =>
+													setFormData({
+														...formData,
+														username: e.target.value.toLowerCase(),
+													})
+												}
+											/>
+										</div>
+									</div>
+								</div>
+
+								<div className='sm:col-span-3'>
+									<div className='inline-flex items-center'>
+										<label
+											htmlFor='first-name'
+											className='block text-sm font-medium leading-6 text-gray-900'
+										>
+											Password
+										</label>
+										{showPassword ? (
+											<EyeIcon
+												onClick={() => setShowPassword(false)}
+												className='h-5 ml-2 hover:cursor-pointer'
+											/>
+										) : (
+											<EyeSlashIcon
+												onClick={() => setShowPassword(true)}
+												className='h-5 ml-2 hover:cursor-pointer'
+											/>
+										)}
+									</div>
+									<div className='mt-2'>
+										<input
+											required
+											type={showPassword ? 'text' : 'password'}
+											name='password'
+											id='password'
+											autoComplete='new-password'
+											placeholder='Choose a secure password'
+											className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
+											value={formData.password}
+											onChange={(e) =>
+												setFormData({ ...formData, password: e.target.value })
+											}
+										/>
+									</div>
+								</div>
+
+								<div className='sm:col-span-3'>
+									<label
+										htmlFor='last-name'
+										className='block text-sm font-medium leading-6 text-gray-900'
+									>
+										Confirm Password
+									</label>
+									<div className='mt-2'>
+										<input
+											required
+											type={showPassword ? 'text' : 'password'}
+											name='confirm-password'
+											id='confirm-password'
+											autoComplete='new-password'
+											className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
+											value={confirmPassword}
+											onChange={(e) => setConfirmPassword(e.target.value)}
+										/>
+										{showConfirmPasswordError && (
+											<span className='text-xs text-red-500'>
+												Passwords do not match
+											</span>
+										)}
+									</div>
+								</div>
+
+								<div className='col-span-full'>
+									<label
+										htmlFor='about'
+										className='block text-sm font-medium leading-6 text-gray-900'
+									>
+										About
+									</label>
+									<div className='mt-2'>
+										<textarea
+											id='about'
+											name='about'
+											rows={3}
+											className='block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
+											defaultValue={''}
+										/>
+									</div>
+									<p className='mt-3 text-sm leading-6 text-gray-600'>
+										Write a few sentences about yourself.
+									</p>
+								</div>
+
+								<div className='col-span-full'>
+									<label
+										htmlFor='photo'
+										className='block text-sm font-medium leading-6 text-gray-900'
+									>
+										Profile Picture
+									</label>
+									<div className='mt-2 flex items-center gap-x-3'>
+										<UserCircleIcon
+											className='h-12 w-12 text-gray-300'
+											aria-hidden='true'
+										/>
+										<button
+											type='button'
+											className='rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50'
+										>
+											Change
+										</button>
+									</div>
+								</div>
+
+								{/* <div className='col-span-full'>
+									<label
+										htmlFor='cover-photo'
+										className='block text-sm font-medium leading-6 text-gray-900'
+									>
+										Cover photo
+									</label>
+									<div className='mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10'>
+										<div className='text-center'>
+											<PhotoIcon
+												className='mx-auto h-12 w-12 text-gray-300'
+												aria-hidden='true'
+											/>
+											<div className='mt-4 flex text-sm leading-6 text-gray-600'>
+												<label
+													htmlFor='file-upload'
+													className='relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500'
+												>
+													<span>Upload a file</span>
+													<input
+required
+														id='file-upload'
+														name='file-upload'
+														type='file'
+														className='sr-only'
+													/>
+												</label>
+												<p className='pl-1'>or drag and drop</p>
+											</div>
+											<p className='text-xs leading-5 text-gray-600'>
+												PNG, JPG, GIF up to 10MB
+											</p>
+										</div>
+									</div>
+								</div> */}
+							</div>
+						</div>
+						<div className='border-b border-gray-900/10 pb-12'>
+							<h2 className='text-base font-semibold leading-7 text-gray-900'>
+								Job Qualifications
+							</h2>
+							<div className='mt-10 space-y-10'>
+								<fieldset>
+									<legend className='text-sm font-semibold leading-6 text-gray-900'>
+										Qualified Jobs
+									</legend>
+									<JobTypesInput
+										onChange={(value) => {
+											let currentTypes = formData.jobTypes
+											if (currentTypes.includes(value)) {
+												currentTypes = currentTypes.filter(
+													(type) => type != value
+												)
+											} else {
+												currentTypes.push(value)
+											}
+											setFormData({
+												...formData,
+												jobTypes: currentTypes,
+											})
+										}}
+										placeholder='Select '
+										inputName='jobTypes'
+										showError={{}}
+										error='Test'
+										// label={'Job Types'}
+										value={formData.jobTypes}
+									/>
+								</fieldset>
+								<fieldset>
+									<legend className='text-sm font-semibold leading-6 text-gray-900'>
+										Upskilling Jobs
+									</legend>
+									<JobTypesInput
+										onChange={(value) => {
+											let currentTypes = formData.upskillingTypes
+											if (currentTypes.includes(value)) {
+												currentTypes = currentTypes.filter(
+													(type) => type != value
+												)
+											} else {
+												currentTypes.push(value)
+											}
+											setFormData({
+												...formData,
+												upskillingTypes: currentTypes,
+											})
+										}}
+										placeholder='Select '
+										inputName='upskillingTypes'
+										showError={{}}
+										error='Test'
+										value={formData.upskillingTypes}
+									/>
+								</fieldset>
+								<fieldset>
+									<legend className='text-sm font-semibold leading-6 text-gray-900'>
+										Certifications
+									</legend>
+									<CertifiicationsInput
+										formData={formData}
+										setFormData={setFormData}
+										showLabel={false}
+									/>
+								</fieldset>
+								{/* <fieldset>
+									<legend className='text-sm font-semibold leading-6 text-gray-900'>
+										Push Notifications
+									</legend>
+									<p className='mt-1 text-sm leading-6 text-gray-600'>
+										These are delivered via SMS to your mobile phone.
+									</p>
+									<div className='mt-6 space-y-6'>
+										<div className='flex items-center gap-x-3'>
+											<input
+												required
+												id='push-everything'
+												name='push-notifications'
+												type='radio'
+												className='h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600'
+											/>
+											<label
+												htmlFor='push-everything'
+												className='block text-sm font-medium leading-6 text-gray-900'
+											>
+												Everything
+											</label>
+										</div>
+										<div className='flex items-center gap-x-3'>
+											<input
+												required
+												id='push-email'
+												name='push-notifications'
+												type='radio'
+												className='h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600'
+											/>
+											<label
+												htmlFor='push-email'
+												className='block text-sm font-medium leading-6 text-gray-900'
+											>
+												Same as email
+											</label>
+										</div>
+										<div className='flex items-center gap-x-3'>
+											<input
+												required
+												id='push-nothing'
+												name='push-notifications'
+												type='radio'
+												className='h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600'
+											/>
+											<label
+												htmlFor='push-nothing'
+												className='block text-sm font-medium leading-6 text-gray-900'
+											>
+												No push notifications
+											</label>
+										</div>
+									</div>
+								</fieldset> */}
+							</div>
+						</div>
+						{/* <div className='border-b border-gray-900/10 pb-12'>
+							<h2 className='text-base font-semibold leading-7 text-gray-900'>
+								Notifications
+							</h2>
+							<p className='mt-1 text-sm leading-6 text-gray-600'>
+								We'll always let you know about important changes, but you pick
+								what else you want to hear about.
+							</p>
+
+							<div className='mt-10 space-y-10'>
+								<fieldset>
+									<legend className='text-sm font-semibold leading-6 text-gray-900'>
+										By Email
+									</legend>
+									<div className='mt-6 space-y-6'>
+										<div className='relative flex gap-x-3'>
+											<div className='flex h-6 items-center'>
+												<input
+required
+													id='comments'
+													name='comments'
+													type='checkbox'
+													className='h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600'
+												/>
+											</div>
+											<div className='text-sm leading-6'>
+												<label
+													htmlFor='comments'
+													className='font-medium text-gray-900'
+												>
+													Comments
+												</label>
+												<p className='text-gray-500'>
+													Get notified when someones posts a comment on a
+													posting.
+												</p>
+											</div>
+										</div>
+										<div className='relative flex gap-x-3'>
+											<div className='flex h-6 items-center'>
+												<input
+required
+													id='candidates'
+													name='candidates'
+													type='checkbox'
+													className='h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600'
+												/>
+											</div>
+											<div className='text-sm leading-6'>
+												<label
+													htmlFor='candidates'
+													className='font-medium text-gray-900'
+												>
+													Candidates
+												</label>
+												<p className='text-gray-500'>
+													Get notified when a candidate applies for a job.
+												</p>
+											</div>
+										</div>
+										<div className='relative flex gap-x-3'>
+											<div className='flex h-6 items-center'>
+												<input
+required
+													id='offers'
+													name='offers'
+													type='checkbox'
+													className='h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600'
+												/>
+											</div>
+											<div className='text-sm leading-6'>
+												<label
+													htmlFor='offers'
+													className='font-medium text-gray-900'
+												>
+													Offers
+												</label>
+												<p className='text-gray-500'>
+													Get notified when a candidate accepts or rejects an
+													offer.
+												</p>
+											</div>
+										</div>
+									</div>
+								</fieldset>
+								<fieldset>
+									<legend className='text-sm font-semibold leading-6 text-gray-900'>
+										Push Notifications
+									</legend>
+									<p className='mt-1 text-sm leading-6 text-gray-600'>
+										These are delivered via SMS to your mobile phone.
+									</p>
+									<div className='mt-6 space-y-6'>
+										<div className='flex items-center gap-x-3'>
+											<input
+required
+												id='push-everything'
+												name='push-notifications'
+												type='radio'
+												className='h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600'
+											/>
+											<label
+												htmlFor='push-everything'
+												className='block text-sm font-medium leading-6 text-gray-900'
+											>
+												Everything
+											</label>
+										</div>
+										<div className='flex items-center gap-x-3'>
+											<input
+required
+												id='push-email'
+												name='push-notifications'
+												type='radio'
+												className='h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600'
+											/>
+											<label
+												htmlFor='push-email'
+												className='block text-sm font-medium leading-6 text-gray-900'
+											>
+												Same as email
+											</label>
+										</div>
+										<div className='flex items-center gap-x-3'>
+											<input
+required
+												id='push-nothing'
+												name='push-notifications'
+												type='radio'
+												className='h-4 w-4 border-gray-300 text-indigo-600 focus:ring-indigo-600'
+											/>
+											<label
+												htmlFor='push-nothing'
+												className='block text-sm font-medium leading-6 text-gray-900'
+											>
+												No push notifications
+											</label>
+										</div>
+									</div>
+								</fieldset>
+							</div>
+						</div> */}
+					</div>
+
+					<div className='mt-6 flex items-center justify-end gap-x-6'>
+						{/* <button
+							type='button'
+							className='text-sm font-semibold leading-6 text-gray-900'
+						>
+							Cancel
+						</button> */}
+						<button
+							onClick={(e) => {
+								if (formRef.current?.checkValidity()) {
+									e.preventDefault()
+									handleSubmit()
+								}
+							}}
+							type='submit'
+							className='rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
+						>
+							Create Profile
+						</button>
+					</div>
+				</form>
+			</div>
+		</div>
 	)
 }

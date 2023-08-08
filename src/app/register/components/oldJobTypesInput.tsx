@@ -2,9 +2,8 @@
 
 import React, { useState } from 'react'
 
+import useJobTypes from '@/src/hooks/useJobTypes'
 import helpers from '@/src/utils/helpers'
-
-import useJobTypes from '@/src/hooks/useJobTypesNew'
 
 const CheckedBox = () => (
 	<svg
@@ -43,17 +42,17 @@ const EmptyBox = () => (
 	</svg>
 )
 
-interface JobTypesInputProps {
+interface RegisterChecklistInputProps {
 	onChange: (e: any) => void
 	placeholder: string
 	inputName: string
 	showError: Record<string, any>
 	error: string
-	label?: string
+	label: string
 	value: string[]
 }
 
-const JobTypesInput: React.FC<JobTypesInputProps> = ({
+const RegisterChecklistInput: React.FC<RegisterChecklistInputProps> = ({
 	onChange,
 	placeholder,
 	inputName,
@@ -74,22 +73,19 @@ const JobTypesInput: React.FC<JobTypesInputProps> = ({
 		return <div>Error: {loadingError.message}</div>
 	}
 
-	const fetchedJobTypes = data.jobTypes.map((jobType) => ({
-		type: jobType.type,
-		_id: jobType._id,
+	const fetchedJobTypes = data.types.map((jobType: string) => ({
+		type: jobType,
 		selected: false,
 	}))
 
 	return (
-		<div className='w-min'>
-			{label && (
-				<label className='block text-sm font-medium text-gray-700 capitalize'>
-					{label}
-				</label>
-			)}
+		<div>
+			<label className='text-sm leading-none text-gray-800' id='securityCode'>
+				{label}
+			</label>
 			<div
 				onClick={() => setShowDropdown(!showDropdown)}
-				className={` w-44 p-3 mt-2 bg-white border rounded ${
+				className={` w-44 p-3 mt-3 bg-gray-100 border rounded ${
 					showError[inputName] ? 'border-red-400' : 'border-gray-200'
 				} text-sm font-medium leading-none text-gray-800 flex flex-row justify-between items-center hover:cursor-pointer`}
 
@@ -99,12 +95,7 @@ const JobTypesInput: React.FC<JobTypesInputProps> = ({
 				<p>
 					{value.length == 0
 						? placeholder
-						: helpers.formatArrayToString(
-								fetchedJobTypes
-									.filter((jobType) => value.includes(jobType._id))
-									.map((jobType) => jobType.type),
-								20
-						  )}
+						: helpers.formatArrayToString(value, 20)}
 				</p>
 				<svg
 					xmlns='http://www.w3.org/2000/svg'
@@ -131,22 +122,22 @@ const JobTypesInput: React.FC<JobTypesInputProps> = ({
 							className=' px-3 py-2 hover:bg-slate-100 flex flex-row justify-between'
 							onClick={() => {
 								//setShowDropdown(false)
-								onChange(jobType._id)
+								onChange(jobType.type)
 							}}
 						>
 							<p className=' first-letter:capitalize'>{jobType.type}</p>
-							{value.includes(jobType._id) ? <CheckedBox /> : <EmptyBox />}
+							{value.includes(jobType.type) ? <CheckedBox /> : <EmptyBox />}
 						</div>
 					))}
 				</div>
 			)}
-			{/* <div className='h-8'>
+			<div className='h-8'>
 				{showError[inputName] && (
 					<p className='text-red-600 text-xs'>{error}</p>
 				)}
-			</div> */}
+			</div>
 		</div>
 	)
 }
 
-export default JobTypesInput
+export default RegisterChecklistInput
