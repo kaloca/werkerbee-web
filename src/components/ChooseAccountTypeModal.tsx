@@ -59,12 +59,14 @@ const AccountTypeModal: React.FC<AccountTypeModalProps> = ({
 								<div className='mt-3 text-center sm:mt-5'>
 									<Dialog.Title
 										as='h1'
-										className='text-2xl leading-6 font-medium text-gray-900'
+										className='text-2xl leading-6 font-semibold text-gray-900'
 									>
-										Get started with WerkerBee
+										Get started with WerkerBee!
 									</Dialog.Title>
-									<div className='mt-2'>
-										<p className='text-sm text-gray-500'>Choose Account Type</p>
+									<div className='mt-4'>
+										<p className='text-sm text-gray-500'>
+											Choose Account Type:
+										</p>
 									</div>
 								</div>
 							</div>
@@ -73,7 +75,7 @@ const AccountTypeModal: React.FC<AccountTypeModalProps> = ({
 									type='button'
 									className='block w-full py-3 px-4 rounded-md shadow bg-gradient-to-r from-teal-500 to-cyan-600 text-white font-medium hover:from-teal-600 hover:to-cyan-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-cyan-400 focus:ring-offset-gray-900'
 									onClick={() =>
-										router.push(`/register/business?email=${email}`)
+										router.push(`/register/company?email=${email}`)
 									}
 								>
 									Business
