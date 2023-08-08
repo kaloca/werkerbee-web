@@ -10,7 +10,7 @@ import RegisterTabs from '../components/registerTabs'
 import RegisterInput from '../components/registerInput'
 import AddressAutocomplete from '../components/mapsEmbedding/mapsEmbedding'
 import RegisterDropdownInput from '../components/registerDropdownInput'
-import RegisterChecklistInput from '../components/jobTypesInput'
+import RegisterChecklistInput from '../components/oldJobTypesInput'
 import { signIn } from 'next-auth/react'
 
 const libraries: (
