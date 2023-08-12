@@ -60,6 +60,12 @@ export default function NavBar() {
 			type: 'company',
 		},
 		{
+			name: 'View All Workers',
+			isSelected: false,
+			url: '/allworkers',
+			type: 'company'
+		},
+		{
 			name: 'Applications Statuses',
 			isSelected: false,
 			url: '/applications',
