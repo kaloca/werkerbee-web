@@ -78,6 +78,12 @@ export default function NavBar() {
 			type: 'worker',
 		},
 		{
+			name: 'Worker Search',
+			isSelected: false,
+			url: '/worker-search',
+			type: 'company',
+		},
+		{
 			name: 'Login',
 			isSelected: false,
 			url: '/login',
