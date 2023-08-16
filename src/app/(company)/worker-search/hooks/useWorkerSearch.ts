@@ -8,6 +8,7 @@ import { BASE_URL } from '@/src/utils/constants'
 import { Worker } from '@/src/interfaces/models/Worker'
 
 import { JobType } from '@/src/interfaces/models/JobType'
+import { useRouter } from 'next/navigation'
 
 export interface UseWorkerSearchWorker extends Worker {
 	jobTypesIds: JobType[]
@@ -30,7 +31,8 @@ const useWorkerSearch = (
 	const [data, setData] = useState<UseWorkerSearchResponse | null>(null)
 	const [error, setError] = useState<Error | null>(null)
 
-	const { data: session } = useSession()
+	const { data: session, status } = useSession()
+	const router = useRouter()
 
 	const queryParams = [
 		`page=${page}`,
@@ -57,10 +59,12 @@ const useWorkerSearch = (
 			} finally {
 				setIsLoading(false)
 			}
+		} else if (status == 'unauthenticated') {
+			router.push('/login')
 		} else {
 			setIsLoading(true)
 		}
-	}, [workerSearchUrl, session])
+	}, [workerSearchUrl, session, status, router])
 
 	const mutateData = async () => {
 		mutate(workerSearchUrl, fetchData())
