@@ -233,7 +233,7 @@ export default function HomePage() {
 											className='inline-flex items-center text-black bg-gray-200 rounded-full p-1 pr-2 sm:text-base lg:text-sm xl:text-base hover:text-gray-400'
 										>
 											<span className='px-3 py-0.5 text-white text-xs font-semibold leading-5 uppercase tracking-wide bg-gradient-to-r from-teal-500 to-cyan-600 rounded-full'>
-												Currenty testing in the Berkeley area
+												Currently testing in the Berkeley area
 											</span>
 											<span className='ml-4 text-sm'>Visit our jobs page</span>
 											<ChevronRightIcon
